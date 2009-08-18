@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSpan2", "TimeSpan2.csproj", "{A267F123-EAFE-4F02-9AC9-283FE5D9A031}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTimeSpan2", "TestTimeSpan2\TestTimeSpan2.csproj", "{14567D26-78A4-4DE3-9EEB-03BD14755C68}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs07.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = TestTimeSpan2\\TestTimeSpan2.csproj
+		SccProjectName1 = TestTimeSpan2
+		SccLocalPath1 = TestTimeSpan2
+		SccProjectUniqueName2 = TimeSpan2.csproj
+		SccLocalPath2 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A267F123-EAFE-4F02-9AC9-283FE5D9A031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A267F123-EAFE-4F02-9AC9-283FE5D9A031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A267F123-EAFE-4F02-9AC9-283FE5D9A031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A267F123-EAFE-4F02-9AC9-283FE5D9A031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14567D26-78A4-4DE3-9EEB-03BD14755C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14567D26-78A4-4DE3-9EEB-03BD14755C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14567D26-78A4-4DE3-9EEB-03BD14755C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14567D26-78A4-4DE3-9EEB-03BD14755C68}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
