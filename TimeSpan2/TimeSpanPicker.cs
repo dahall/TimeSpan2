@@ -68,6 +68,10 @@ namespace System.Windows.Forms
             get; set;
         }
 
+		/// <summary>
+		/// Gets or sets the format string for displaying values. See <seealso cref="TimeSpanFormatInfo.Format"/> for more information on valid format strings.
+		/// </summary>
+		/// <value>The format string.</value>
 		[DefaultValue("f"), Category("Appearance")]
 		public string FormatString { get; set; }
 
@@ -105,6 +109,10 @@ namespace System.Windows.Forms
             this.comboBoxTimeSpan.SelectionLength = 0;
         }
 
+		/// <summary>
+		/// Raises the <see cref="E:ValueChanged"/> event.
+		/// </summary>
+		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void OnValueChanged(EventArgs args)
         {
             EventHandler h = ValueChanged;

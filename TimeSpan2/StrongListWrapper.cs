@@ -91,22 +91,22 @@
 
 		public class StrongListWrapperEnumerator<T> : IEnumerator<T>
 		{
-			private IEnumerator _iEnum;
+			private IEnumerator iEnum;
 
 			internal StrongListWrapperEnumerator(IEnumerator ienum)
 			{
-				_iEnum = ienum;
+				iEnum = ienum;
 			}
 
 			public T Current
 			{
-				get { return (T)_iEnum.Current; }
+				get { return (T)iEnum.Current; }
 			}
 
 			public void Dispose()
 			{
 				Reset();
-				_iEnum = null;
+				iEnum = null;
 			}
 
 			object IEnumerator.Current
@@ -116,12 +116,12 @@
 
 			public bool MoveNext()
 			{
-				return _iEnum.MoveNext();
+				return iEnum.MoveNext();
 			}
 
 			public void Reset()
 			{
-				_iEnum.Reset();
+				iEnum.Reset();
 			}
 		}
 	}

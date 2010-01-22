@@ -537,9 +537,9 @@ namespace System
 		/// <item><term>1</term><description>This instance is longer than <paramref name="value"/></description></item>
 		/// </list>
 		/// </returns>
-		public int CompareTo(TimeSpan other)
+		public int CompareTo(TimeSpan value)
         {
-            return core.CompareTo(other);
+            return core.CompareTo(value);
         }
 
         /// <summary>

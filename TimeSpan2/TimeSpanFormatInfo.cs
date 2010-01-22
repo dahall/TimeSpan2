@@ -94,6 +94,7 @@ namespace System.Globalization
 		/// <item><term>n</term><description>Standard TimeSpan format (00:00:00:00)</description></item>
 		/// <item><term>s</term><description>Localized string for TotalSeconds</description></item>
 		/// <item><term>t</term><description>Localized string for TotalMilliseconds</description></item>
+		/// <item><term>x</term><description>ISO 8601 XML standard for durations</description></item>
 		/// </list>
 		/// </remarks>
 		public string Format(string format, object arg, IFormatProvider formatProvider)
@@ -135,6 +136,24 @@ namespace System.Globalization
 			}
 			else
 			{
+				// See if it matches the 8601 standard
+				System.Text.RegularExpressions.Match m = System.Text.RegularExpressions.Regex.Match(value, @"P(?:(?<Y>\d*)Y)?(?:(?<Mo>\d*)M)?(?:(?<D>\d*)D)?(?:T(?:(?<H>\d*)H)?(?:(?<M>\d*)M)?(?:(?<S>\d*)S)?)?", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Singleline | System.Text.RegularExpressions.RegexOptions.IgnorePatternWhitespace);
+				if (m.Success)
+				{
+					DateTime now = DateTime.Now;
+					int years = m.Groups["Y"].Success ? Int32.Parse(m.Groups["Y"].Value) : 0;
+					int months = m.Groups["Mo"].Success ? Int32.Parse(m.Groups["Mo"].Value) : 0;
+					int days = m.Groups["D"].Success ? Int32.Parse(m.Groups["D"].Value) : 0;
+					if (years > 0 || months > 0)
+						days += (now - new DateTime(now.Year + years + (now.Month + months) / 12, (now.Month + months) % 12, 1)).Days;
+					int hours = m.Groups["H"].Success ? Int32.Parse(m.Groups["H"].Value) : 0;
+					int minutes = m.Groups["M"].Success ? Int32.Parse(m.Groups["M"].Value) : 0;
+					int seconds = m.Groups["S"].Success ? Int32.Parse(m.Groups["S"].Value) : 0;
+					ts = new TimeSpan(days, hours, minutes, seconds);
+					return true;
+				}
+
+				// Try to parse out localized words
 				bool f = false;
 				StringBuilder sb = new StringBuilder(value.ToLower(Properties.Resources.Culture));
 				foreach (var s in Properties.Resources.TimeSpanMillisecondStrings.Split(','))
@@ -154,7 +173,7 @@ namespace System.Globalization
 									RegexOptions.IgnoreCase |
 									RegexOptions.Compiled |
 									RegexOptions.Singleline);*/
-					Match m = regex.Match(sb.ToString());
+					m = regex.Match(sb.ToString());
 					if (m.Success)
 					{
 						int d = 0, h = 0, mi = 0, sc = 0, t = 0;
@@ -239,6 +258,15 @@ namespace System.Globalization
 					return string.Format(core.TotalDays == 1 ? Properties.Resources.TimeSpanOneDayFormat : Properties.Resources.TimeSpanManyDayFormat, core.TotalDays);
 				case 't':
 					return string.Format(core.TotalMilliseconds == 1 ? Properties.Resources.TimeSpanOneMillisecondFormat : Properties.Resources.TimeSpanManyMillisecondFormat, core.TotalMilliseconds);
+				case 'x':
+					if (core == TimeSpan.Zero) return "PT0S";
+					System.Text.StringBuilder sb = new System.Text.StringBuilder("P", 20);
+					if (core.Days > 0) sb.AppendFormat("{0}D", core.Days);
+					if (core.TotalDays - Math.Truncate(core.TotalDays) != 0) sb.Append('T');
+					if (core.Hours > 0) sb.AppendFormat("{0}H", core.Hours);
+					if (core.Minutes > 0) sb.AppendFormat("{0}M", core.Minutes);
+					if (core.Seconds > 0) sb.AppendFormat("{0}S", core.Seconds);
+					return sb.ToString();
 				default:
 					throw new FormatException("Invalid format specified");
 			}
