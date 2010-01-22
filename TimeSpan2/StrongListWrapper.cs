@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
-	public class StrongListWrapper<T> : IList<T>, ICollection<T>, IEnumerable<T> //, IList, ICollection, IEnumerable
+	public class StrongListWrapper<T> : IList<T>
 	{
 		private IList list;
 
@@ -94,97 +91,38 @@ namespace System.Collections.Generic
 
 		public class StrongListWrapperEnumerator<T> : IEnumerator<T>
 		{
-			private IEnumerator iEnum;
+			private IEnumerator _iEnum;
 
 			internal StrongListWrapperEnumerator(IEnumerator ienum)
 			{
-				iEnum = ienum;
+				_iEnum = ienum;
 			}
 
 			public T Current
 			{
-				get { return (T)iEnum.Current; }
+				get { return (T)_iEnum.Current; }
 			}
 
 			public void Dispose()
 			{
 				Reset();
-				iEnum = null;
+				_iEnum = null;
 			}
 
 			object IEnumerator.Current
 			{
-				get { return this.Current; }
+				get { return Current; }
 			}
 
 			public bool MoveNext()
 			{
-				return iEnum.MoveNext();
+				return _iEnum.MoveNext();
 			}
 
 			public void Reset()
 			{
-				iEnum.Reset();
+				_iEnum.Reset();
 			}
 		}
-
-		/*
-		int Add(object value)
-		{
-			return Add(value);
-		}
-
-		bool Contains(object value)
-		{
-			return Contains(value);
-		}
-
-		int IndexOf(object value)
-		{
-			return IndexOf(value);
-		}
-
-		void Insert(int index, object value)
-		{
-			Insert(index, value);
-		}
-
-		bool IsFixedSize
-		{
-			get { return list.IsFixedSize; }
-		}
-
-		void Remove(object value)
-		{
-			Remove(value);
-		}
-
-		object IList.this[int index]
-		{
-			get
-			{
-				return this[index];
-			}
-			set
-			{
-				this[index] = (T)value;
-			}
-		}
-
-		void CopyTo(Array array, int index)
-		{
-			CopyTo(array, index);
-		}
-
-		bool IsSynchronized
-		{
-			get { return list.IsSynchronized; }
-		}
-
-		object SyncRoot
-		{
-			get { return list.SyncRoot; }
-		}
-		*/ 
 	}
 }

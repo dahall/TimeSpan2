@@ -9,14 +9,11 @@ namespace System.Globalization
 	/// </summary>
 	public sealed class TimeSpanFormatInfo : IFormatProvider, ICustomFormatter
 	{
-		private TimeSpanResources res;
-
 		/// <summary>
 		/// Initializes a new writable instance of the <see cref="TimeSpanFormatInfo"/> class that is culture-independent (invariant).
 		/// </summary>
 		public TimeSpanFormatInfo()
 		{
-			res = new TimeSpanResources();
 		}
 
 		/// <summary>
@@ -25,7 +22,7 @@ namespace System.Globalization
 		/// <param name="culture">The culture.</param>
 		internal TimeSpanFormatInfo(CultureInfo culture)
 		{
-			res = new TimeSpanResources(culture);
+			Properties.Resources.Culture = culture;
 		}
 
 		/// <summary>
@@ -139,20 +136,20 @@ namespace System.Globalization
 			else
 			{
 				bool f = false;
-				StringBuilder sb = new StringBuilder(value.ToLower(this.res.Culture));
-				foreach (var s in res.TimeSpanMillisecondStrings.Split(','))
+				StringBuilder sb = new StringBuilder(value.ToLower(Properties.Resources.Culture));
+				foreach (var s in Properties.Resources.TimeSpanMillisecondStrings.Split(','))
 					if (sb.ToString().IndexOf(s) != -1) { f = true; sb.Replace(s, "t"); }
-				foreach (var s in res.TimeSpanSecondStrings.Split(','))
+				foreach (var s in Properties.Resources.TimeSpanSecondStrings.Split(','))
 					if (sb.ToString().IndexOf(s) != -1) { f = true; sb.Replace(s, "s"); }
-				foreach (var s in res.TimeSpanMinuteStrings.Split(','))
+				foreach (var s in Properties.Resources.TimeSpanMinuteStrings.Split(','))
 					if (sb.ToString().IndexOf(s) != -1) { f = true; sb.Replace(s, "m"); }
-				foreach (var s in res.TimeSpanHourStrings.Split(','))
+				foreach (var s in Properties.Resources.TimeSpanHourStrings.Split(','))
 					if (sb.ToString().IndexOf(s) != -1) { f = true; sb.Replace(s, "h"); }
-				foreach (var s in res.TimeSpanDayStrings.Split(','))
+				foreach (var s in Properties.Resources.TimeSpanDayStrings.Split(','))
 					if (sb.ToString().IndexOf(s) != -1) { f = true; sb.Replace(s, "d"); }
 				if (f)
 				{
-					Regex regex = new Regex(res.TimeSpanParseRegEx, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+					Regex regex = new Regex(Properties.Resources.TimeSpanParseRegEx, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 					/*Regex regex = new Regex(@"(?:(?<d>\d+)\s*d\s*[,]?\s*)?(?:(?<h>\d+)\s*h\s*[,]?\s*)?(?:(?<m>\d+)\s*m\s*[,]?\s*)?(?:(?<s>\d+)\s*s\s*[,]?\s*)?(?:(?<t>\d+)\s*t)?",
 									RegexOptions.IgnoreCase |
 									RegexOptions.Compiled |
@@ -213,35 +210,35 @@ namespace System.Globalization
 				case 'f':
 					Dictionary<char, string> sc = new Dictionary<char, string>(5);
 					if (core.Days > 0)
-						sc.Add('d', string.Format(core.Days == 1 ? res.TimeSpanOneDayFormat : res.TimeSpanManyDayFormat, core.Days));
+						sc.Add('d', string.Format(core.Days == 1 ? Properties.Resources.TimeSpanOneDayFormat : Properties.Resources.TimeSpanManyDayFormat, core.Days));
 					if (core.Hours > 0)
-						sc.Add('h', string.Format(core.Hours == 1 ? res.TimeSpanOneHourFormat : res.TimeSpanManyHourFormat, core.Hours));
+						sc.Add('h', string.Format(core.Hours == 1 ? Properties.Resources.TimeSpanOneHourFormat : Properties.Resources.TimeSpanManyHourFormat, core.Hours));
 					if (core.Minutes > 0)
-						sc.Add('m', string.Format(core.Minutes == 1 ? res.TimeSpanOneMinuteFormat : res.TimeSpanManyMinuteFormat, core.Minutes));
+						sc.Add('m', string.Format(core.Minutes == 1 ? Properties.Resources.TimeSpanOneMinuteFormat : Properties.Resources.TimeSpanManyMinuteFormat, core.Minutes));
 					if (core.Seconds > 0)
-						sc.Add('s', string.Format(core.Seconds == 1 ? res.TimeSpanOneSecondFormat : res.TimeSpanManySecondFormat, core.Seconds));
+						sc.Add('s', string.Format(core.Seconds == 1 ? Properties.Resources.TimeSpanOneSecondFormat : Properties.Resources.TimeSpanManySecondFormat, core.Seconds));
 					if (core.Milliseconds > 0)
-						sc.Add('t', string.Format(core.Milliseconds == 1 ? res.TimeSpanOneMillisecondFormat : res.TimeSpanManyMillisecondFormat, core.Milliseconds));
+						sc.Add('t', string.Format(core.Milliseconds == 1 ? Properties.Resources.TimeSpanOneMillisecondFormat : Properties.Resources.TimeSpanManyMillisecondFormat, core.Milliseconds));
 					if (sc.Count == 0 && core.TotalSeconds > 0)
-						sc.Add('s', string.Format(core.TotalSeconds == 1 ? res.TimeSpanOneSecondFormat : res.TimeSpanManySecondFormat, core.TotalSeconds));
+						sc.Add('s', string.Format(core.TotalSeconds == 1 ? Properties.Resources.TimeSpanOneSecondFormat : Properties.Resources.TimeSpanManySecondFormat, core.TotalSeconds));
 					string[] vals = new string[sc.Count];
-					string ordering = res.TimeSpanFullBuildOrder;
+					string ordering = Properties.Resources.TimeSpanFullBuildOrder;
 					for (int i = 0, p = 0; i < 5; i++)
 					{
 						if (sc.ContainsKey(ordering[i]))
 							vals[p++] = sc[ordering[i]];
 					}
-					return string.Join(res.TimeSpanSeparator, vals);
+					return string.Join(Properties.Resources.TimeSpanSeparator, vals);
 				case 's':
-					return string.Format(core.TotalSeconds == 1 ? res.TimeSpanOneSecondFormat : res.TimeSpanManySecondFormat, core.TotalSeconds);
+					return string.Format(core.TotalSeconds == 1 ? Properties.Resources.TimeSpanOneSecondFormat : Properties.Resources.TimeSpanManySecondFormat, core.TotalSeconds);
 				case 'm':
-					return string.Format(core.TotalMinutes == 1 ? res.TimeSpanOneMinuteFormat : res.TimeSpanManyMinuteFormat, core.TotalMinutes);
+					return string.Format(core.TotalMinutes == 1 ? Properties.Resources.TimeSpanOneMinuteFormat : Properties.Resources.TimeSpanManyMinuteFormat, core.TotalMinutes);
 				case 'h':
-					return string.Format(core.TotalHours == 1 ? res.TimeSpanOneHourFormat : res.TimeSpanManyHourFormat, core.TotalHours);
+					return string.Format(core.TotalHours == 1 ? Properties.Resources.TimeSpanOneHourFormat : Properties.Resources.TimeSpanManyHourFormat, core.TotalHours);
 				case 'd':
-					return string.Format(core.TotalDays == 1 ? res.TimeSpanOneDayFormat : res.TimeSpanManyDayFormat, core.TotalDays);
+					return string.Format(core.TotalDays == 1 ? Properties.Resources.TimeSpanOneDayFormat : Properties.Resources.TimeSpanManyDayFormat, core.TotalDays);
 				case 't':
-					return string.Format(core.TotalMilliseconds == 1 ? res.TimeSpanOneMillisecondFormat : res.TimeSpanManyMillisecondFormat, core.TotalMilliseconds);
+					return string.Format(core.TotalMilliseconds == 1 ? Properties.Resources.TimeSpanOneMillisecondFormat : Properties.Resources.TimeSpanManyMillisecondFormat, core.TotalMilliseconds);
 				default:
 					throw new FormatException("Invalid format specified");
 			}

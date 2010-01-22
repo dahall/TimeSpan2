@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StrongListWrapper.cs" />
     <Compile Include="TimeSpan2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,16 +58,16 @@
     <Compile Include="TimeSpanPicker.designer.cs">
       <DependentUpon>TimeSpanPicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeSpanResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.fr.resx" />
     <EmbeddedResource Include="Properties\Resources.es.resx" />
-    <EmbeddedResource Include="Properties\Resources.en.resx" />
     <EmbeddedResource Include="Properties\Resources.it.resx" />
     <EmbeddedResource Include="Properties\Resources.de.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="TimeSpanPicker.resx">
       <DependentUpon>TimeSpanPicker.cs</DependentUpon>
