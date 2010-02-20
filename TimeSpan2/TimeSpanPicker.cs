@@ -141,7 +141,7 @@ namespace System.Windows.Forms
 
         private TimeSpan GetValue(string s)
         {
-            return TimeSpanFormatInfo.CurrentInfo.Parse(s);
+            return TimeSpanFormatInfo.CurrentInfo.Parse(s, null);
         }
 
         private void comboBoxTimeSpan_Format(object sender, ListControlConvertEventArgs e)

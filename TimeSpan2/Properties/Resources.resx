@@ -122,32 +122,36 @@
     <comment>Comma separated list of all strings that can represent a day</comment>
   </data>
   <data name="TimeSpanFullBuildOrder" xml:space="preserve">
-    <value>dhmst</value>
-    <comment>Formatting order of each time element (d = day, h = hour, m = minute, s = second, t = millisecond)</comment>
+    <value>dhmskt</value>
+    <comment>Formatting order of each time element (d = day, h = hour, m = minute, s = second, k = millisecond, t = ticks)</comment>
   </data>
   <data name="TimeSpanHourStrings" xml:space="preserve">
     <value>hours,hour,hrs,hr,h</value>
     <comment>Comma separated list of all strings that can represent an hour</comment>
   </data>
   <data name="TimeSpanManyDayFormat" xml:space="preserve">
-    <value>{0} days</value>
+    <value>days</value>
     <comment>Format for days when Days property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyHourFormat" xml:space="preserve">
-    <value>{0} hours</value>
+    <value>hours</value>
     <comment>Format for hours when Hours property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyMillisecondFormat" xml:space="preserve">
-    <value>{0} milliseconds</value>
+    <value>milliseconds</value>
     <comment>Format for milliseconds when Milliseconds property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyMinuteFormat" xml:space="preserve">
-    <value>{0} minutes</value>
+    <value>minutes</value>
     <comment>Format for minutes when Minutes property &gt; 1</comment>
   </data>
   <data name="TimeSpanManySecondFormat" xml:space="preserve">
-    <value>{0} seconds</value>
+    <value>seconds</value>
     <comment>Format for seconds when Seconds property &gt; 1</comment>
+  </data>
+  <data name="TimeSpanManyTickFormat" xml:space="preserve">
+    <value>ticks</value>
+    <comment>Format for hours when Ticks property &gt; 1</comment>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
     <value>milliseconds,millisecond,ms</value>
@@ -157,29 +161,33 @@
     <value>minutes,minute,mins,min,m</value>
     <comment>Comma separated list of all strings that can represent a minute</comment>
   </data>
+  <data name="TimeSpanNumberWordPattern" xml:space="preserve">
+    <value>{0} {1}</value>
+    <comment>{0} = number; {1} = word</comment>
+  </data>
   <data name="TimeSpanOneDayFormat" xml:space="preserve">
-    <value>{0} day</value>
+    <value>day</value>
     <comment>Format for days when Days property equals 1</comment>
   </data>
   <data name="TimeSpanOneHourFormat" xml:space="preserve">
-    <value>{0} hour</value>
+    <value>hour</value>
     <comment>Format for hours when Hours property equals 1</comment>
   </data>
   <data name="TimeSpanOneMillisecondFormat" xml:space="preserve">
-    <value>{0} millisecond</value>
+    <value>millisecond</value>
     <comment>Format for milliseconds when Milliseconds property equals 1</comment>
   </data>
   <data name="TimeSpanOneMinuteFormat" xml:space="preserve">
-    <value>{0} minutes</value>
+    <value>minutes</value>
     <comment>Format for minutes when Minutes property equals 1</comment>
   </data>
   <data name="TimeSpanOneSecondFormat" xml:space="preserve">
-    <value>{0} seconds</value>
+    <value>seconds</value>
     <comment>Format for seconds when Seconds property equals 1</comment>
   </data>
-  <data name="TimeSpanParseRegEx" xml:space="preserve">
-    <value>\s*(?:(?&lt;d&gt;\d+)\s*d\s*[,]?\s*)?(?:(?&lt;h&gt;\d+)\s*h\s*[,]?\s*)?(?:(?&lt;m&gt;\d+)\s*m\s*[,]?\s*)?(?:(?&lt;s&gt;\d+)\s*s\s*[,]?\s*)?(?:(?&lt;t&gt;\d+)\s*t)?\s*</value>
-    <comment>Regular expression used to parse input string after all day strings (TimeSpanDayStrings) have been changed to a 'd', all hour strings have been changed to 'h', all minute string to 'm', all second strings to 's, and all millisecond strings to 't'</comment>
+  <data name="TimeSpanOneTickFormat" xml:space="preserve">
+    <value>tick</value>
+    <comment>Format for hours when Ticks property equals 1</comment>
   </data>
   <data name="TimeSpanSecondStrings" xml:space="preserve">
     <value>seconds,second,secs,sec,s</value>
@@ -188,5 +196,13 @@
   <data name="TimeSpanSeparator" xml:space="preserve">
     <value>, </value>
     <comment>Separator string used in between individual formatted strings for each time element</comment>
+  </data>
+  <data name="TimeSpanTickStrings" xml:space="preserve">
+    <value>ticks,tick,t</value>
+    <comment>Comma separated list of all strings that can represent a tick</comment>
+  </data>
+  <data name="TimeSpanWordPattern" xml:space="preserve">
+    <value>[%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t]</value>
+    <comment>Format string for worded time spans</comment>
   </data>
 </root>

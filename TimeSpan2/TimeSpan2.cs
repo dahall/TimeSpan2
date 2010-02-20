@@ -23,12 +23,28 @@ namespace System
         /// <summary>Represents the zero <see cref="TimeSpan2"/> value. This field is read-only.</summary>
         public static readonly TimeSpan2 Zero;
 
+		/// <summary>Represents the number of ticks in 1 day. This field is constant.</summary>
+		public static readonly long TicksPerDay;
+		/// <summary>Represents the number of ticks in 1 hour. This field is constant.</summary>
+		public static readonly long TicksPerHour;
+		/// <summary>Represents the number of ticks in 1 millisecond. This field is constant.</summary>
+		public static readonly long TicksPerMillisecond;
+		/// <summary>Represents the number of ticks in 1 minute. This field is constant.</summary>
+		public static readonly long TicksPerMinute;
+		/// <summary>Represents the number of ticks in 1 second. This field is constant.</summary>
+		public static readonly long TicksPerSecond;
+
         static TimeSpan2()
         {
             Zero = new TimeSpan2(TimeSpan.Zero);
             MaxValue = new TimeSpan2(TimeSpan.MaxValue);
             MinValue = new TimeSpan2(TimeSpan.MinValue);
-        }
+			TicksPerDay = TimeSpan.TicksPerDay;
+			TicksPerHour = TimeSpan.TicksPerHour;
+			TicksPerMillisecond = TimeSpan.TicksPerMillisecond;
+			TicksPerMinute = TimeSpan.TicksPerMinute;
+			TicksPerSecond = TimeSpan.TicksPerSecond;
+		}
 
         /// <summary>
         /// Initializes a new <see cref="TimeSpan2"/> with the specified <see cref="TimeSpan"/>.
@@ -409,7 +425,7 @@ namespace System
 		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
 		public static TimeSpan2 Parse(string value)
         {
-            return Parse(value, null, String.Empty);
+            return Parse(value, null);
         }
 
 		/// <summary>
@@ -422,51 +438,34 @@ namespace System
 		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
 		public static TimeSpan2 Parse(string value, IFormatProvider formatProvider)
         {
-            return Parse(value, formatProvider, String.Empty);
-        }
-
-		/// <summary>
-		/// Converts the specified string representation of a time span to its <see cref="TimeSpan2"/> equivalent using the specified culture-specific format information. 
-		/// </summary>
-		/// <param name="value">A string containing a time span to parse.</param>
-		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="value"/>.</param>
-		/// <param name="formattedZero">The string to use if <paramref name="value"/> equals <c>TimeSpan2.Zero</c>.</param>
-		/// <returns>A <see cref="TimeSpan2"/> equivalent to the time span contained in <paramref name="value"/> as specified by <paramref name="formatProvider"/>.</returns>
-		/// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
-		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
-		public static TimeSpan2 Parse(string value, IFormatProvider formatProvider, string formattedZero)
-        {
             TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
-            fi.TimeSpanZeroDisplay = formattedZero;
-            return new TimeSpan2(fi.Parse(value));
+            return new TimeSpan2(fi.Parse(value, null));
         }
 
 		/// <summary>
-		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan2"/> equivalent and returns a value that indicates whether the conversion succeeded. 
+		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified array of format strings and culture-specific format information. The format of the string representation must match the specified format exactly.
 		/// </summary>
-		/// <param name="s">A string containing a time span to convert.</param>
-		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="s"/>.</param>
-		/// <param name="formattedZero">The string to use if <paramref name="s"/> equals <c>TimeSpan2.Zero</c>.</param>
-		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
-		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
-		public static bool TryParse(string s, IFormatProvider formatProvider, string formattedZero, out TimeSpan2 result)
-        {
+		/// <param name="input">A string that specifies the time interval to convert.</param>
+		/// <param name="format">A standard or custom format string that defines the required format of <paramref name="input"/>.</param>
+		/// <param name="formatProvider">An object that provides culture-specific formatting information.</param>
+		/// <returns>A time interval that corresponds to <paramref name="input"/>, as specified by <paramref name="format"/> and <paramref name="formatProvider"/>.</returns>
+		public static TimeSpan2 ParseExact(string input, string format, IFormatProvider formatProvider)
+		{
+			return ParseExact(input, new string[] { format }, formatProvider);
+		}
+
+		/// <summary>
+		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format and culture-specific format information. The format of the string representation must match the specified format exactly.
+		/// </summary>
+		/// <param name="input">A string that specifies the time interval to convert.</param>
+		/// <param name="formats">A array of standard or custom format strings that defines the required format of <paramref name="input"/>.</param>
+		/// <param name="formatProvider">An object that provides culture-specific formatting information.</param>
+		/// <returns>A time interval that corresponds to <paramref name="input"/>, as specified by <paramref name="formats"/> and <paramref name="formatProvider"/>.</returns>
+		public static TimeSpan2 ParseExact(string input, string[] formats, IFormatProvider formatProvider)
+		{
             TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
-            fi.TimeSpanZeroDisplay = formattedZero;
-            return fi.TryParse(s, out result.core);
-        }
-
-		/// <summary>
-		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan2"/> equivalent and returns a value that indicates whether the conversion succeeded. 
-		/// </summary>
-		/// <param name="s">A string containing a time span to convert.</param>
-		/// <param name="formattedZero">The string to use if <paramref name="s"/> equals <c>TimeSpan2.Zero</c>.</param>
-		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
-		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
-		public static bool TryParse(string s, string formattedZero, out TimeSpan2 result)
-        {
-            return TryParse(s, null, formattedZero, out result);
-        }
+			return fi.ParseExact(input, formats, null);
+		}
 
 		/// <summary>
 		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan2"/> equivalent and returns a value that indicates whether the conversion succeeded. 
@@ -475,11 +474,51 @@ namespace System
 		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParse(string s, out TimeSpan2 result)
+		{
+			return TryParse(s, null, out result);
+		}
+
+		/// <summary>
+		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan2"/> equivalent and returns a value that indicates whether the conversion succeeded. 
+		/// </summary>
+		/// <param name="s">A string containing a time span to convert.</param>
+		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="s"/>.</param>
+		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
+		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
+		public static bool TryParse(string s, IFormatProvider formatProvider, out TimeSpan2 result)
         {
-            return TryParse(s, null, null, out result);
+            TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
+            return fi.TryParse(s, null, out result.core);
         }
 
-        /// <summary>
+		/// <summary>
+		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format and culture-specific format information, and returns a value that indicates whether the conversion succeeded. The format of the string representation must match the specified format exactly.
+		/// </summary>
+		/// <param name="input">A string that specifies the time interval to convert.</param>
+		/// <param name="format">A standard or custom format string that defines the required format of <paramref name="input"/>.</param>
+		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="input"/>.</param>
+		/// <param name="result">When this method returns, contains an object that represents the time interval specified by <paramref name="input"/>, or <see cref="TimeSpan.Zero"/> if the conversion failed. This parameter is passed uninitialized.</param>
+		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
+		public static bool TryParseExact(string input, string format, IFormatProvider formatProvider, out TimeSpan2 result)
+		{
+			return TryParseExact(input, new string[] { format }, formatProvider, out result);
+		}
+
+		/// <summary>
+		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified formats and culture-specific format information, and returns a value that indicates whether the conversion succeeded. The format of the string representation must match one of the specified formats exactly.
+		/// </summary>
+		/// <param name="input">A string that specifies the time interval to convert.</param>
+		/// <param name="formats">A array of standard or custom format strings that define the acceptable formats of <paramref name="input"/>.</param>
+		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="input"/>.</param>
+		/// <param name="result">When this method returns, contains an object that represents the time interval specified by <paramref name="input"/>, or <see cref="TimeSpan.Zero"/> if the conversion failed. This parameter is passed uninitialized.</param>
+		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
+		public static bool TryParseExact(string input, string[] formats, IFormatProvider formatProvider, out TimeSpan2 result)
+		{
+			TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
+			return fi.TryParseExact(input, formats, null, out result.core);
+		}
+
+		/// <summary>
 		/// Adds the specified <see cref="TimeSpan2"/> to this instance.
         /// </summary>
 		/// <param name="ts">A <see cref="TimeSpan2"/>.</param>
@@ -715,44 +754,78 @@ namespace System
 		/// <param name="format">A TimeSpan format string.</param>
 		/// <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> object that supplies format information about the current instance.</param>
 		/// <returns>A string representation of value of the current <see cref="TimeSpan2"/> object as specified by format.</returns>
-		/// <remarks>The following table lists the standard TimeSpan format patterns.
-		/// <list type="table">
-		/// <listheader><term>Format pattern</term><description>Associated Property/Description</description></listheader>
-		/// <item><term>d</term><description>Localized string for TotalDays</description></item>
-		/// <item><term>f</term><description>Full localized string displaying each time element with separator between</description></item>
-		/// <item><term>h</term><description>Localized string for TotalHours</description></item>
-		/// <item><term>m</term><description>Localized string for TotalMinutes</description></item>
-		/// <item><term>n</term><description>Standard TimeSpan format (00:00:00:00)</description></item>
-		/// <item><term>s</term><description>Localized string for TotalSeconds</description></item>
-		/// <item><term>t</term><description>Localized string for TotalMilliseconds</description></item>
-		/// </list>
-		/// </remarks>
 		public string ToString(string format, IFormatProvider formatProvider)
         {
             TimeSpanFormatInfo tfi = TimeSpanFormatInfo.GetInstance(formatProvider);
             return tfi.Format(format, this, formatProvider);
         }
 
-        /// <summary>
+		/// <summary>
+		/// Returns string representation of the value of this instance using the specified format.
+		/// </summary>
+		/// <param name="format">A TimeSpan format string.</param>
+		/// <returns>A string representation of value of the current <see cref="TimeSpan2"/> object as specified by format.</returns>
+		/// <remarks>
+		/// <para>The following table lists the standard TimeSpan format patterns.</para>
+		/// <list type="table">
+		/// <listheader><term>Format specifier</term><description>Name</description><description>Description</description><description>Examples</description></listheader>
+		/// <item><term>"c"</term>
+		///		<description>Constant (invariant) format</description>
+		///		<description>This specifier is not culture-sensitive. It takes the form <code>[-][d’.’]hh’:’mm’:’ss[‘.’fffffff]</code>.</description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"f"</term>
+		///		<description>General word format</description>
+		///		<description></description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"g"</term>
+		///		<description>General short format</description>
+		///		<description>This specifier outputs only what is needed. It is culture-sensitive and takes the form <code>[-][d’:’]h’:’mm’:’ss[.FFFFFFF]</code>.</description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"G"</term>
+		///		<description>General long format</description>
+		///		<description>This specifier always outputs days and seven fractional digits. It is culture-sensitive and takes the form <code>[-]d’:’hh’:’mm’:’ss.fffffff</code>.</description>
+		///		<description></description>
+		/// </item>
+		/// </list>
+		/// <para>The following table lists the standard TimeSpan format patterns.</para>
+		/// <list type="table">
+		/// <listheader><term>Format specifier</term><description>Description</description><description>Examples</description></listheader>
+		/// <item><term>"d", "%d"</term>
+		///		<description>The number of whole days in the time interval.</description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"dd"-"dddddddd"</term>
+		///		<description>The number of whole days in the time interval, padded with leading zeros as needed.</description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"h", "%h"</term>
+		///		<description>The number of whole hours in the time interval that are not counted as part of days. Single-digit hours do not have a leading zero.</description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"hh"</term>
+		///		<description>The number of whole hours in the time interval that are not counted as part of days. Single-digit hours have a leading zero.</description>
+		///		<description></description>
+		/// </item>
+		/// </list>
+		/// </remarks>
+		public string ToString(string format)
+		{
+			return TimeSpanFormatInfo.CurrentInfo.Format(format, this, null);
+		}
+
+		/// <summary>
 		/// Returns the string representation of the value of this instance.
         /// </summary>
         /// <returns>
 		/// A string that represents the value of this instance. The return value is of the form: 
 		/// <para>[-][d.]hh:mm:ss[.fffffff]</para>
-		/// <para>Elements in square brackets ([ and ]) may not be included in the returned string. Colons and periods (: and.) are literal characters. The non-literal elements are listed in the following table.</para>
-		/// <list>
-		/// <listheader><term>Item</term><description>Description</description></listheader>
-		/// <item><term>"-"</term><description>A minus sign, which indicates a negative time span. No sign is included for a positive time span</description></item>
-		/// <item><term>"d"</term><description>The number of days in the time span. This element is omitted if the time span is less than one day.</description></item>
-		/// <item><term>"hh"</term><description>The number of hours in the time span, ranging from 0 to 23.</description></item>
-		/// <item><term>"mm"</term><description>The number of minutes in the time span, ranging from 0 to 59.</description></item>
-		/// <item><term>"ss"</term><description>The number of seconds in the time span, ranging from 0 to 59.</description></item>
-		/// <item><term>"fffffff"</term><description>Fractional seconds in the time span. This element is omitted if the time span does not include fractional seconds. If present, fractional seconds are always expressed using 7 decimal digits.</description></item>
-		/// </list>
 		/// </returns>
 		public override string ToString()
         {
-            return ToString(null, null);
+            return core.ToString();
         }
     }
 }

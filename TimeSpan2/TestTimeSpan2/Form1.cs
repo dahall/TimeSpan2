@@ -69,15 +69,17 @@ namespace TestTimeSpan2
 		private void dayUpDn_ValueChanged(object sender, EventArgs e)
 		{
 			TimeSpan2 ts = new TimeSpan2((int)dayUpDn.Value, (int)hrUpDn.Value, (int)minUpDn.Value, (int)secUpDn.Value, (int)msUpDn.Value);
-			outputLabel.Text = ts.ToString("f", formatInfo);
+			try { outputLabel.Text = ts.ToString(formatTextBox.Text, formatInfo); }
+			catch (Exception ex) { outputLabel.Text = ex.Message; }
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
 			try
 			{
-				TimeSpan ts = TimeSpan2.Parse(parseText.Text, formatInfo);
-				parseLabel.Text = ts.ToString();
+				TimeSpan2 ts;
+				if (TimeSpan2.TryParse(parseText.Text, out ts))
+					parseLabel.Text = ts.ToString("x");
 			}
 			catch (Exception ex)
 			{
