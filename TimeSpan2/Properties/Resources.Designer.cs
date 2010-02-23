@@ -70,15 +70,6 @@ namespace System.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to dhmskt.
-        /// </summary>
-        internal static string TimeSpanFullBuildOrder {
-            get {
-                return ResourceManager.GetString("TimeSpanFullBuildOrder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to hours,hour,hrs,hr,h.
         /// </summary>
         internal static string TimeSpanHourStrings {
@@ -160,15 +151,6 @@ namespace System.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} {1}.
-        /// </summary>
-        internal static string TimeSpanNumberWordPattern {
-            get {
-                return ResourceManager.GetString("TimeSpanNumberWordPattern", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to day.
         /// </summary>
         internal static string TimeSpanOneDayFormat {
@@ -196,7 +178,7 @@ namespace System.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to minutes.
+        ///   Looks up a localized string similar to minute.
         /// </summary>
         internal static string TimeSpanOneMinuteFormat {
             get {
@@ -205,7 +187,7 @@ namespace System.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to seconds.
+        ///   Looks up a localized string similar to second.
         /// </summary>
         internal static string TimeSpanOneSecondFormat {
             get {
@@ -250,11 +232,29 @@ namespace System.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [%d_@d],[%h_@h],[%m_@m],[%s_@s],[%k_@k].
+        /// </summary>
+        internal static string TimeSpanWordFormat {
+            get {
+                return ResourceManager.GetString("TimeSpanWordFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t].
         /// </summary>
         internal static string TimeSpanWordPattern {
             get {
                 return ResourceManager.GetString("TimeSpanWordPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to true.
+        /// </summary>
+        internal static string TimeSpanWordPatternIgnoreCase {
+            get {
+                return ResourceManager.GetString("TimeSpanWordPatternIgnoreCase", resourceCulture);
             }
         }
     }

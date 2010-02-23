@@ -292,11 +292,12 @@
 			// timeSpanPicker
 			// 
 			this.timeSpanPicker.AutoSize = true;
+			this.timeSpanPicker.FormattedZero = "Nothing";
 			this.timeSpanPicker.Location = new System.Drawing.Point(12, 177);
 			this.timeSpanPicker.Name = "timeSpanPicker";
 			this.timeSpanPicker.Size = new System.Drawing.Size(275, 21);
 			this.timeSpanPicker.TabIndex = 7;
-			this.timeSpanPicker.Value = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+			this.timeSpanPicker.Value = System.TimeSpan.Parse("00:00:00");
 			this.timeSpanPicker.ValueChanged += new System.EventHandler(this.timeSpanPicker_ValueChanged);
 			// 
 			// pickerValueLabel

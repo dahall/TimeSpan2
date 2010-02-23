@@ -118,88 +118,67 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TimeSpanDayStrings" xml:space="preserve">
-    <value>days,day,d</value>
-    <comment>Comma separated list of all strings that can represent a day</comment>
+    <value>dias,dia</value>
   </data>
   <data name="TimeSpanHourStrings" xml:space="preserve">
-    <value>hours,hour,hrs,hr,h</value>
-    <comment>Comma separated list of all strings that can represent an hour</comment>
+    <value>horas,hora</value>
   </data>
   <data name="TimeSpanManyDayFormat" xml:space="preserve">
-    <value>days</value>
-    <comment>Format for days when Days property &gt; 1</comment>
+    <value>dias</value>
   </data>
   <data name="TimeSpanManyHourFormat" xml:space="preserve">
-    <value>hours</value>
-    <comment>Format for hours when Hours property &gt; 1</comment>
+    <value>horas</value>
   </data>
   <data name="TimeSpanManyMillisecondFormat" xml:space="preserve">
-    <value>milliseconds</value>
-    <comment>Format for milliseconds when Milliseconds property &gt; 1</comment>
+    <value>milissegundos</value>
   </data>
   <data name="TimeSpanManyMinuteFormat" xml:space="preserve">
-    <value>minutes</value>
-    <comment>Format for minutes when Minutes property &gt; 1</comment>
+    <value>minutos</value>
   </data>
   <data name="TimeSpanManySecondFormat" xml:space="preserve">
-    <value>seconds</value>
-    <comment>Format for seconds when Seconds property &gt; 1</comment>
+    <value>segundos</value>
   </data>
   <data name="TimeSpanManyTickFormat" xml:space="preserve">
-    <value>ticks</value>
-    <comment>Format for hours when Ticks property &gt; 1</comment>
+    <value>escalas</value>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
-    <value>milliseconds,millisecond,ms</value>
-    <comment>Comma separated list of all strings that can represent a millisecond</comment>
+    <value>milisegundos,milisegundos</value>
   </data>
   <data name="TimeSpanMinuteStrings" xml:space="preserve">
-    <value>minutes,minute,mins,min,m</value>
-    <comment>Comma separated list of all strings that can represent a minute</comment>
+    <value>minutos,minuto</value>
   </data>
   <data name="TimeSpanOneDayFormat" xml:space="preserve">
-    <value>day</value>
-    <comment>Format for days when Days property equals 1</comment>
+    <value>dia</value>
   </data>
   <data name="TimeSpanOneHourFormat" xml:space="preserve">
-    <value>hour</value>
-    <comment>Format for hours when Hours property equals 1</comment>
+    <value>hora</value>
   </data>
   <data name="TimeSpanOneMillisecondFormat" xml:space="preserve">
-    <value>millisecond</value>
-    <comment>Format for milliseconds when Milliseconds property equals 1</comment>
+    <value>milisegundo</value>
   </data>
   <data name="TimeSpanOneMinuteFormat" xml:space="preserve">
-    <value>minute</value>
-    <comment>Format for minutes when Minutes property equals 1</comment>
+    <value>minuto</value>
   </data>
   <data name="TimeSpanOneSecondFormat" xml:space="preserve">
-    <value>second</value>
-    <comment>Format for seconds when Seconds property equals 1</comment>
+    <value>segundo</value>
   </data>
   <data name="TimeSpanOneTickFormat" xml:space="preserve">
-    <value>tick</value>
-    <comment>Format for hours when Ticks property equals 1</comment>
+    <value>escala</value>
   </data>
   <data name="TimeSpanSecondStrings" xml:space="preserve">
-    <value>seconds,second,secs,sec,s</value>
-    <comment>Comma separated list of all strings that can represent a second</comment>
+    <value>segundos,segundo</value>
   </data>
   <data name="TimeSpanSeparator" xml:space="preserve">
     <value>, </value>
-    <comment>Separator string used in between individual formatted strings for each time element</comment>
   </data>
   <data name="TimeSpanTickStrings" xml:space="preserve">
-    <value>ticks,tick,t</value>
-    <comment>Comma separated list of all strings that can represent a tick</comment>
+    <value>escalas,escala</value>
   </data>
   <data name="TimeSpanWordFormat" xml:space="preserve">
     <value>[%d_@d],[%h_@h],[%m_@m],[%s_@s],[%k_@k]</value>
-    <comment>Pattern string for formatting worded time spans</comment>
   </data>
   <data name="TimeSpanWordPattern" xml:space="preserve">
     <value>[%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t]</value>
-    <comment>Pattern string for parsing worded time spans</comment>
   </data>
   <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">
     <value>true</value>

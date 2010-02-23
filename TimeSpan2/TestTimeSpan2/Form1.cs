@@ -26,6 +26,8 @@ namespace TestTimeSpan2
 			langCombo.Items.Add(new System.Globalization.CultureInfo("de-DE"));
 			langCombo.Items.Add(new System.Globalization.CultureInfo("es-ES"));
 			langCombo.Items.Add(new System.Globalization.CultureInfo("fr-FR"));
+			langCombo.Items.Add(new System.Globalization.CultureInfo("pt-PT"));
+			langCombo.Items.Add(new System.Globalization.CultureInfo("ru-RU"));
 			langCombo.EndUpdate();
 			langCombo.SelectedItem = curCulture = System.Globalization.CultureInfo.CurrentCulture;
 
@@ -79,7 +81,7 @@ namespace TestTimeSpan2
 			{
 				TimeSpan2 ts;
 				if (TimeSpan2.TryParse(parseText.Text, out ts))
-					parseLabel.Text = ts.ToString("x");
+					parseLabel.Text = ts.ToString(formatTextBox.Text);
 			}
 			catch (Exception ex)
 			{
@@ -89,7 +91,7 @@ namespace TestTimeSpan2
 
 		private void timeSpanPicker_ValueChanged(object sender, EventArgs e)
 		{
-			pickerValueLabel.Text = timeSpanPicker.Value.ToString();
+			pickerValueLabel.Text = System.Globalization.TimeSpanFormatInfo.CurrentInfo.Format(formatTextBox.Text, timeSpanPicker.Value, null);
 		}
 	}
 }

@@ -4,18 +4,30 @@ using System.Text.RegularExpressions;
 
 namespace System.Globalization
 {
-    /// <summary>
+	/// <summary>
+	/// Type of pattern to extract.
+	/// </summary>
+	public enum TimeSpanPatternType
+	{
+		/// <summary>Pattern used for formatting output.</summary>
+		Formatting,
+		/// <summary>Pattern used for parsing input string.</summary>
+		Parsing
+	}
+
+	/// <summary>
     /// Defines how <see cref="TimeSpan"/> values are formatted and displayed, depending on the culture.
     /// </summary>
     public sealed class TimeSpanFormatInfo : IFormatProvider, ICustomFormatter
     {
-        const string generalLongPattern = "-d:hh:mm:ss.fffffff";
-        const string generalShortPattern = "-[d:]h:mm:ss[.FFFFFFF]";
-		const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase;
-		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
+        const string defaultPattern = "-[d'.']hh':'mm':'ss['.'fffffff]";
+        const string generalLongPattern = "-d.hh:mm:ss.fffffff";
+        const string generalShortPattern = "-[d.]h:mm:ss[.FFFFFFF]";
+        const string ISO8601Pattern = @"'P'[d'D']['T'[h'H'][m'M'][p3'S']];PT0S";
+        const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace; // | RegexOptions.IgnoreCase;
+        const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
         const string post = @")*(?:;(?<z>[ A-Za-z0-9,:\(\)]+))?\s*$";
         const string pre = @"^\s*(?<n>-)?(?:";
-		const string ISO8601Pattern = @"\P[d\D][\T[h\H][m\M][p3\S]];PT0S";
 
         static readonly string fullPattern = string.Concat(pre, pattern, post);
 
@@ -52,6 +64,15 @@ namespace System.Globalization
         }
 
         /// <summary>
+        /// Gets the default pattern.
+        /// </summary>
+        /// <value>The default pattern.</value>
+        public string DefaultPattern
+        {
+            get { return defaultPattern; }
+        }
+
+        /// <summary>
         /// Gets or sets the long pattern.
         /// </summary>
         /// <value>The long pattern.</value>
@@ -77,6 +98,18 @@ namespace System.Globalization
         public string TimeSpanZeroDisplay
         {
             get; set;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether to ignore case when parsing word formatted time spans. Pulls value, if available, from localized resources.
+        /// </summary>
+        private bool WordPatternIgnoreCase
+        {
+            get
+            {
+                try { return bool.Parse(Properties.Resources.TimeSpanWordPatternIgnoreCase); }
+                catch { return true; }
+            }
         }
 
         /// <summary>
@@ -138,6 +171,34 @@ namespace System.Globalization
             return (arg is IFormattable && !(arg is TimeSpan2)) ? ((IFormattable)arg).ToString(format, formatProvider) : arg.ToString();
         }
 
+		/// <summary>
+		/// Returns all the standard patterns in which <see cref="TimeSpan"/> values can be formatted.
+		/// </summary>
+		/// <param name="patternType">Type of the pattern.</param>
+		/// <returns>
+		/// An array containing the standard patterns in which <see cref="TimeSpan"/> values can be formatted.
+		/// </returns>
+        public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType)
+        {
+            List<string> output = new List<string>();
+            foreach (char f in "cgGfx".ToCharArray())
+                output.AddRange(GetAllTimeSpanPatterns(patternType, f));
+            return output.ToArray();
+        }
+
+		/// <summary>
+		/// Returns all the standard patterns in which <see cref="TimeSpan"/> values can be formatted using the specified format pattern.
+		/// </summary>
+		/// <param name="patternType">Type of the pattern.</param>
+		/// <param name="format">A standard format pattern.</param>
+		/// <returns>
+		/// An array containing the standard patterns in which <see cref="TimeSpan"/> values can be formatted using the specified format pattern.
+		/// </returns>
+        public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType, char format)
+        {
+            return new string[] { GetTimeSpanPattern(patternType, format) };
+        }
+
         /// <summary>
         /// Returns an object of the specified type that provides a <see cref="TimeSpan"/> formatting service.
         /// </summary>
@@ -180,9 +241,9 @@ namespace System.Globalization
             if (s == null)
                 throw new ArgumentNullException("s");
 
-			TimeSpan ts;
-			if (!TryParseExact(s, formats, provider, out ts))
-				throw new FormatException();
+            TimeSpan ts;
+            if (!TryParseExact(s, formats, provider, out ts))
+                throw new FormatException();
 
             return ts;
         }
@@ -203,18 +264,14 @@ namespace System.Globalization
             if (string.IsNullOrEmpty(s))
                 return false;
 
-            // Try for the easy one
-            if (TimeSpan.TryParse(s, out result))
+            if (TryParseExact(s, GetAllTimeSpanPatterns(TimeSpanPatternType.Parsing), provider, out result))
                 return true;
-
-			if (TryParseExact(s, new string[] { ShortPattern, LongPattern, ISO8601Pattern, Properties.Resources.TimeSpanWordPattern }, provider, out result))
-				return true;
 
             // Setup
             if (!string.IsNullOrEmpty(TimeSpanZeroDisplay) && (string.Compare(s, TimeSpanZeroDisplay, StringComparison.CurrentCultureIgnoreCase) == 0))
                 return true;
 
-			return false;
+            return false;
         }
 
         /// <summary>
@@ -231,7 +288,12 @@ namespace System.Globalization
         {
             foreach (string f in formats)
             {
-                Match m = ValidateCustomPattern(f);
+                string zeroFormat;
+                string cFormat = GetCustomFormatString(TimeSpanPatternType.Parsing, f, out zeroFormat);
+                if (cFormat.Length == 0)
+                    return TimeSpan.TryParse(s, out result);
+
+                Match m = ValidateCustomPattern(cFormat);
 
                 string pExp = BuildParsingExpression(m);
                 System.Diagnostics.Debug.WriteLine(pExp);
@@ -271,72 +333,22 @@ namespace System.Globalization
             ParseEntity head = GetParsedTokens(match);
             if (head.children == null)
                 throw new FormatException();
-			ParseEntity z = head.children.Find(delegate(ParseEntity p) { return p.name == "z"; });
-			if (z != null && core == TimeSpan.Zero)
-				return z.value;
-			else
-				head.children.Remove(z);
+            ParseEntity z = head.children.Find(delegate(ParseEntity p) { return p.name == "z"; });
+            if (z != null && core == TimeSpan.Zero)
+                return z.value;
+            else
+                head.children.Remove(z);
             ProcessFormatEntity(head, core);
             return head.ToString();
         }
 
         private string FormatTimeSpan(TimeSpan core, string format)
         {
-            char fmt = string.IsNullOrEmpty(format) ? 'c' : format[0];
-            string zeroFormat = string.IsNullOrEmpty(TimeSpanZeroDisplay) ? string.Empty : TimeSpanZeroDisplay;
-            if (format.Length > 1)
-            {
-                if (format[0] == ';')
-                    zeroFormat = format.Substring(1);
-                else if (format[0] != '\\' && format[1] == ';')
-                    zeroFormat = format.Substring(2);
-                else
-                    return CustomFormat(core, format, zeroFormat);
-            }
-
-            switch (fmt)
-            {
-                case ';':
-                case 'c':
-                    return (core == TimeSpan.Zero && zeroFormat != null) ? zeroFormat : core.ToString();
-                case 'g':
-                    return CustomFormat(core, ShortPattern, null);
-                case 'G':
-                    return CustomFormat(core, LongPattern, null);
-                case 'f':
-                    if (core == TimeSpan.Zero && zeroFormat != null)
-                        return zeroFormat;
-                    Dictionary<char, string> sc = new Dictionary<char, string>(5);
-                    if (core.Days > 0)
-                        sc.Add('d', string.Format(Properties.Resources.TimeSpanNumberWordPattern, core.Days, GetCultureString(core.Days, "vd")));
-                    if (core.Hours > 0)
-                        sc.Add('h', string.Format(Properties.Resources.TimeSpanNumberWordPattern, core.Hours, GetCultureString(core.Hours, "vh")));
-                    if (core.Minutes > 0)
-                        sc.Add('m', string.Format(Properties.Resources.TimeSpanNumberWordPattern, core.Minutes, GetCultureString(core.Minutes, "vm")));
-                    if (core.Seconds > 0)
-                        sc.Add('s', string.Format(Properties.Resources.TimeSpanNumberWordPattern, core.Seconds, GetCultureString(core.Seconds, "vs")));
-                    if (core.Milliseconds > 0)
-                        sc.Add('k', string.Format(Properties.Resources.TimeSpanNumberWordPattern, core.Milliseconds, GetCultureString(core.Milliseconds, "vk")));
-                    if (sc.Count == 0 && core.TotalSeconds > 0)
-                        sc.Add('s', string.Format(Properties.Resources.TimeSpanNumberWordPattern, core.TotalSeconds, GetCultureString((long)core.TotalSeconds, "vs")));
-                    string[] vals = new string[sc.Count];
-                    string ordering = Properties.Resources.TimeSpanFullBuildOrder;
-                    for (int i = 0, p = 0; i < 5; i++)
-                    {
-                        if (sc.ContainsKey(ordering[i]))
-                            vals[p++] = sc[ordering[i]];
-                    }
-                    return string.Join(Properties.Resources.TimeSpanSeparator, vals);
-                case 'x':
-                    if (core == TimeSpan.Zero)
-                        return "PT0S";
-                    //if (core.TotalDays - Math.Truncate(core.TotalDays) == 0)
-                    //    return CustomFormat(core, @"\P[d\D]", null);
-                    //return CustomFormat(core, @"\P[d\D]\T[h\H][m\M][p3\S]", null);
-					return CustomFormat(core, ISO8601Pattern, null);
-				default:
-                    throw new FormatException("Invalid format specified");
-            }
+            string zeroFormat;
+			string cFormat = GetCustomFormatString(TimeSpanPatternType.Formatting, format, out zeroFormat);
+            if (cFormat.Length == 0)
+                return (core == TimeSpan.Zero && zeroFormat != null) ? zeroFormat : core.ToString();
+            return CustomFormat(core, cFormat, zeroFormat);
         }
 
         private string GetCultureString(long value, string matchValue)
@@ -368,17 +380,40 @@ namespace System.Globalization
             return ret;
         }
 
+        private string GetCustomFormatString(TimeSpanPatternType patternType, string format, out string zeroFormat)
+        {
+            char fmt = string.IsNullOrEmpty(format) ? 'c' : format[0];
+            zeroFormat = string.IsNullOrEmpty(TimeSpanZeroDisplay) ? string.Empty : TimeSpanZeroDisplay;
+            if (format.Length > 1)
+            {
+                if (format[0] == ';')
+                {
+                    fmt = 'c';
+                    zeroFormat = format.Substring(1);
+                }
+                else if (format[0] != '\\' && format[1] == ';')
+                    zeroFormat = format.Substring(2);
+                else
+                    return format;
+            }
+
+			return GetTimeSpanPattern(patternType, fmt);
+        }
+
         private ParseEntity GetParsedTokens(Match m)
         {
             // Handle each match group
-            ParseEntity head = new ParseEntity(".", m);
+            ParseEntity head = new ParseEntity(".", m, null);
             List<ParseEntity> list = head.children = new List<ParseEntity>();
             foreach (string gn in regex.GetGroupNames())
             {
-                Group g = m.Groups[gn];
-                if (g.Success && gn != "OPT" && gn != "0")
-                    foreach (Capture c in g.Captures)
-                        list.Add(new ParseEntity(gn, c));
+                if (gn != "OPT" && gn != "0")
+                {
+                    Group g = m.Groups[gn];
+                    if (g.Success)
+                        foreach (Capture c in g.Captures)
+                            list.Add(new ParseEntity(gn, c, head));
+                }
             }
             list.Sort(delegate(ParseEntity p1, ParseEntity p2) { return p1.start - p2.start; });
 
@@ -387,10 +422,11 @@ namespace System.Globalization
             {
                 int f = list.FindIndex(delegate(ParseEntity p1) { return p1.start > c.Index; });
                 int l = list.FindLastIndex(delegate(ParseEntity p1) { return p1.start + p1.length < c.Index + c.Length; });
-                ParseEntity p = new ParseEntity(null, c);
+                ParseEntity p = new ParseEntity(null, c, head);
                 p.children = list.GetRange(f, l - f + 1);
+                list.RemoveRange(f, l - f + 1);
+                p.children.ForEach(delegate(ParseEntity pe) { pe.parent = p; });
                 list.Insert(f, p);
-                list.RemoveRange(f + 1, l - f + 1);
             }
             #if DEBUG
             for (int i = 0; i < list.Count; i++)
@@ -413,6 +449,25 @@ namespace System.Globalization
             }
             else
                 return value.ToString(matchValue.Replace(matchValue[0], '0'));
+        }
+
+        private string GetTimeSpanPattern(TimeSpanPatternType patternType, char format)
+        {
+            switch (format)
+            {
+                case 'c':
+                    return DefaultPattern;
+                case 'g':
+                    return ShortPattern;
+                case 'G':
+                    return LongPattern;
+                case 'f':
+					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanWordFormat : Properties.Resources.TimeSpanWordPattern;
+                case 'x':
+                    return ISO8601Pattern;
+                default:
+                    throw new ArgumentException("format");
+            }
         }
 
         private double GetValueForGroup(TimeSpan core, string matchGroup)
@@ -450,6 +505,35 @@ namespace System.Globalization
             throw new FormatException();
         }
 
+        private string GetVerboseParseString(string entityName)
+        {
+            string parseWords = null;
+            switch (entityName)
+            {
+                case "vd":
+                    parseWords = Properties.Resources.TimeSpanDayStrings;
+                    break;
+                case "vh":
+                    parseWords = Properties.Resources.TimeSpanHourStrings;
+                    break;
+                case "vm":
+                    parseWords = Properties.Resources.TimeSpanMinuteStrings;
+                    break;
+                case "vs":
+                    parseWords = Properties.Resources.TimeSpanSecondStrings;
+                    break;
+                case "vk":
+                    parseWords = Properties.Resources.TimeSpanMillisecondStrings;
+                    break;
+                case "vt":
+                    parseWords = Properties.Resources.TimeSpanTickStrings;
+                    break;
+                default:
+                    return string.Empty;
+            }
+            return string.Format(@"\b(?{1}:{0})\b", string.Join("|", parseWords.Split(',')), this.WordPatternIgnoreCase ? "i" : string.Empty);
+        }
+
         private bool ProcessFormatEntity(ParseEntity e, TimeSpan core)
         {
             if (e.name == null && e.children == null)
@@ -457,17 +541,30 @@ namespace System.Globalization
                 e.output = string.Empty;
                 return false;
             }
-			bool foundValue = false;
-			if (e.children != null)
+            bool foundValue = false, foundSep = false;
+            if (e.children != null)
             {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < e.children.Count; i++)
                 {
-					if (ProcessFormatEntity(e.children[i], core) && !foundValue)
-						foundValue = true;
-                    sb.Append(e.children[i].output);
+                    if (ProcessFormatEntity(e.children[i], core) && !foundValue)
+                        foundValue = true;
+                    if (e.children[i].name == "fs")
+                    {
+                        if (sb.Length > 0)
+                            foundSep = true;
+                    }
+                    else
+                    {
+                        if (foundSep && !string.IsNullOrEmpty(e.children[i].output))
+                        {
+                            sb.Append(Properties.Resources.TimeSpanSeparator);
+                            foundSep = false;
+                        }
+                        sb.Append(e.children[i].output);
+                    }
                 }
-				e.output = (foundValue) ? sb.ToString() : string.Empty;
+                e.output = (foundValue) ? sb.ToString() : string.Empty;
                 return foundValue;
             }
             switch (e.name)
@@ -488,9 +585,13 @@ namespace System.Globalization
                 case "k":
                 case "K":
                 case "p":
-					double val = GetValueForGroup(core, e.name);
+                case "f":
+                case "F":
+                    double val = GetValueForGroup(core, e.name);
                     e.output = GetStringValue(val, e.value);
-					foundValue = val != 0;
+                    foundValue = val != 0;
+                    if (e.name == "F")
+                        e.output = e.output.TrimEnd('0');
                     break;
                 case "ts":
                     e.output = CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator;
@@ -498,10 +599,13 @@ namespace System.Globalization
                 case "ds":
                     e.output = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
                     break;
-				case "ws":
-					e.output = " ";
-					break;
-				case "vd":
+                case "ws":
+                    e.output = " ";
+                    break;
+                case "fs":
+                    e.output = string.Empty;
+                    break;
+                case "vd":
                 case "vh":
                 case "vm":
                 case "vs":
@@ -509,26 +613,13 @@ namespace System.Globalization
                 case "vt":
                     e.output = GetCultureString((long)GetValueForGroup(core, e.name.Substring(1)), e.value);
                     break;
-                case "f":
-                case "F":
-                    long dec = core.Ticks % TimeSpan.TicksPerSecond;
-                    bool trailingZeros = e.name == "f";
-                    e.output = dec.ToString("0000000");
-                    if (e.value.StartsWith("%") || e.value.Length == 1)
-                        e.output = e.output.Substring(0, 1);
-                    else if (e.value.Length < 7)
-                        e.output = e.output.Substring(0, e.value.Length);
-                    if (!trailingZeros)
-                        e.output = e.output.TrimEnd('0');
-					foundValue = dec != 0;
-                    break;
                 case "q":
                 case "e":
                 default:
                     e.output = e.value;
                     break;
             }
-			return foundValue;
+            return foundValue;
         }
 
         private void ProcessParseEntity(ParseEntity e)
@@ -559,9 +650,9 @@ namespace System.Globalization
             }
             switch (e.name)
             {
-				case "z":
-					break;
-				case "n":
+                case "z":
+                    break;
+                case "n":
                     e.output = string.Format(@"(?<n>{0})?", Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NegativeSign));
                     break;
                 case "d":
@@ -579,37 +670,30 @@ namespace System.Globalization
                 case "F":
                     e.output = string.Format(@"(?<{0}>\d+)", e.name);
                     break;
-				case "p":
-					e.output = string.Format(@"(?<p>\d+(?:{0}\d{{0,{1}}})?)", Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), e.value.Substring(1));
-					break;
-				case "vd":
-					e.output = string.Format(@"\b(?:{0})\b", string.Join("|", Properties.Resources.TimeSpanDayStrings.Split(',')));
-					break;
-				case "vh":
-					e.output = string.Format(@"\b(?:{0})\b", string.Join("|", Properties.Resources.TimeSpanHourStrings.Split(',')));
-					break;
-				case "vm":
-					e.output = string.Format(@"\b(?:{0})\b", string.Join("|", Properties.Resources.TimeSpanMinuteStrings.Split(',')));
-					break;
-				case "vs":
-					e.output = string.Format(@"\b(?:{0})\b", string.Join("|", Properties.Resources.TimeSpanSecondStrings.Split(',')));
-					break;
-				case "vk":
-					e.output = string.Format(@"\b(?:{0})\b", string.Join("|", Properties.Resources.TimeSpanMillisecondStrings.Split(',')));
-					break;
-				case "vt":
-					e.output = string.Format(@"\b(?:{0})\b", string.Join("|", Properties.Resources.TimeSpanTickStrings.Split(',')));
-					break;
-				case "ts":
+                case "p":
+                    e.output = string.Format(@"(?<p>\d+(?:{0}\d{{0,{1}}})?)", Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), e.value.Substring(1));
+                    break;
+                case "vd":
+                case "vh":
+                case "vm":
+                case "vs":
+                case "vk":
+                case "vt":
+                    e.output = GetVerboseParseString(e.name);
+                    break;
+                case "ts":
                     e.output = Regex.Escape(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator);
                     break;
                 case "ds":
                     e.output = Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
                     break;
-				case "ws":
-					e.output = @"\s+";
-					break;
-				case "q":
+                case "ws":
+                    e.output = @"\s+";
+                    break;
+                case "fs":
+					e.output = @"\s*" + Regex.Escape(Properties.Resources.TimeSpanSeparator.Trim()) + @"\s*";
+                    break;
+                case "q":
                 case "e":
                 default:
                     e.output = Regex.Escape(e.value);
@@ -619,8 +703,8 @@ namespace System.Globalization
 
         private TimeSpan TimeSpanFromParseMatch(Match p)
         {
-			int d = 0, h = 0, m = 0, s = 0;
-			double ps = 0, dk = 0;
+            int d = 0, h = 0, m = 0, s = 0;
+            double ps = 0, dk = 0;
             try
             {
                 if (p.Groups["d"].Success)
@@ -631,15 +715,15 @@ namespace System.Globalization
                     m = int.Parse(p.Groups["m"].Value);
                 if (p.Groups["s"].Success)
                     s = int.Parse(p.Groups["s"].Value);
-				if (p.Groups["p"].Success)
-				{
-					ps = double.Parse(p.Groups["p"].Value);
-					s = (int)Math.Truncate(ps);
-					dk = ps - s;
-				}
-				else if (p.Groups["s"].Success)
-					s = int.Parse(p.Groups["s"].Value);
-			}
+                if (p.Groups["p"].Success)
+                {
+                    ps = double.Parse(p.Groups["p"].Value);
+                    s = (int)Math.Truncate(ps);
+                    dk = ps - s;
+                }
+                else if (p.Groups["s"].Success)
+                    s = int.Parse(p.Groups["s"].Value);
+            }
             catch
             {
                 throw new OverflowException();
@@ -656,16 +740,16 @@ namespace System.Globalization
             if (fVal.Length > 0)
                 dk = double.Parse("0" + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator + fVal);
 
-			if (p.Groups["k"].Success)
-				dk = int.Parse(p.Groups["k"].Value) / 1000.0;
+            if (p.Groups["k"].Success)
+                dk = int.Parse(p.Groups["k"].Value) / 1000.0;
 
             if (dk != 0)
-				ret += TimeSpan.FromTicks((long)Math.Round(dk * 10000000));
+                ret += TimeSpan.FromTicks((long)Math.Round(dk * 10000000));
 
-			if (p.Groups["t"].Success)
-				ret += TimeSpan.FromTicks(int.Parse(p.Groups["t"].Value));
+            if (p.Groups["t"].Success)
+                ret += TimeSpan.FromTicks(int.Parse(p.Groups["t"].Value));
 
-			return ret;
+            return ret;
         }
 
         private Match ValidateCustomPattern(string pattern)
@@ -687,11 +771,34 @@ namespace System.Globalization
         {
             public List<ParseEntity> children;
             public string name, value, output;
+            public ParseEntity parent;
             public int start, length;
 
-            public ParseEntity(string n, Capture c)
+            public ParseEntity(string n, Capture c, ParseEntity p)
             {
-                name = n; value = c.Value; start = c.Index; length = c.Length;
+                name = n; value = c.Value; start = c.Index; length = c.Length; parent = p;
+            }
+
+            public ParseEntity SiblingAfter
+            {
+                get
+                {
+                    int idx = parent.children.IndexOf(this);
+                    if (idx < parent.children.Count - 1)
+                        return parent.children[idx + 1];
+                    return null;
+                }
+            }
+
+            public ParseEntity SiblingPrior
+            {
+                get
+                {
+                    int idx = parent.children.IndexOf(this);
+                    if (idx > 0)
+                        return parent.children[idx - 1];
+                    return null;
+                }
             }
 
             public override string ToString()

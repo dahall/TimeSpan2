@@ -120,26 +120,26 @@
   <data name="TimeSpanDayStrings" xml:space="preserve">
     <value>Tage,Tag</value>
   </data>
-  <data name="TimeSpanFullBuildOrder" xml:space="preserve">
-    <value>dhmst</value>
-  </data>
   <data name="TimeSpanHourStrings" xml:space="preserve">
     <value>Stunden,Stunde</value>
   </data>
   <data name="TimeSpanManyDayFormat" xml:space="preserve">
-    <value>{0} Tagen</value>
+    <value>Tagen</value>
   </data>
   <data name="TimeSpanManyHourFormat" xml:space="preserve">
-    <value>{0} Stunden</value>
+    <value>Stunden</value>
   </data>
   <data name="TimeSpanManyMillisecondFormat" xml:space="preserve">
-    <value>{0} Millisekunden</value>
+    <value>Millisekunden</value>
   </data>
   <data name="TimeSpanManyMinuteFormat" xml:space="preserve">
-    <value>{0} Minuten</value>
+    <value>Minuten</value>
   </data>
   <data name="TimeSpanManySecondFormat" xml:space="preserve">
-    <value>{0} Sekunden</value>
+    <value>Sekunden</value>
+  </data>
+  <data name="TimeSpanManyTickFormat" xml:space="preserve">
+    <value>Ticks</value>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
     <value>Millisekunden,Millisekunde</value>
@@ -148,27 +148,39 @@
     <value>Minuten,Minute</value>
   </data>
   <data name="TimeSpanOneDayFormat" xml:space="preserve">
-    <value>{0} Tag</value>
+    <value>Tag</value>
   </data>
   <data name="TimeSpanOneHourFormat" xml:space="preserve">
-    <value>{0} Stunde</value>
+    <value>Stunde</value>
   </data>
   <data name="TimeSpanOneMillisecondFormat" xml:space="preserve">
-    <value>{0} Millisekunde</value>
+    <value>Millisekunde</value>
   </data>
   <data name="TimeSpanOneMinuteFormat" xml:space="preserve">
-    <value>{0} Minute</value>
+    <value>Minute</value>
   </data>
   <data name="TimeSpanOneSecondFormat" xml:space="preserve">
-    <value>{0} Sekunde</value>
+    <value>Sekunde</value>
   </data>
-  <data name="TimeSpanParseRegEx" xml:space="preserve">
-    <value>\s*(?:(?&lt;d&gt;\d+)\s*d\s*[,]?\s*)?(?:(?&lt;h&gt;\d+)\s*h\s*[,]?\s*)?(?:(?&lt;m&gt;\d+)\s*m\s*[,]?\s*)?(?:(?&lt;s&gt;\d+)\s*s\s*[,]?\s*)?(?:(?&lt;t&gt;\d+)\s*t)?\s*</value>
+  <data name="TimeSpanOneTickFormat" xml:space="preserve">
+    <value>Tick</value>
   </data>
   <data name="TimeSpanSecondStrings" xml:space="preserve">
     <value>Sekunden,Sekunde</value>
   </data>
   <data name="TimeSpanSeparator" xml:space="preserve">
     <value>, </value>
+  </data>
+  <data name="TimeSpanTickStrings" xml:space="preserve">
+    <value>Ticks,Tick</value>
+  </data>
+  <data name="TimeSpanWordFormat" xml:space="preserve">
+    <value>[%d_@d],[%h_@h],[%m_@m],[%s_@s],[%k_@k]</value>
+  </data>
+  <data name="TimeSpanWordPattern" xml:space="preserve">
+    <value>[%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t]</value>
+  </data>
+  <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">
+    <value>true</value>
   </data>
 </root>
