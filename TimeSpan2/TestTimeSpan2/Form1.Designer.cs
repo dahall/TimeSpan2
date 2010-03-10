@@ -312,10 +312,21 @@
 			// timeSpanPicker
 			// 
 			this.timeSpanPicker.FormattedZero = "Nothing";
+			this.timeSpanPicker.Items.AddRange(new System.TimeSpan2[] {
+            new System.TimeSpan2(0, 0, 0, 0),
+            new System.TimeSpan2(0, 0, 0, 1),
+            new System.TimeSpan2(0, 0, 0, 15),
+            new System.TimeSpan2(0, 0, 1, 0),
+            new System.TimeSpan2(0, 0, 5, 0),
+            new System.TimeSpan2(0, 1, 0, 0),
+            new System.TimeSpan2(0, 3, 0, 0),
+            new System.TimeSpan2(1, 0, 0, 0),
+            new System.TimeSpan2(30, 0, 0, 0)});
 			this.timeSpanPicker.Location = new System.Drawing.Point(12, 177);
 			this.timeSpanPicker.Name = "timeSpanPicker";
 			this.timeSpanPicker.Size = new System.Drawing.Size(275, 21);
 			this.timeSpanPicker.TabIndex = 7;
+			this.timeSpanPicker.Value = new System.TimeSpan2(1, 0, 0, 0);
 			this.timeSpanPicker.ValueChanged += new System.EventHandler(this.timeSpanPicker_ValueChanged);
 			// 
 			// Form1

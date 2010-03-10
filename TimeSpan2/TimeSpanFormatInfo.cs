@@ -36,14 +36,14 @@ namespace System.Globalization
         private string shortPattern = generalShortPattern;
 
         /// <summary>
-        /// Initializes a new writable instance of the <see cref="TimeSpanFormatInfo"/> class that is culture-independent (invariant).
+        /// Initializes a new writable instance of the <see cref="TimeSpan2FormatInfo"/> class that is culture-independent (invariant).
         /// </summary>
         public TimeSpan2FormatInfo()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSpanFormatInfo"/> class that is associated with the supplied culture.
+        /// Initializes a new instance of the <see cref="TimeSpan2FormatInfo"/> class that is associated with the supplied culture.
         /// </summary>
         /// <param name="culture">The culture.</param>
         internal TimeSpan2FormatInfo(CultureInfo culture)
@@ -52,9 +52,9 @@ namespace System.Globalization
         }
 
         /// <summary>
-        /// Gets a read-only <see cref="TimeSpanFormatInfo"/> object that formats values based on the current culture.
+        /// Gets a read-only <see cref="TimeSpan2FormatInfo"/> object that formats values based on the current culture.
         /// </summary>
-        /// <value>A read-only <see cref="TimeSpanFormatInfo"/> object based on the <see cref="CultureInfo"/> object for the current thread.</value>
+        /// <value>A read-only <see cref="TimeSpan2FormatInfo"/> object based on the <see cref="CultureInfo"/> object for the current thread.</value>
         public static TimeSpan2FormatInfo CurrentInfo
         {
             get
@@ -113,10 +113,10 @@ namespace System.Globalization
         }
 
         /// <summary>
-        /// Returns the <see cref="TimeSpanFormatInfo"/> associated with the specified <see cref="IFormatProvider"/>. 
+        /// Returns the <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>. 
         /// </summary>
-        /// <param name="provider">The <see cref="IFormatProvider"/> that gets the <see cref="TimeSpanFormatInfo"/>. -or- <c>null</c> reference (Nothing in Visual Basic) to get <see cref="CurrentInfo"/>.</param>
-        /// <returns>A <see cref="TimeSpanFormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</returns>
+        /// <param name="provider">The <see cref="IFormatProvider"/> that gets the <see cref="TimeSpan2FormatInfo"/>. -or- <c>null</c> reference (Nothing in Visual Basic) to get <see cref="CurrentInfo"/>.</param>
+        /// <returns>A <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</returns>
         public static TimeSpan2FormatInfo GetInstance(IFormatProvider provider)
         {
             CultureInfo info2 = provider as CultureInfo;
@@ -143,7 +143,7 @@ namespace System.Globalization
         /// <param name="arg">An object to format.</param>
         /// <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> object that supplies format information about the current instance.</param>
         /// <returns>A string representation of value of the current <see cref="TimeSpan"/> object as specified by format.</returns>
-        /// <remarks>The following table lists the standard TimeSpan format patterns associated with TimeSpanFormatInfo properties.
+        /// <remarks>The following table lists the standard TimeSpan format patterns associated with TimeSpan2FormatInfo properties.
         /// <list type="table">
         /// <listheader><term>Format pattern</term><description>Associated Property/Description</description></listheader>
         /// <item><term>d</term><description>Localized string for TotalDays</description></item>
@@ -204,7 +204,7 @@ namespace System.Globalization
         /// </summary>
         /// <param name="formatType">The <see cref="Type"/> of the required formatting service.</param>
         /// <returns>
-        /// The current <see cref="TimeSpanFormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpanFormatInfo"/>; otherwise, <c>null</c>. 
+        /// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>. 
         /// </returns>
         public object GetFormat(Type formatType)
         {
@@ -235,7 +235,7 @@ namespace System.Globalization
         /// <param name="s">A string containing a time span to parse.</param>
         /// <param name="formats">An array of standard or custom format strings that define the required format of <paramref name="s"/>.</param>
         /// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
-        /// <returns>A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/> as specified by <paramref name="format"/> and <paramref name="provider"/>.</returns>
+        /// <returns>A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/> as specified by <paramref name="formats"/> and <paramref name="provider"/>.</returns>
         internal TimeSpan ParseExact(string s, string[] formats, IFormatProvider provider)
         {
             if (s == null)
@@ -255,7 +255,7 @@ namespace System.Globalization
         /// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
         /// <param name="result">When this method returns, contains the <see cref="TimeSpan"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="s"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
         /// <returns>
-        /// 	<c>true</c> if the <paramref name="value"/> parameter was converted successfully; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.
         /// </returns>
         internal bool TryParse(string s, IFormatProvider provider, out TimeSpan result)
         {
@@ -282,7 +282,7 @@ namespace System.Globalization
         /// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
         /// <param name="result">When this method returns, contains the <see cref="TimeSpan"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if <paramref name="s"/> or <paramref name="formats"/> is <c>null</c>, <paramref name="s"/> or an element of <paramref name="formats"/> is an empty string, or the format of <paramref name="s"/> is not exactly as specified by at least one of the format patterns in <paramref name="formats"/>. This parameter is passed uninitialized.</param>
         /// <returns>
-        /// 	<c>true</c> if the <paramref name="value"/> parameter was converted successfully; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.
         /// </returns>
         internal bool TryParseExact(string s, string[] formats, IFormatProvider provider, out TimeSpan result)
         {

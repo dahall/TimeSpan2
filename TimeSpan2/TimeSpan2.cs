@@ -503,7 +503,7 @@ namespace System
 		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan2"/> equivalent and returns a value that indicates whether the conversion succeeded. 
 		/// </summary>
 		/// <param name="s">A string containing a time span to convert.</param>
-		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
+		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="s"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParse(string s, out TimeSpan2 result)
 		{
@@ -515,7 +515,7 @@ namespace System
 		/// </summary>
 		/// <param name="s">A string containing a time span to convert.</param>
 		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="s"/>.</param>
-		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
+		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="s"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParse(string s, IFormatProvider formatProvider, out TimeSpan2 result)
         {

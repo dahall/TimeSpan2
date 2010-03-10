@@ -12,6 +12,7 @@ namespace System.Windows.Forms
     public partial class TimeSpanPicker : ComboBox
     {
 		private bool isValid = true;
+		private TimeSpan2 lastVal = TimeSpan2.Zero;
         private TimeSpanCollection list;
         private string zero;
 
@@ -57,7 +58,7 @@ namespace System.Windows.Forms
 		}
 
 		/// <summary>
-        /// Gets or sets the format string for displaying values. See <seealso cref="TimeSpanFormatInfo.Format"/> for more information on valid format strings.
+        /// Gets or sets the format string for displaying values. See <seealso cref="TimeSpan2FormatInfo.Format"/> for more information on valid format strings.
         /// </summary>
         /// <value>The format string.</value>
         [DefaultValue("f"), Category("Appearance")]
@@ -82,11 +83,29 @@ namespace System.Windows.Forms
             }
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether formatting is applied to the <see cref="P:System.Windows.Forms.ListControl.DisplayMember"/> property of the <see cref="T:System.Windows.Forms.ListControl"/>.
+		/// </summary>
+		/// <value></value>
+		/// <returns>true if formatting of the <see cref="P:System.Windows.Forms.ListControl.DisplayMember"/> property is enabled; otherwise, false. The default is false.
+		/// </returns>
 		[DefaultValue(true), Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public new bool FormattingEnabled
 		{
 			get { return base.FormattingEnabled; }
 			set { base.FormattingEnabled = value; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the current text can be parsed into a valid <see cref="TimeSpan2"/> value.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this text is valid; otherwise, <c>false</c>.
+		/// </value>
+		[DefaultValue(true), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool IsTextValid
+		{
+			get { return isValid; }
 		}
 
 		/// <summary>
@@ -101,6 +120,19 @@ namespace System.Windows.Forms
             get { return list; }
         }
 
+		/// <summary>
+		/// Gets or sets the text associated with this control.
+		/// </summary>
+		/// <value></value>
+		/// <returns>
+		/// The text associated with this control.
+		/// </returns>
+		/// <PermissionSet>
+		/// 	<IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+		/// 	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+		/// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+		/// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+		/// </PermissionSet>
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public override string Text
 		{
@@ -124,7 +156,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                base.SelectedItem = value;
+                base.SelectedItem = lastVal = value;
 				if (!value.Equals(base.SelectedItem))
 					base.Text = value.ToString(base.FormatString, this.FormatInfo);
             }
@@ -140,29 +172,48 @@ namespace System.Windows.Forms
             return this.Value != TimeSpan2.Zero;
         }
 
+		/// <summary>
+		/// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.ComboBox"/> and optionally releases the managed resources.
+		/// </summary>
+		/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             Microsoft.Win32.SystemEvents.UserPreferenceChanged -= this.UserPreferenceChanged;
             base.Dispose(disposing);
         }
 
+		/// <summary>
+		/// Raises the <see cref="E:System.Windows.Forms.ListControl.Format"/> event.
+		/// </summary>
+		/// <param name="e">A <see cref="T:System.Windows.Forms.ListControlConvertEventArgs"/> that contains the event data.</param>
 		protected override void OnFormat(ListControlConvertEventArgs e)
 		{
 			base.OnFormat(e);
 		}
 
+		/// <summary>
+		/// Raises the <see cref="E:System.Windows.Forms.DomainUpDown.SelectedItemChanged"/> event.
+		/// </summary>
+		/// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnSelectedItemChanged(EventArgs e)
         {
             OnValueChanged(e);
             base.OnSelectedItemChanged(e);
         }
 
+		/// <summary>
+		/// Raises the <see cref="E:System.Windows.Forms.Control.TextChanged"/> event.
+		/// </summary>
+		/// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnTextChanged(EventArgs e)
         {
             TimeSpan ts;
 			isValid = this.FormatInfo.TryParse(base.Text, null, out ts);
-			if (isValid)
-                OnValueChanged(e);
+			if (isValid && ts != (TimeSpan)lastVal)
+			{
+				lastVal = ts;
+				OnValueChanged(e);
+			}
             base.OnTextChanged(e);
         }
 
@@ -235,8 +286,11 @@ namespace System.Windows.Forms
                 {
                     TimeSpanCollection c = (TimeSpanCollection)editValue;
                     List<string> output = new List<string>(c.Count);
-                    foreach (var t in c)
-                        output.Add(t.ToString(format));
+					foreach (var t in c)
+					{
+						string s = t.ToString(format);
+						output.Add(string.IsNullOrEmpty(s) ? "0:0:0" : s);
+					}
                     return output.ToArray();
                 }
                 return new object[0];
