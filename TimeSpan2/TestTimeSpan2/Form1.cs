@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace TestTimeSpan2
 {
@@ -30,9 +31,6 @@ namespace TestTimeSpan2
 			langCombo.Items.Add(new System.Globalization.CultureInfo("ru-RU"));
 			langCombo.EndUpdate();
 			langCombo.SelectedItem = curCulture = System.Globalization.CultureInfo.CurrentCulture;
-
-			timeSpanPicker.Items.AddRange(new TimeSpan[] { TimeSpan.Zero, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5),
-				TimeSpan.FromMinutes(15), TimeSpan.FromHours(1), TimeSpan.FromHours(12), TimeSpan.FromDays(1), TimeSpan.FromDays(3) });
 		}
 
 		/// <summary>
@@ -49,6 +47,15 @@ namespace TestTimeSpan2
 			TimeSpan t = tfi.Parse("1 giorno");
 			Console.Write(s = tfi.Format("f", t, null));
 			s = string.Empty;*/
+			/*TimeSpan ts = new TimeSpan(3, 2, 1);
+            System.Collections.Specialized.ListDictionary dict = new System.Collections.Specialized.ListDictionary();
+            dict.Add("Ticks", 450L);
+			TimeSpan2 ts2 = (TimeSpan2)ts;
+			TypeConverter tc = TypeDescriptor.GetConverter(typeof(TimeSpan2));
+			ts2 = (TimeSpan2)tc.ConvertFrom(23);
+			ts2 = (TimeSpan2)tc.ConvertFrom("1.2:3:4");
+			ts2 = (TimeSpan2)tc.CreateInstance(dict);*/
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new Form1());
@@ -57,15 +64,14 @@ namespace TestTimeSpan2
 		private void langCombo_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			System.Threading.Thread.CurrentThread.CurrentCulture = langCombo.SelectedItem as System.Globalization.CultureInfo;
-			formatInfo = System.Globalization.TimeSpanFormatInfo.CurrentInfo;
+			formatInfo = System.Globalization.TimeSpan2FormatInfo.CurrentInfo;
 			if (langCombo.SelectedIndex == 0)
-				((System.Globalization.TimeSpanFormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero = "Nothing";
+				((System.Globalization.TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero = "Nothing";
 			else
-				((System.Globalization.TimeSpanFormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero = "??";
+				((System.Globalization.TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero = "??";
 			dayUpDn_ValueChanged(dayUpDn, EventArgs.Empty);
 			parseText.Clear();
 			parseLabel.Text = string.Empty;
-			timeSpanPicker.RefreshItems();
 		}
 
 		private void dayUpDn_ValueChanged(object sender, EventArgs e)
@@ -81,7 +87,7 @@ namespace TestTimeSpan2
 			{
 				TimeSpan2 ts;
 				if (TimeSpan2.TryParse(parseText.Text, out ts))
-					parseLabel.Text = ts.ToString(formatTextBox.Text);
+					parseLabel.Text = ts.ToString(formatTextBox.Text, formatInfo);
 			}
 			catch (Exception ex)
 			{
@@ -91,7 +97,7 @@ namespace TestTimeSpan2
 
 		private void timeSpanPicker_ValueChanged(object sender, EventArgs e)
 		{
-			pickerValueLabel.Text = System.Globalization.TimeSpanFormatInfo.CurrentInfo.Format(formatTextBox.Text, timeSpanPicker.Value, null);
+			pickerValueLabel.Text = timeSpanPicker.Value.ToString(formatTextBox.Text, formatInfo);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSpan2", "TimeSpan2.csproj", "{A267F123-EAFE-4F02-9AC9-283FE5D9A031}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTimeSpan2", "TestTimeSpan2\TestTimeSpan2.csproj", "{14567D26-78A4-4DE3-9EEB-03BD14755C68}"

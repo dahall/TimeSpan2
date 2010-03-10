@@ -1,15 +1,16 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace System
 {
     /// <summary>
     /// 
     /// </summary>
-    [Serializable,
-    StructLayout(LayoutKind.Sequential),
-    ComVisible(true)]
+    [Serializable, StructLayout(LayoutKind.Sequential), ComVisible(true)]
+	[TypeConverter(typeof(TimeSpan2Converter))]
     public struct TimeSpan2 : IComparable, IComparable<TimeSpan2>, IComparable<TimeSpan>, IEquatable<TimeSpan2>, IEquatable<TimeSpan>, IFormattable, IConvertible, ISerializable
     {
         private TimeSpan core;
@@ -100,10 +101,21 @@ namespace System
             core = new TimeSpan(days, hours, minutes, seconds, milliseconds);
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimeSpan2"/> struct.
+		/// </summary>
+		/// <param name="info">The serialization info.</param>
+		/// <param name="context">The serialization context.</param>
+		public TimeSpan2(SerializationInfo info, StreamingContext context)
+		{
+			core = new TimeSpan(info.GetInt64("ticks"));
+		}
+
         /// <summary>
 		/// Gets the days component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
         /// </summary>
 		/// <value>The day component of this instance. The return value can be positive or negative.</value>
+		[Browsable(false)]
         public int Days
         {
             get { return core.Days; }
@@ -113,15 +125,27 @@ namespace System
 		/// Gets the hours component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The hours component of this instance. The return value ranges from -23 through 23.</value>
+		[Browsable(false)]
 		public int Hours
         {
             get { return core.Hours; }
         }
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is zero.
+		/// </summary>
+		/// <value><c>true</c> if this instance is zero; otherwise, <c>false</c>.</value>
+		[Browsable(false)]
+		public bool IsZero
+		{
+			get { return core == TimeSpan.Zero; }
+		}
+
+		/// <summary>
 		/// Gets the milliseconds component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The milliseconds component of this instance. The return value ranges from -999 through 999.</value>
+		[Browsable(false)]
 		public int Milliseconds
         {
             get { return core.Milliseconds; }
@@ -131,6 +155,7 @@ namespace System
 		/// Gets the minutes component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The minutes component of this instance. The return value ranges from -59 through 59.</value>
+		[Browsable(false)]
 		public int Minutes
         {
             get { return core.Minutes; }
@@ -140,6 +165,7 @@ namespace System
 		/// Gets the seconds component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The seconds component of this instance. The return value ranges from -59 through 59.</value>
+		[Browsable(false)]
 		public int Seconds
         {
             get { return core.Seconds; }
@@ -149,7 +175,8 @@ namespace System
 		/// Gets the number of ticks that represent the value of the current <see cref="TimeSpan2"/> structure.
         /// </summary>
         /// <value>The number of ticks contained in this instance.</value>
-        public long Ticks
+		[Browsable(false)]
+		public long Ticks
         {
             get { return core.Ticks; }
         }
@@ -158,7 +185,8 @@ namespace System
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional days.
         /// </summary>
 		/// <value>The total number of days represented by this instance.</value>
-        public double TotalDays
+		[Browsable(false)]
+		public double TotalDays
         {
             get { return core.TotalDays; }
         }
@@ -167,6 +195,7 @@ namespace System
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional hours.
 		/// </summary>
 		/// <value>The total number of hours represented by this instance.</value>
+		[Browsable(false)]
 		public double TotalHours
         {
             get { return core.TotalHours; }
@@ -176,6 +205,7 @@ namespace System
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional milliseconds.
 		/// </summary>
 		/// <value>The total number of milliseconds represented by this instance.</value>
+		[Browsable(false)]
 		public double TotalMilliseconds
         {
             get { return core.TotalMilliseconds; }
@@ -185,6 +215,7 @@ namespace System
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional minutes.
 		/// </summary>
 		/// <value>The total number of minutes represented by this instance.</value>
+		[Browsable(false)]
 		public double TotalMinutes
         {
             get { return core.TotalMinutes; }
@@ -194,6 +225,7 @@ namespace System
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional seconds.
 		/// </summary>
 		/// <value>The total number of seconds represented by this instance.</value>
+		[Browsable(false)]
 		public double TotalSeconds
         {
             get { return core.TotalSeconds; }
@@ -209,7 +241,7 @@ namespace System
             return d.core;
         }
 
-        /// <summary>
+		/// <summary>
         /// Performs an implicit conversion from <see cref="System.TimeSpan"/> to <see cref="System.TimeSpan2"/>.
         /// </summary>
 		/// <param name="d">The <see cref="TimeSpan"/> structure to convert.</param>
@@ -438,7 +470,7 @@ namespace System
 		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
 		public static TimeSpan2 Parse(string value, IFormatProvider formatProvider)
         {
-            TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
+            TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
             return new TimeSpan2(fi.Parse(value, null));
         }
 
@@ -463,7 +495,7 @@ namespace System
 		/// <returns>A time interval that corresponds to <paramref name="input"/>, as specified by <paramref name="formats"/> and <paramref name="formatProvider"/>.</returns>
 		public static TimeSpan2 ParseExact(string input, string[] formats, IFormatProvider formatProvider)
 		{
-            TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
+            TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.ParseExact(input, formats, null);
 		}
 
@@ -487,7 +519,7 @@ namespace System
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParse(string s, IFormatProvider formatProvider, out TimeSpan2 result)
         {
-            TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
+            TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
             return fi.TryParse(s, null, out result.core);
         }
 
@@ -514,7 +546,7 @@ namespace System
 		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParseExact(string input, string[] formats, IFormatProvider formatProvider, out TimeSpan2 result)
 		{
-			TimeSpanFormatInfo fi = TimeSpanFormatInfo.GetInstance(formatProvider);
+			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.TryParseExact(input, formats, null, out result.core);
 		}
 
@@ -722,7 +754,8 @@ namespace System
             return Convert.ToUInt64(core.Ticks);
         }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -756,7 +789,7 @@ namespace System
 		/// <returns>A string representation of value of the current <see cref="TimeSpan2"/> object as specified by format.</returns>
 		public string ToString(string format, IFormatProvider formatProvider)
         {
-            TimeSpanFormatInfo tfi = TimeSpanFormatInfo.GetInstance(formatProvider);
+            TimeSpan2FormatInfo tfi = TimeSpan2FormatInfo.GetInstance(formatProvider);
             return tfi.Format(format, this, formatProvider);
         }
 
@@ -813,7 +846,7 @@ namespace System
 		/// </remarks>
 		public string ToString(string format)
 		{
-			return TimeSpanFormatInfo.CurrentInfo.Format(format, this, null);
+			return TimeSpan2FormatInfo.CurrentInfo.Format(format, this, null);
 		}
 
 		/// <summary>

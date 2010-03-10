@@ -18,7 +18,7 @@ namespace System.Globalization
 	/// <summary>
     /// Defines how <see cref="TimeSpan"/> values are formatted and displayed, depending on the culture.
     /// </summary>
-    public sealed class TimeSpanFormatInfo : IFormatProvider, ICustomFormatter
+    public sealed class TimeSpan2FormatInfo : IFormatProvider, ICustomFormatter
     {
         const string defaultPattern = "-[d'.']hh':'mm':'ss['.'fffffff]";
         const string generalLongPattern = "-d.hh:mm:ss.fffffff";
@@ -38,7 +38,7 @@ namespace System.Globalization
         /// <summary>
         /// Initializes a new writable instance of the <see cref="TimeSpanFormatInfo"/> class that is culture-independent (invariant).
         /// </summary>
-        public TimeSpanFormatInfo()
+        public TimeSpan2FormatInfo()
         {
         }
 
@@ -46,7 +46,7 @@ namespace System.Globalization
         /// Initializes a new instance of the <see cref="TimeSpanFormatInfo"/> class that is associated with the supplied culture.
         /// </summary>
         /// <param name="culture">The culture.</param>
-        internal TimeSpanFormatInfo(CultureInfo culture)
+        internal TimeSpan2FormatInfo(CultureInfo culture)
         {
             Properties.Resources.Culture = culture;
         }
@@ -55,11 +55,11 @@ namespace System.Globalization
         /// Gets a read-only <see cref="TimeSpanFormatInfo"/> object that formats values based on the current culture.
         /// </summary>
         /// <value>A read-only <see cref="TimeSpanFormatInfo"/> object based on the <see cref="CultureInfo"/> object for the current thread.</value>
-        public static TimeSpanFormatInfo CurrentInfo
+        public static TimeSpan2FormatInfo CurrentInfo
         {
             get
             {
-                return new TimeSpanFormatInfo(CultureInfo.CurrentCulture);
+                return new TimeSpan2FormatInfo(CultureInfo.CurrentCulture);
             }
         }
 
@@ -117,19 +117,19 @@ namespace System.Globalization
         /// </summary>
         /// <param name="provider">The <see cref="IFormatProvider"/> that gets the <see cref="TimeSpanFormatInfo"/>. -or- <c>null</c> reference (Nothing in Visual Basic) to get <see cref="CurrentInfo"/>.</param>
         /// <returns>A <see cref="TimeSpanFormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</returns>
-        public static TimeSpanFormatInfo GetInstance(IFormatProvider provider)
+        public static TimeSpan2FormatInfo GetInstance(IFormatProvider provider)
         {
             CultureInfo info2 = provider as CultureInfo;
             if (info2 != null)
-                return new TimeSpanFormatInfo(info2);
+                return new TimeSpan2FormatInfo(info2);
 
-            TimeSpanFormatInfo timeSpanInfo = provider as TimeSpanFormatInfo;
+            TimeSpan2FormatInfo timeSpanInfo = provider as TimeSpan2FormatInfo;
             if (timeSpanInfo != null)
                 return timeSpanInfo;
 
             if (provider != null)
             {
-                timeSpanInfo = provider.GetFormat(typeof(TimeSpanFormatInfo)) as TimeSpanFormatInfo;
+                timeSpanInfo = provider.GetFormat(typeof(TimeSpan2FormatInfo)) as TimeSpan2FormatInfo;
                 if (timeSpanInfo != null)
                     return timeSpanInfo;
             }

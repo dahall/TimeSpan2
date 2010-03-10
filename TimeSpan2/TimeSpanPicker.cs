@@ -1,118 +1,175 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms
 {
-	/// <summary>
-	/// Drop down control that will display a formatted TimeSpan.
-	/// </summary>
+    /// <summary>
+    /// Drop down control that will display a formatted TimeSpan.
+    /// </summary>
     [DefaultEvent("ValueChanged"), DefaultProperty("Value")]
-    public partial class TimeSpanPicker : UserControl
+    public partial class TimeSpanPicker : ComboBox
     {
-        private TimeSpan value = TimeSpan.MinValue;
-		private TimeSpanCollection list;
+		private bool isValid = true;
+        private TimeSpanCollection list;
+        private string zero;
 
-		/// <summary>
-		/// List of TimeSpan structures.
-		/// </summary>
-		public class TimeSpanCollection : StrongListWrapper<TimeSpan>
-		{
-			internal TimeSpanCollection(ComboBox.ObjectCollection coll) : base(coll)
-			{
-			}
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TimeSpanPicker"/> class.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSpanPicker"/> class.
+        /// </summary>
         public TimeSpanPicker()
         {
-			FormatString = "f";
-            InitializeComponent();
-			Microsoft.Win32.SystemEvents.UserPreferenceChanged += new Microsoft.Win32.UserPreferenceChangedEventHandler(this.UserPreferenceChanged);
-			list = new TimeSpanCollection(comboBoxTimeSpan.Items);
+            base.FormatString = "f";
+            base.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
+            base.FormattingEnabled = true;
+            list = new TimeSpanCollection(base.Items);
+            Microsoft.Win32.SystemEvents.UserPreferenceChanged += this.UserPreferenceChanged;
         }
 
-		/// <summary>
-		/// Refreshes all the items in the list and applies any changes to the current language.
-		/// </summary>
-		public void RefreshItems()
-		{
-			comboBoxTimeSpan.BeginUpdate();
-			TimeSpan? cVal = null;
-			if (comboBoxTimeSpan.Text.Length > 0)
-				cVal = this.Value;
-			TimeSpan[] temp = new TimeSpan[Items.Count];
-			Items.CopyTo(temp, 0);
-			Items.Clear();
-			Items.AddRange(temp);
-			if (cVal.HasValue)
-				comboBoxTimeSpan.Text = GetString(cVal.Value);
-			comboBoxTimeSpan.EndUpdate();
-		}
-
-		/// <summary>
-		/// Occurs when the value changes.
-		/// </summary>
+        /// <summary>
+        /// Occurs when the value changes.
+        /// </summary>
         [Category("Property Changed")]
         public event EventHandler ValueChanged;
 
 		/// <summary>
-		/// Gets or sets the string used to represent <c>TimeSpan.Zero</c>.
+		/// Gets or sets the <see cref="TimeSpan2FormatInfo"/> that provides custom formatting behavior.
 		/// </summary>
-		/// <value>The formatted zero.</value>
+		/// <value></value>
+		/// <returns>
+		/// The <see cref="TimeSpan2FormatInfo"/> implementation that provides custom formatting behavior.
+		/// </returns>
+		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public new TimeSpan2FormatInfo FormatInfo
+		{
+			get
+			{
+				if (base.FormatInfo == null)
+					this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
+				return (TimeSpan2FormatInfo)base.FormatInfo;
+			}
+			set
+			{
+				base.FormatInfo = value;
+				((TimeSpan2FormatInfo)base.FormatInfo).TimeSpanZeroDisplay = this.FormattedZero;
+			}
+		}
+
+		/// <summary>
+        /// Gets or sets the format string for displaying values. See <seealso cref="TimeSpanFormatInfo.Format"/> for more information on valid format strings.
+        /// </summary>
+        /// <value>The format string.</value>
+        [DefaultValue("f"), Category("Appearance")]
+        public new string FormatString
+        {
+            get { return base.FormatString; }
+            set { base.FormatString = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the string used to represent <c>TimeSpan.Zero</c>.
+        /// </summary>
+        /// <value>The formatted zero.</value>
         [DefaultValue(null), Category("Appearance")]
         public string FormattedZero
         {
-            get; set;
+            get { return zero; }
+            set
+            {
+                this.zero = value;
+                this.FormatInfo.TimeSpanZeroDisplay = value;
+            }
         }
 
-		/// <summary>
-		/// Gets or sets the format string for displaying values. See <seealso cref="TimeSpanFormatInfo.Format"/> for more information on valid format strings.
-		/// </summary>
-		/// <value>The format string.</value>
-		[DefaultValue("f"), Category("Appearance")]
-		public string FormatString { get; set; }
+		[DefaultValue(true), Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public new bool FormattingEnabled
+		{
+			get { return base.FormattingEnabled; }
+			set { base.FormattingEnabled = value; }
+		}
 
 		/// <summary>
-		/// Gets the items displayed in the drop-down list.
-		/// </summary>
-		/// <value>The items.</value>
-		public TimeSpanCollection Items
+        /// Gets the items displayed in the drop-down list.
+        /// </summary>
+        /// <value>The items.</value>
+        [Category("Data"), Localizable(false)]
+        [Editor(typeof(TimeSpanCollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        public new TimeSpanCollection Items
         {
             get { return list; }
         }
 
-		/// <summary>
-		/// Gets or sets the value of the control.
-		/// </summary>
-		/// <value>The TimeSpan value.</value>
-        [DefaultValue("00:00:00"), Category("Data")]
-        public TimeSpan Value
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override string Text
+		{
+			get { return base.Text; }
+			set { base.Text = value; }
+		}
+
+        /// <summary>
+        /// Gets or sets the value of the control.
+        /// </summary>
+        /// <value>The TimeSpan value.</value>
+        [Category("Data")]
+        public TimeSpan2 Value
         {
             get
             {
-                this.ControlsToData();
-                return this.value;
+                TimeSpan ts;
+                if (this.FormatInfo.TryParse(base.Text, null, out ts))
+                    return (TimeSpan2)ts;
+                return TimeSpan2.Zero;
             }
             set
             {
-                this.value = value;
-                this.DataToControls();
-                OnValueChanged(EventArgs.Empty);
+                base.SelectedItem = value;
+				if (!value.Equals(base.SelectedItem))
+					base.Text = value.ToString(base.FormatString, this.FormatInfo);
             }
         }
 
-        internal void DeselectText()
+        internal void ResetValue()
         {
-            this.comboBoxTimeSpan.SelectionLength = 0;
+            this.Value = TimeSpan2.Zero;
         }
 
-		/// <summary>
-		/// Raises the <see cref="E:ValueChanged"/> event.
-		/// </summary>
-		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        internal bool ShouldSerializeValue()
+        {
+            return this.Value != TimeSpan2.Zero;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Microsoft.Win32.SystemEvents.UserPreferenceChanged -= this.UserPreferenceChanged;
+            base.Dispose(disposing);
+        }
+
+		protected override void OnFormat(ListControlConvertEventArgs e)
+		{
+			base.OnFormat(e);
+		}
+
+        protected override void OnSelectedItemChanged(EventArgs e)
+        {
+            OnValueChanged(e);
+            base.OnSelectedItemChanged(e);
+        }
+
+        protected override void OnTextChanged(EventArgs e)
+        {
+            TimeSpan ts;
+			isValid = this.FormatInfo.TryParse(base.Text, null, out ts);
+			if (isValid)
+                OnValueChanged(e);
+            base.OnTextChanged(e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:ValueChanged"/> event.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void OnValueChanged(EventArgs args)
         {
             EventHandler h = ValueChanged;
@@ -120,54 +177,87 @@ namespace System.Windows.Forms
                 h(this, args);
         }
 
-        private bool ControlsToData()
+        private void UserPreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
         {
-            try { value = GetValue(this.comboBoxTimeSpan.Text); }
-            catch { return false; }
-            return true;
+            switch(e.Category)
+            {
+                case Microsoft.Win32.UserPreferenceCategory.Locale:
+                    System.Threading.Thread.CurrentThread.CurrentCulture.ClearCachedData();
+                    this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
-        private void DataToControls()
+        /// <summary>
+        /// List of TimeSpan structures.
+        /// </summary>
+        public class TimeSpanCollection : StrongListWrapper<TimeSpan2>
         {
-            this.comboBoxTimeSpan.Text = GetString(value);
+            internal TimeSpanCollection(ComboBox.ObjectCollection coll)
+                : base(coll)
+            {
+            }
         }
 
-        private string GetString(TimeSpan t)
+        internal class TimeSpanCollectionEditor : ExposedStringCollectionEditor
         {
-			if (t == TimeSpan.Zero)
-				return FormattedZero;
-            return TimeSpanFormatInfo.CurrentInfo.Format(FormatString, t, null);
+            private string format = "f";
+
+            public TimeSpanCollectionEditor(Type type)
+                : base(type)
+            {
+            }
+
+            protected override string FormTitle
+            {
+                get { return "TimeSpan Collection Editor"; }
+            }
+
+            protected override string InstructionText
+            {
+                get { return "Enter string representations of TimeSpan objects (one per line):"; }
+            }
+
+            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            {
+                TimeSpanPicker p = context.Instance as TimeSpanPicker;
+                if (p != null)
+                    format = p.FormatString;
+                return base.EditValue(context, provider, value);
+            }
+
+            protected override object[] GetItems(object editValue)
+            {
+                if (editValue is TimeSpanCollection)
+                {
+                    TimeSpanCollection c = (TimeSpanCollection)editValue;
+                    List<string> output = new List<string>(c.Count);
+                    foreach (var t in c)
+                        output.Add(t.ToString(format));
+                    return output.ToArray();
+                }
+                return new object[0];
+            }
+
+            protected override object SetItems(object editValue, object[] value)
+            {
+                if (editValue != null && !(editValue is TimeSpanCollection))
+                    return editValue;
+
+                TimeSpanCollection c = (TimeSpanCollection)editValue;
+                c.Clear();
+                TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.CurrentInfo;
+                foreach (var v in value)
+                {
+                    TimeSpan ts;
+                    if (fi.TryParse(v.ToString(), null, out ts))
+                        c.Add(ts);
+                }
+                return c;
+            }
         }
-
-        private TimeSpan GetValue(string s)
-        {
-            return TimeSpanFormatInfo.CurrentInfo.Parse(s, null);
-        }
-
-        private void comboBoxTimeSpan_Format(object sender, ListControlConvertEventArgs e)
-        {
-            if (e.DesiredType == typeof(string) && e.ListItem is TimeSpan)
-                e.Value = GetString(((TimeSpan)e.ListItem));
-        }
-
-        private void comboBoxTimeSpan_Leave(object sender, EventArgs e)
-        {
-            if (this.ControlsToData())
-                OnValueChanged(EventArgs.Empty);
-        }
-
-		private void UserPreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
-		{
-			switch(e.Category)
-			{
-				case Microsoft.Win32.UserPreferenceCategory.Locale:
-					System.Threading.Thread.CurrentThread.CurrentCulture.ClearCachedData();
-					RefreshItems();
-					break;
-
-				default:
-					break;
-			}
-		}
     }
 }

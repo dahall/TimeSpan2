@@ -45,9 +45,9 @@
 			this.parseText = new System.Windows.Forms.TextBox();
 			this.parseBtn = new System.Windows.Forms.Button();
 			this.parseLabel = new System.Windows.Forms.Label();
-			this.timeSpanPicker = new System.Windows.Forms.TimeSpanPicker();
 			this.pickerValueLabel = new System.Windows.Forms.Label();
 			this.formatTextBox = new System.Windows.Forms.TextBox();
+			this.timeSpanPicker = new System.Windows.Forms.TimeSpanPicker();
 			((System.ComponentModel.ISupportInitialize)(this.dayUpDn)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.hrUpDn)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.minUpDn)).BeginInit();
@@ -289,17 +289,6 @@
 			this.parseLabel.Text = "label7";
 			this.parseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// timeSpanPicker
-			// 
-			this.timeSpanPicker.AutoSize = true;
-			this.timeSpanPicker.FormattedZero = "Nothing";
-			this.timeSpanPicker.Location = new System.Drawing.Point(12, 177);
-			this.timeSpanPicker.Name = "timeSpanPicker";
-			this.timeSpanPicker.Size = new System.Drawing.Size(275, 21);
-			this.timeSpanPicker.TabIndex = 7;
-			this.timeSpanPicker.Value = System.TimeSpan.Parse("00:00:00");
-			this.timeSpanPicker.ValueChanged += new System.EventHandler(this.timeSpanPicker_ValueChanged);
-			// 
 			// pickerValueLabel
 			// 
 			this.pickerValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -319,6 +308,15 @@
 			this.formatTextBox.TabIndex = 2;
 			this.formatTextBox.Text = "f";
 			this.formatTextBox.TextChanged += new System.EventHandler(this.dayUpDn_ValueChanged);
+			// 
+			// timeSpanPicker
+			// 
+			this.timeSpanPicker.FormattedZero = "Nothing";
+			this.timeSpanPicker.Location = new System.Drawing.Point(12, 177);
+			this.timeSpanPicker.Name = "timeSpanPicker";
+			this.timeSpanPicker.Size = new System.Drawing.Size(275, 21);
+			this.timeSpanPicker.TabIndex = 7;
+			this.timeSpanPicker.ValueChanged += new System.EventHandler(this.timeSpanPicker_ValueChanged);
 			// 
 			// Form1
 			// 
