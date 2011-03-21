@@ -87,7 +87,10 @@ namespace TestTimeSpan2
 			{
 				TimeSpan2 ts;
 				if (TimeSpan2.TryParse(parseText.Text, out ts))
+				{
 					parseLabel.Text = ts.ToString(formatTextBox.Text, formatInfo);
+					timeSpanPicker.Value = ts;
+				}
 			}
 			catch (Exception ex)
 			{

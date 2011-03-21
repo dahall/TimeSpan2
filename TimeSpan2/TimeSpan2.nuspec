@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <metadata>
+    <id>TimeSpan2</id>
+    <version>1.1.0</version>
+    <title>TimeSpan Helper Library</title>
+    <authors>David Hall</authors>
+    <description>Library to extend the functionality of the TimeSpan structure to be comparable, serializable, and convertible. It also supports localized string formatting and parsing so a TimeSpan can be represented by something like "3 days, 2 hours, 19 minutes" instead of "3:02:19:00".</description>
+    <language>en-US</language>
+    <licenseUrl>http://timespan2.codeplex.com/license</licenseUrl>
+    <projectUrl>http://timespan2.codeplex.com/</projectUrl>
+    <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=timespan2&amp;DownloadId=107200&amp;Build=17672</iconUrl>
+    <tags>timespan control</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\TimeSpan2.dll" target="lib\2" />
+    <file src="bin\Release\TimeSpan2.xml" target="lib\2" />
+    <file src="bin\Release\**\TimeSpan2.resources.dll" target="lib\2" />
+  </files>
+</package>
