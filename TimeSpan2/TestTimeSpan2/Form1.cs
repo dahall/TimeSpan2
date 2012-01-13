@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace TestTimeSpan2
 {
@@ -29,6 +22,7 @@ namespace TestTimeSpan2
 			langCombo.Items.Add(new System.Globalization.CultureInfo("fr-FR"));
 			langCombo.Items.Add(new System.Globalization.CultureInfo("pt-PT"));
 			langCombo.Items.Add(new System.Globalization.CultureInfo("ru-RU"));
+			langCombo.Items.Add(new System.Globalization.CultureInfo("zh-CN"));
 			langCombo.EndUpdate();
 			langCombo.SelectedItem = curCulture = System.Globalization.CultureInfo.CurrentCulture;
 		}
@@ -48,8 +42,8 @@ namespace TestTimeSpan2
 			Console.Write(s = tfi.Format("f", t, null));
 			s = string.Empty;*/
 			/*TimeSpan ts = new TimeSpan(3, 2, 1);
-            System.Collections.Specialized.ListDictionary dict = new System.Collections.Specialized.ListDictionary();
-            dict.Add("Ticks", 450L);
+			System.Collections.Specialized.ListDictionary dict = new System.Collections.Specialized.ListDictionary();
+			dict.Add("Ticks", 450L);
 			TimeSpan2 ts2 = (TimeSpan2)ts;
 			TypeConverter tc = TypeDescriptor.GetConverter(typeof(TimeSpan2));
 			ts2 = (TimeSpan2)tc.ConvertFrom(23);
