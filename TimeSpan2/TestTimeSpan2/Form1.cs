@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace TestTimeSpan2
 {
@@ -24,7 +25,7 @@ namespace TestTimeSpan2
 			langCombo.Items.Add(new System.Globalization.CultureInfo("ru-RU"));
 			langCombo.Items.Add(new System.Globalization.CultureInfo("zh-CN"));
 			langCombo.EndUpdate();
-			langCombo.SelectedItem = curCulture = System.Globalization.CultureInfo.CurrentCulture;
+			langCombo.SelectedItem = curCulture = System.Globalization.CultureInfo.CurrentUICulture;
 		}
 
 		/// <summary>
@@ -57,15 +58,14 @@ namespace TestTimeSpan2
 
 		private void langCombo_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			System.Threading.Thread.CurrentThread.CurrentCulture = langCombo.SelectedItem as System.Globalization.CultureInfo;
+			System.Threading.Thread.CurrentThread.CurrentUICulture = langCombo.SelectedItem as System.Globalization.CultureInfo;
 			formatInfo = System.Globalization.TimeSpan2FormatInfo.CurrentInfo;
-			if (langCombo.SelectedIndex == 0)
-				((System.Globalization.TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero = "Nothing";
-			else
-				((System.Globalization.TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero = "??";
+			((System.Globalization.TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero;
 			dayUpDn_ValueChanged(dayUpDn, EventArgs.Empty);
+			//timeSpanPicker.FormatInfo = (System.Globalization.TimeSpan2FormatInfo)formatInfo;
 			parseText.Clear();
 			parseLabel.Text = string.Empty;
+			ChangeLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture);
 		}
 
 		private void dayUpDn_ValueChanged(object sender, EventArgs e)
@@ -95,6 +95,15 @@ namespace TestTimeSpan2
 		private void timeSpanPicker_ValueChanged(object sender, EventArgs e)
 		{
 			pickerValueLabel.Text = timeSpanPicker.Value.ToString(formatTextBox.Text, formatInfo);
+		}
+
+		private void ChangeLanguage(System.Globalization.CultureInfo culture)
+		{
+			foreach (Control c in this.Controls)
+			{
+				ComponentResourceManager resources = new ComponentResourceManager(typeof(Form1));
+				resources.ApplyResources(c, c.Name, culture);
+			}
 		}
 	}
 }

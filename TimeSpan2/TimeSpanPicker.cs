@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms
@@ -22,8 +24,8 @@ namespace System.Windows.Forms
 		public TimeSpanPicker()
 		{
 			base.FormatString = "f";
-			base.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 			base.FormattingEnabled = true;
+			ResetLocale();
 			list = new TimeSpanCollection(base.Items);
 			ResetValue();
 			Microsoft.Win32.SystemEvents.UserPreferenceChanged += this.UserPreferenceChanged;
@@ -47,14 +49,13 @@ namespace System.Windows.Forms
 		{
 			get
 			{
-				if (base.FormatInfo == null)
-					this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 				return (TimeSpan2FormatInfo)base.FormatInfo;
 			}
 			set
 			{
+				if (!string.IsNullOrEmpty(this.FormattedZero))
+					((TimeSpan2FormatInfo)value).TimeSpanZeroDisplay = this.FormattedZero;
 				base.FormatInfo = value;
-				((TimeSpan2FormatInfo)base.FormatInfo).TimeSpanZeroDisplay = this.FormattedZero;
 			}
 		}
 
@@ -62,7 +63,7 @@ namespace System.Windows.Forms
 		/// Gets or sets the format string for displaying values. See <seealso cref="TimeSpan2FormatInfo.Format"/> for more information on valid format strings.
 		/// </summary>
 		/// <value>The format string.</value>
-		[DefaultValue("f"), Category("Appearance")]
+		[DefaultValue("f"), Category("Appearance"), Localizable(true)]
 		public new string FormatString
 		{
 			get { return base.FormatString; }
@@ -73,7 +74,7 @@ namespace System.Windows.Forms
 		/// Gets or sets the string used to represent <c>TimeSpan.Zero</c>.
 		/// </summary>
 		/// <value>The formatted zero.</value>
-		[DefaultValue(null), Category("Appearance")]
+		[DefaultValue(null), Category("Appearance"), Localizable(true)]
 		public string FormattedZero
 		{
 			get { return zero; }
@@ -186,25 +187,6 @@ namespace System.Windows.Forms
 		}
 
 		/// <summary>
-		/// Raises the <see cref="E:System.Windows.Forms.ListControl.Format"/> event.
-		/// </summary>
-		/// <param name="e">A <see cref="T:System.Windows.Forms.ListControlConvertEventArgs"/> that contains the event data.</param>
-		protected override void OnFormat(ListControlConvertEventArgs e)
-		{
-			base.OnFormat(e);
-		}
-
-		/// <summary>
-		/// Raises the <see cref="E:System.Windows.Forms.DomainUpDown.SelectedItemChanged"/> event.
-		/// </summary>
-		/// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
-		protected override void OnSelectedItemChanged(EventArgs e)
-		{
-			//OnValueChanged(e);
-			base.OnSelectedItemChanged(e);
-		}
-
-		/// <summary>
 		/// Raises the <see cref="E:System.Windows.Forms.Control.TextChanged"/> event.
 		/// </summary>
 		/// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
@@ -228,16 +210,35 @@ namespace System.Windows.Forms
 				h(this, args);
 		}
 
+		/// <summary>
+		/// Processes Windows messages.
+		/// </summary>
+		/// <param name="m">The Windows <see cref="T:System.Windows.Forms.Message"/> to process.</param>
+		protected override void WndProc(ref Message m)
+		{
+			switch (m.Msg)
+			{
+				// change in a systemwide or policy setting
+				case 0x001A: // WM_SETTINGCHANGE
+					ResetLocale();
+					break;
+			}
+
+			base.WndProc(ref m);
+		}
+
+		private void ResetLocale()
+		{
+			System.Threading.Thread.CurrentThread.CurrentCulture.ClearCachedData();
+			this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
+		}
+
 		private void UserPreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
 		{
 			switch(e.Category)
 			{
 				case Microsoft.Win32.UserPreferenceCategory.Locale:
-					System.Threading.Thread.CurrentThread.CurrentCulture.ClearCachedData();
-					this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
-					break;
-
-				default:
+					ResetLocale();
 					break;
 			}
 		}

@@ -59,7 +59,7 @@ namespace System.Globalization
 		{
 			get
 			{
-				return new TimeSpan2FormatInfo(CultureInfo.CurrentCulture);
+				return new TimeSpan2FormatInfo(CultureInfo.CurrentUICulture);
 			}
 		}
 
