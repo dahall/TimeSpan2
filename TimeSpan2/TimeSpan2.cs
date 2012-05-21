@@ -822,6 +822,11 @@ namespace System
 		///		<description>This specifier always outputs days and seven fractional digits. It is culture-sensitive and takes the form <code>[-]d’:’hh’:’mm’:’ss.fffffff</code>.</description>
 		///		<description></description>
 		/// </item>
+		/// <item><term>"j"</term>
+		///		<description>JIRA duration format</description>
+		///		<description>This specifier outputs days, hours, minutes and seconds in the style defined by JIRA. It takes the form <code>[d'd'] [h'h'] [m'm'] [s's']</code>.</description>
+		///		<description></description>
+		/// </item>
 		/// </list>
 		/// <para>The following table lists the standard TimeSpan format patterns.</para>
 		/// <list type="table">

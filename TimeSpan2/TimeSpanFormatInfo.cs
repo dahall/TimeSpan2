@@ -25,9 +25,10 @@ namespace System.Globalization
 		const string generalShortPattern = "-[d.]h:mm:ss[.FFFFFFF]";
 		const string ISO8601Pattern = @"'P'[d'D']['T'[h'H'][m'M'][p3'S']];PT0S";
 		const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace; // | RegexOptions.IgnoreCase;
-		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
+		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
 		const string post = @")*(?:;(?<z>[ A-Za-z0-9,:\(\)]+))?\s*$";
 		const string pre = @"^\s*(?<n>-)?(?:";
+		const string standardPatternsArray = "cgGfxj";
 
 		static readonly string fullPattern = string.Concat(pre, pattern, post);
 
@@ -149,6 +150,7 @@ namespace System.Globalization
 		/// <item><term>d</term><description>Localized string for TotalDays</description></item>
 		/// <item><term>f</term><description>Full localized string displaying each time element with separator between</description></item>
 		/// <item><term>h</term><description>Localized string for TotalHours</description></item>
+		/// <item><term>j</term><description>JIRA style output</description></item>
 		/// <item><term>m</term><description>Localized string for TotalMinutes</description></item>
 		/// <item><term>n</term><description>Standard TimeSpan format (00:00:00:00)</description></item>
 		/// <item><term>s</term><description>Localized string for TotalSeconds</description></item>
@@ -181,7 +183,7 @@ namespace System.Globalization
 		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType)
 		{
 			List<string> output = new List<string>();
-			foreach (char f in "cgGfx".ToCharArray())
+			foreach (char f in standardPatternsArray.ToCharArray())
 				output.AddRange(GetAllTimeSpanPatterns(patternType, f));
 			return output.ToArray();
 		}
@@ -463,6 +465,8 @@ namespace System.Globalization
 					return LongPattern;
 				case 'f':
 					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanWordFormat : Properties.Resources.TimeSpanWordPattern;
+				case 'j':
+					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanJiraFormat : Properties.Resources.TimeSpanJiraPattern;
 				case 'x':
 					return ISO8601Pattern;
 				default:
@@ -541,7 +545,7 @@ namespace System.Globalization
 				e.output = string.Empty;
 				return false;
 			}
-			bool foundValue = false, foundSep = false;
+			bool foundValue = false, foundSep = false, foundSpace = false;
 			if (e.children != null)
 			{
 				StringBuilder sb = new StringBuilder();
@@ -554,12 +558,22 @@ namespace System.Globalization
 						if (sb.Length > 0)
 							foundSep = true;
 					}
+					else if (e.children[i].name == "ws")
+					{
+						if (sb.Length > 0)
+							foundSpace = true;
+					}
 					else
 					{
 						if (foundSep && !string.IsNullOrEmpty(e.children[i].output))
 						{
 							sb.Append(Properties.Resources.TimeSpanSeparator);
 							foundSep = false;
+						}
+						if (foundSpace && !string.IsNullOrEmpty(e.children[i].output))
+						{
+							sb.Append(' ');
+							foundSpace = false;
 						}
 						sb.Append(e.children[i].output);
 					}
@@ -668,6 +682,7 @@ namespace System.Globalization
 				case "K":
 				case "f":
 				case "F":
+				case "w":
 					e.output = string.Format(@"(?<{0}>\d+)", e.name);
 					break;
 				case "p":
@@ -709,6 +724,8 @@ namespace System.Globalization
 			{
 				if (p.Groups["d"].Success)
 					d = int.Parse(p.Groups["d"].Value);
+				if (p.Groups["w"].Success)
+					d += (int.Parse(p.Groups["w"].Value) * 7);
 				if (p.Groups["h"].Success)
 					h = int.Parse(p.Groups["h"].Value);
 				if (p.Groups["m"].Success)

@@ -125,6 +125,14 @@
     <value>hours,hour,hrs,hr,h</value>
     <comment>Comma separated list of all strings that can represent an hour</comment>
   </data>
+  <data name="TimeSpanJiraFormat" xml:space="preserve">
+    <value>[%d'd']_[%h'h']_[%m'm']_[%s's']</value>
+    <comment>Pattern string for formatting JIRA style time spans</comment>
+  </data>
+  <data name="TimeSpanJiraPattern" xml:space="preserve">
+    <value>[%w\w][_][%d\d][_][%h\h][_][%m\m][_][%s\s]</value>
+    <comment>Pattern string for parsing JIRa style time spans</comment>
+  </data>
   <data name="TimeSpanManyDayFormat" xml:space="preserve">
     <value>days</value>
     <comment>Format for days when Days property &gt; 1</comment>
