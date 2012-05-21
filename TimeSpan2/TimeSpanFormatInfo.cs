@@ -25,7 +25,7 @@ namespace System.Globalization
 		const string generalShortPattern = "-[d.]h:mm:ss[.FFFFFFF]";
 		const string ISO8601Pattern = @"'P'[d'D']['T'[h'H'][m'M'][p3'S']];PT0S";
 		const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace; // | RegexOptions.IgnoreCase;
-		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
+		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<r>%r|r+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
 		const string post = @")*(?:;(?<z>[ A-Za-z0-9,:\(\)]+))?\s*$";
 		const string pre = @"^\s*(?<n>-)?(?:";
 		const string standardPatternsArray = "cgGfxj";
@@ -505,6 +505,10 @@ namespace System.Globalization
 					return core.Ticks % TimeSpan.TicksPerSecond;
 				case "p":
 					return core.TotalSeconds % 60;
+				case "w":
+					return core.Days / 7;
+				case "r":
+					return core.Days % 7;
 			}
 			throw new FormatException();
 		}
@@ -601,6 +605,8 @@ namespace System.Globalization
 				case "p":
 				case "f":
 				case "F":
+				case "w":
+				case "r":
 					double val = GetValueForGroup(core, e.name);
 					e.output = GetStringValue(val, e.value);
 					foundValue = val != 0;
@@ -683,6 +689,7 @@ namespace System.Globalization
 				case "f":
 				case "F":
 				case "w":
+				case "r":
 					e.output = string.Format(@"(?<{0}>\d+)", e.name);
 					break;
 				case "p":

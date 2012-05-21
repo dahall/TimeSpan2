@@ -79,7 +79,7 @@ namespace System.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [%d&apos;d&apos;]_[%h&apos;h&apos;]_[%m&apos;m&apos;]_[%s&apos;s&apos;].
+        ///   Looks up a localized string similar to [%w&apos;w&apos;]_[%r&apos;d&apos;]_[%h&apos;h&apos;]_[%m&apos;m&apos;]_[%s&apos;s&apos;].
         /// </summary>
         internal static string TimeSpanJiraFormat {
             get {
