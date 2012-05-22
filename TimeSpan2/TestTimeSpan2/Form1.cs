@@ -73,6 +73,7 @@ namespace TestTimeSpan2
 			TimeSpan2 ts = new TimeSpan2((int)dayUpDn.Value, (int)hrUpDn.Value, (int)minUpDn.Value, (int)secUpDn.Value, (int)msUpDn.Value);
 			try { outputLabel.Text = ts.ToString(formatTextBox.Text, formatInfo); }
 			catch (Exception ex) { outputLabel.Text = ex.Message; }
+			button1_Click(sender, e);
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -104,6 +105,16 @@ namespace TestTimeSpan2
 				ComponentResourceManager resources = new ComponentResourceManager(typeof(Form1));
 				resources.ApplyResources(c, c.Name, culture);
 			}
+		}
+
+		private void outputLabel_DoubleClick(object sender, EventArgs e)
+		{
+			Clipboard.SetText(outputLabel.Text, TextDataFormat.Text);
+		}
+
+		private void parseLabel_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(parseLabel.Text, TextDataFormat.Text);
 		}
 	}
 }

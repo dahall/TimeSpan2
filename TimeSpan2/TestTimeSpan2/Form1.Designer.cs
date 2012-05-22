@@ -195,6 +195,7 @@
 			resources.ApplyResources(this.outputLabel, "outputLabel");
 			this.outputLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.outputLabel.Name = "outputLabel";
+			this.outputLabel.DoubleClick += new System.EventHandler(this.outputLabel_DoubleClick);
 			// 
 			// parseText
 			// 
@@ -213,6 +214,7 @@
 			resources.ApplyResources(this.parseLabel, "parseLabel");
 			this.parseLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.parseLabel.Name = "parseLabel";
+			this.parseLabel.Click += new System.EventHandler(this.parseLabel_Click);
 			// 
 			// pickerValueLabel
 			// 

@@ -635,6 +635,17 @@ namespace System
 		}
 
 		/// <summary>
+		/// Indicates whether the current object is equal to a specified <see cref="string"/>.
+		/// </summary>
+		/// <param name="obj">A <see cref="string"/> to compare with this object.</param>
+		/// <returns><c>true</c> if the current object is equal to the <paramref name="str"/> parameter once converted to a <see cref="TimeSpan2"/>; otherwise, <c>false</c>.</returns>
+		public bool Equals(string str)
+		{
+			try { return Equals(TimeSpan2.Parse(str)); } catch { }
+			return false;
+		}
+
+		/// <summary>
 		/// Indicates whether the current object is equal to a specified <see cref="TimeSpan2"/> object.
 		/// </summary>
 		/// <param name="obj">A <see cref="TimeSpan2"/> object to compare with this object.</param>
@@ -824,7 +835,12 @@ namespace System
 		/// </item>
 		/// <item><term>"j"</term>
 		///		<description>JIRA duration format</description>
-		///		<description>This specifier outputs days, hours, minutes and seconds in the style defined by JIRA. It takes the form <code>[d'd'] [h'h'] [m'm'] [s's']</code>.</description>
+		///		<description>This specifier outputs days, hours, minutes and seconds in the style defined by JIRA. It takes the form <code>[w'w'] [d'd'] [h'h'] [m'm'] [s's']</code>.</description>
+		///		<description></description>
+		/// </item>
+		/// <item><term>"x"</term>
+		///		<description>ISO 8601 format for time intervals</description>
+		///		<description>This specifier outputs days, hours, minutes, seconds and milliseconds in the style defined by ISO 8601. It takes the form <code>'P'[d'D']['T'[h'H'][m'M'][p3'S']]</code>.</description>
 		///		<description></description>
 		/// </item>
 		/// </list>

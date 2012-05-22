@@ -211,5 +211,6 @@
   </data>
   <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">
     <value>true</value>
+    <comment>Value indicating if case should be ignored when parsing worded patterns</comment>
   </data>
 </root>

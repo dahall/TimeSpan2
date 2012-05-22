@@ -25,7 +25,7 @@ namespace System.Globalization
 		const string generalShortPattern = "-[d.]h:mm:ss[.FFFFFFF]";
 		const string ISO8601Pattern = @"'P'[d'D']['T'[h'H'][m'M'][p3'S']];PT0S";
 		const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace; // | RegexOptions.IgnoreCase;
-		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<r>%r|r+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f+)|(?<F>%F|F+)|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
+		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<r>%r|r+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f{2,7})|(?<F>%F|F{2,7})|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
 		const string post = @")*(?:;(?<z>[ A-Za-z0-9,:\(\)]+))?\s*$";
 		const string pre = @"^\s*(?<n>-)?(?:";
 		const string standardPatternsArray = "cgGfxj";
@@ -439,18 +439,27 @@ namespace System.Globalization
 			return head;
 		}
 
-		private string GetStringValue(double value, string matchValue)
+		private string GetStringValue(double value, ParseEntity e)
 		{
-			if (matchValue.StartsWith("%") || matchValue.Length == 1)
-				return value.ToString();
-			else if (char.IsDigit(matchValue, 1))
+			if (e.name == "F" || e.name == "f")
 			{
-				int precision = int.Parse(matchValue.Substring(1));
+				int fcnt = e.value.Length;
+				if (e.value[0] == '%')
+					fcnt--;
+				string ret = value.ToString("f7").Substring(2, fcnt);
+				if (e.name == "F")
+					ret = ret.TrimEnd('0');
+				return ret;
+			}
+			else if (e.value.StartsWith("%") || e.value.Length == 1)
+				return value.ToString();
+			else if (char.IsDigit(e.value, 1))
+			{
+				int precision = int.Parse(e.value.Substring(1));
 				double newVal = Math.Round(value, precision, MidpointRounding.AwayFromZero);
 				return newVal.ToString();
 			}
-			else
-				return value.ToString(matchValue.Replace(matchValue[0], '0'));
+			return value.ToString(e.value.Replace(e.value[0], '0'));
 		}
 
 		private string GetTimeSpanPattern(TimeSpanPatternType patternType, char format)
@@ -502,7 +511,7 @@ namespace System.Globalization
 					return core.TotalMilliseconds;
 				case "f":
 				case "F":
-					return core.Ticks % TimeSpan.TicksPerSecond;
+					return (double)core.Ticks % TimeSpan.TicksPerSecond / 10000000;
 				case "p":
 					return core.TotalSeconds % 60;
 				case "w":
@@ -608,10 +617,8 @@ namespace System.Globalization
 				case "w":
 				case "r":
 					double val = GetValueForGroup(core, e.name);
-					e.output = GetStringValue(val, e.value);
+					e.output = GetStringValue(val, e);
 					foundValue = val != 0;
-					if (e.name == "F")
-						e.output = e.output.TrimEnd('0');
 					break;
 				case "ts":
 					e.output = CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator;
