@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using System.Xml.Serialization;
 
 namespace System
 {
@@ -14,7 +15,7 @@ namespace System
 	/// </remarks>
 	[Serializable, StructLayout(LayoutKind.Sequential), ComVisible(true)]
 	[TypeConverter(typeof(TimeSpan2Converter))]
-	public struct TimeSpan2 : IComparable, IComparable<TimeSpan2>, IComparable<TimeSpan>, IEquatable<TimeSpan2>, IEquatable<TimeSpan>, IFormattable, IConvertible, ISerializable
+	public struct TimeSpan2 : IComparable, IComparable<TimeSpan2>, IComparable<TimeSpan>, IEquatable<TimeSpan2>, IEquatable<TimeSpan>, IFormattable, IConvertible, ISerializable, IXmlSerializable
 	{
 		private TimeSpan core;
 
@@ -637,7 +638,7 @@ namespace System
 		/// <summary>
 		/// Indicates whether the current object is equal to a specified <see cref="string"/>.
 		/// </summary>
-		/// <param name="obj">A <see cref="string"/> to compare with this object.</param>
+		/// <param name="str">A <see cref="string"/> to compare with this object.</param>
 		/// <returns><c>true</c> if the current object is equal to the <paramref name="str"/> parameter once converted to a <see cref="TimeSpan2"/>; otherwise, <c>false</c>.</returns>
 		public bool Equals(string str)
 		{
@@ -771,6 +772,21 @@ namespace System
 			if (info == null)
 				throw new ArgumentNullException("info");
 			info.AddValue("ticks", core.Ticks);
+		}
+
+		Xml.Schema.XmlSchema IXmlSerializable.GetSchema()
+		{
+			return null;
+		}
+
+		void IXmlSerializable.ReadXml(Xml.XmlReader reader)
+		{
+			core = System.Xml.XmlConvert.ToTimeSpan(reader.ReadContentAsString());
+		}
+
+		void IXmlSerializable.WriteXml(Xml.XmlWriter writer)
+		{
+			writer.WriteValue(System.Xml.XmlConvert.ToString(core));
 		}
 
 		/// <summary>
