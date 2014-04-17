@@ -98,6 +98,8 @@
         /// <param name="items">The items.</param>
         public void AddRange(T[] items)
         {
+			if (items == null)
+				throw new ArgumentNullException();
             for (int i = 0; i < items.Length; i++)
                 list.Add(items[i]);
         }

@@ -167,7 +167,7 @@ namespace System.Globalization
 				if (arg is TimeSpan)
 					return FormatTimeSpan((TimeSpan)arg, format);
 				else if (arg is TimeSpan2)
-					return FormatTimeSpan((TimeSpan)Convert.ChangeType(arg, typeof(TimeSpan)), format);
+					return FormatTimeSpan((TimeSpan)Convert.ChangeType(arg, typeof(TimeSpan), formatProvider), format);
 			}
 
 			return (arg is IFormattable && !(arg is TimeSpan2)) ? ((IFormattable)arg).ToString(format, formatProvider) : arg.ToString();
@@ -224,7 +224,7 @@ namespace System.Globalization
 		internal TimeSpan Parse(string s, IFormatProvider provider)
 		{
 			if (string.IsNullOrEmpty(s))
-				throw new ArgumentNullException();
+				throw new ArgumentNullException("s");
 			TimeSpan ts;
 			if (TryParse(s, provider, out ts))
 				return ts;
@@ -479,7 +479,7 @@ namespace System.Globalization
 				case 'x':
 					return ISO8601Pattern;
 				default:
-					throw new ArgumentException("format");
+					throw new ArgumentException("Invalid format specified.", "format");
 			}
 		}
 

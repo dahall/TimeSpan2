@@ -41,8 +41,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-      <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
-      <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -50,8 +50,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-      <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
-      <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\$(TargetFrameworkVersion)\TimeSpan2.XML</DocumentationFile>
@@ -68,7 +68,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -112,7 +111,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="TimeSpan2.nuspec" />
     <None Include="TimeSpan2.snk" />
   </ItemGroup>
@@ -134,17 +132,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <PropertyGroup Condition=" '$(Configuration)|$(TargetFrameworkVersion)' == 'Release|v4.0' ">
-        <PostBuildEvent>"$(SolutionDir)..\NuGet.exe" pack "$(ProjectDir)$(ProjectName).nuspec" /o "$(ProjectDir)bin\Release"</PostBuildEvent>
-    </PropertyGroup>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup Condition=" '$(Configuration)|$(TargetFrameworkVersion)' == 'Release|v4.0' ">
+    <PostBuildEvent>"$(SolutionDir)..\NuGet.exe" pack "$(ProjectDir)$(ProjectName).nuspec" /o "$(ProjectDir)bin\Release"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
   -->
-    <Target Name="AfterBuild">
-        <MSBuild Condition=" $(TargetFrameworkVersion.Replace(&quot;v&quot;,&quot;&quot;)) == 2.0 " Projects="$(MSBuildProjectFile)" Properties="TargetFrameworkVersion=v4.0" RunEachTargetSeparately="true" />
-    </Target>
+  <Target Name="AfterBuild">
+    <MSBuild Condition=" $(TargetFrameworkVersion.Replace(&quot;v&quot;,&quot;&quot;)) == 2.0 " Projects="$(MSBuildProjectFile)" Properties="TargetFrameworkVersion=v4.0" RunEachTargetSeparately="true" />
+  </Target>
 </Project>

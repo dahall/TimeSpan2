@@ -25,7 +25,8 @@ namespace System.Windows.Forms
 		{
 			base.FormatString = "f";
 			base.FormattingEnabled = true;
-			ResetLocale();
+			//ResetLocale();
+			this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 			list = new TimeSpanCollection(base.Items);
 			ResetValue();
 			Microsoft.Win32.SystemEvents.UserPreferenceChanged += this.UserPreferenceChanged;
@@ -53,7 +54,7 @@ namespace System.Windows.Forms
 			}
 			set
 			{
-				if (!string.IsNullOrEmpty(this.FormattedZero))
+				if (!string.IsNullOrEmpty(this.FormattedZero) && value != null)
 					((TimeSpan2FormatInfo)value).TimeSpanZeroDisplay = this.FormattedZero;
 				base.FormatInfo = value;
 			}
@@ -275,6 +276,8 @@ namespace System.Windows.Forms
 
 			public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 			{
+				if (context == null)
+					throw new ArgumentNullException("context");
 				TimeSpanPicker p = context.Instance as TimeSpanPicker;
 				if (p != null)
 					format = p.FormatString;

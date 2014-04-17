@@ -53,15 +53,16 @@ namespace System
 		{
 			if (value is string)
 			{
-				if (string.IsNullOrEmpty((string)value))
+				string sval = (string)value;
+				if (string.IsNullOrEmpty(sval))
 					return TimeSpan2.Zero;
 
 				TimeSpan2FormatInfo fi = new TimeSpan2FormatInfo(culture);
 				TimeSpan ts;
-				if (fi.TryParse(value.ToString(), null, out ts))
+				if (fi.TryParse(sval, null, out ts))
 					return (TimeSpan2)ts;
 			}
-			try { long l = Convert.ToInt64(value); return new TimeSpan2(l); }
+			try { long l = Convert.ToInt64(value, CultureInfo.CurrentCulture); return new TimeSpan2(l); }
 			catch { }
 			return base.ConvertFrom(context, culture, value);
 		}
@@ -113,7 +114,7 @@ namespace System
 					}
 				}
 
-				try { return Convert.ChangeType(value, destinationType); }
+				try { return Convert.ChangeType(value, destinationType, CultureInfo.CurrentCulture); }
 				catch { }
 			}
 			return base.ConvertTo(context, culture, value, destinationType);
@@ -163,6 +164,8 @@ namespace System
 		/// </returns>
 		public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
 		{
+			if (value == null || attributes == null)
+				throw new ArgumentNullException();
 			return TypeDescriptor.GetProperties(value.GetType(), attributes).Sort(new string[] { "Ticks" });
 		}
 

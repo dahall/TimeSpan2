@@ -20,33 +20,21 @@ namespace System
 		private TimeSpan core;
 
 		/// <summary>Represents the maximum <see cref="TimeSpan2"/> value. This field is read-only.</summary>
-		public static readonly TimeSpan2 MaxValue;
+		public static readonly TimeSpan2 MaxValue = new TimeSpan2(TimeSpan.MaxValue);
 		/// <summary>Represents the minimum <see cref="TimeSpan2"/> value. This field is read-only.</summary>
-		public static readonly TimeSpan2 MinValue;
+		public static readonly TimeSpan2 MinValue = new TimeSpan2(TimeSpan.MinValue);
 		/// <summary>Represents the zero <see cref="TimeSpan2"/> value. This field is read-only.</summary>
-		public static readonly TimeSpan2 Zero;
+		public static readonly TimeSpan2 Zero = new TimeSpan2(TimeSpan.Zero);
 		/// <summary>Represents the number of ticks in 1 day. This field is constant.</summary>
-		public static readonly long TicksPerDay;
+		public static readonly long TicksPerDay = TimeSpan.TicksPerDay;
 		/// <summary>Represents the number of ticks in 1 hour. This field is constant.</summary>
-		public static readonly long TicksPerHour;
+		public static readonly long TicksPerHour = TimeSpan.TicksPerHour;
 		/// <summary>Represents the number of ticks in 1 millisecond. This field is constant.</summary>
-		public static readonly long TicksPerMillisecond;
+		public static readonly long TicksPerMillisecond = TimeSpan.TicksPerMillisecond;
 		/// <summary>Represents the number of ticks in 1 minute. This field is constant.</summary>
-		public static readonly long TicksPerMinute;
+		public static readonly long TicksPerMinute = TimeSpan.TicksPerMinute;
 		/// <summary>Represents the number of ticks in 1 second. This field is constant.</summary>
-		public static readonly long TicksPerSecond;
-
-		static TimeSpan2()
-		{
-			Zero = new TimeSpan2(TimeSpan.Zero);
-			MaxValue = new TimeSpan2(TimeSpan.MaxValue);
-			MinValue = new TimeSpan2(TimeSpan.MinValue);
-			TicksPerDay = TimeSpan.TicksPerDay;
-			TicksPerHour = TimeSpan.TicksPerHour;
-			TicksPerMillisecond = TimeSpan.TicksPerMillisecond;
-			TicksPerMinute = TimeSpan.TicksPerMinute;
-			TicksPerSecond = TimeSpan.TicksPerSecond;
-		}
+		public static readonly long TicksPerSecond = TimeSpan.TicksPerSecond;
 
 		/// <summary>
 		/// Initializes a new <see cref="TimeSpan2"/> with the specified <see cref="TimeSpan"/>.
@@ -107,7 +95,7 @@ namespace System
 		/// </summary>
 		/// <param name="info">The serialization info.</param>
 		/// <param name="context">The serialization context.</param>
-		public TimeSpan2(SerializationInfo info, StreamingContext context)
+		private TimeSpan2(SerializationInfo info, StreamingContext context)
 		{
 			core = new TimeSpan(info.GetInt64("ticks"));
 		}
@@ -642,7 +630,7 @@ namespace System
 		/// <returns><c>true</c> if the current object is equal to the <paramref name="str"/> parameter once converted to a <see cref="TimeSpan2"/>; otherwise, <c>false</c>.</returns>
 		public bool Equals(string str)
 		{
-			try { return Equals(TimeSpan2.Parse(str)); } catch { }
+			try { return Equals(TimeSpan2.Parse(str, CultureInfo.CurrentCulture)); } catch { }
 			return false;
 		}
 
