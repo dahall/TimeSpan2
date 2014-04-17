@@ -28,6 +28,8 @@ namespace TestTimeSpan2
 			langCombo.SelectedItem = curCulture = System.Globalization.CultureInfo.CurrentUICulture;
 		}
 
+		static DateTime dtStart = DateTime.Now;
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
@@ -58,6 +60,7 @@ namespace TestTimeSpan2
 
 		private void langCombo_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			ChangeLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture);
 			System.Threading.Thread.CurrentThread.CurrentUICulture = langCombo.SelectedItem as System.Globalization.CultureInfo;
 			formatInfo = System.Globalization.TimeSpan2FormatInfo.CurrentInfo;
 			((System.Globalization.TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero;
@@ -65,7 +68,6 @@ namespace TestTimeSpan2
 			//timeSpanPicker.FormatInfo = (System.Globalization.TimeSpan2FormatInfo)formatInfo;
 			parseText.Clear();
 			parseLabel.Text = string.Empty;
-			ChangeLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture);
 		}
 
 		private void dayUpDn_ValueChanged(object sender, EventArgs e)

@@ -20,17 +20,19 @@ namespace System.Globalization
 	/// </summary>
 	public sealed class TimeSpan2FormatInfo : IFormatProvider, ICustomFormatter
 	{
-		const string defaultPattern = "-[d'.']hh':'mm':'ss['.'fffffff]";
-		const string generalLongPattern = "-d.hh:mm:ss.fffffff";
-		const string generalShortPattern = "-[d.]h:mm:ss[.FFFFFFF]";
-		const string ISO8601Pattern = @"'P'[d'D']['T'[h'H'][m'M'][p3'S']];PT0S";
-		const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace; // | RegexOptions.IgnoreCase;
-		const string pattern = @"(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<r>%r|r+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f{2,7})|(?<F>%F|F{2,7})|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!))";
-		const string post = @")*(?:;(?<z>[ A-Za-z0-9,:\(\)]+))?\s*$";
-		const string pre = @"^\s*(?<n>-)?(?:";
-		const string standardPatternsArray = "cgGfxj";
+		private const string defaultPattern = "-[d'.']hh':'mm':'ss['.'fffffff]";
+		private const string generalLongPattern = "-d.hh:mm:ss.fffffff";
+		private const string generalShortPattern = "-[d.]h:mm:ss[.FFFFFFF]";
+		private const string ISO8601Pattern = @"'P'[d'D']['T'[h'H'][m'M'][p3'S']];PT0S";
+		private const RegexOptions opts = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace; // | RegexOptions.IgnoreCase;
+		private const string pattern = @"(?:(?>(?<LEVEL>)\[|\](?<OPT-LEVEL>)|(?! \[ | \] )'(?<q>[^']*)'|\\(?<e>.)|(?<w>%w|w+)|(?<r>%r|r+)|(?<d>%d|d+)|(?<h>%h|h+)|(?<m>%m|m+)|(?<s>%s|s+)|(?<k>%k|k+)|(?<t>%t|t+)|(?<D>%D|D\d*)|(?<H>%H|H\d*)|(?<M>%M|M\d*)|(?<S>%S|S\d*)|(?<K>%K|K\d*)|(?<p>p\d*)|(?<vd>@[dD])|(?<vh>@[hH])|(?<vm>@[mM])|(?<vs>@[sS])|(?<vk>@[kK])|(?<vt>@[tT])|(?<f>%f|f{2,7})|(?<F>%F|F{2,7})|(?<fs>,)|(?<ws>_)|(?<ts>:)|(?<ds>\.))+(?(LEVEL)(?!)))*";
+		private const string post = @"(?:;(?<z>[ A-Za-z0-9,:\(\)]+))?\s*$";
+		private const string pre = @"^\s*(?<n>-)?";
+		private const string standardPatternsArray = "cgGfxj";
 
-		static readonly string fullPattern = string.Concat(pre, pattern, post);
+		private static readonly string fullPattern = string.Concat(pre, pattern, post);
+		private static Dictionary<int, TimeSpan2FormatInfo> cache = new Dictionary<int, TimeSpan2FormatInfo>();
+		private static Dictionary<string, Match> fullPatternCache = new Dictionary<string, Match>();
 
 		private string longPattern = generalLongPattern;
 		private Regex regex = new Regex(fullPattern, opts);
@@ -60,7 +62,8 @@ namespace System.Globalization
 		{
 			get
 			{
-				return new TimeSpan2FormatInfo(CultureInfo.CurrentUICulture);
+				CultureInfo currentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+				return GetInstance(currentCulture);
 			}
 		}
 
@@ -96,10 +99,9 @@ namespace System.Globalization
 		/// <summary>
 		/// Gets or sets the string to display the representing <c>TimeSpan.Zero</c>.
 		/// </summary>
-		public string TimeSpanZeroDisplay
-		{
-			get; set;
-		}
+		public string TimeSpanZeroDisplay { get; set; }
+
+		private Regex MyRegex { get { if (regex == null) { regex = new Regex(fullPattern, opts); } return regex; } }
 
 		/// <summary>
 		/// Gets a value indicating whether to ignore case when parsing word formatted time spans. Pulls value, if available, from localized resources.
@@ -114,7 +116,7 @@ namespace System.Globalization
 		}
 
 		/// <summary>
-		/// Returns the <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>. 
+		/// Returns the <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.
 		/// </summary>
 		/// <param name="provider">The <see cref="IFormatProvider"/> that gets the <see cref="TimeSpan2FormatInfo"/>. -or- <c>null</c> reference (Nothing in Visual Basic) to get <see cref="CurrentInfo"/>.</param>
 		/// <returns>A <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</returns>
@@ -122,7 +124,14 @@ namespace System.Globalization
 		{
 			CultureInfo info2 = provider as CultureInfo;
 			if (info2 != null)
-				return new TimeSpan2FormatInfo(info2);
+			{
+				TimeSpan2FormatInfo tsInfo = null;
+				if (cache.TryGetValue(info2.LCID, out tsInfo))
+					return tsInfo;
+				tsInfo = new TimeSpan2FormatInfo(CultureInfo.CurrentCulture);
+				cache.Add(info2.LCID, tsInfo);
+				return tsInfo;
+			}
 
 			TimeSpan2FormatInfo timeSpanInfo = provider as TimeSpan2FormatInfo;
 			if (timeSpanInfo != null)
@@ -206,7 +215,7 @@ namespace System.Globalization
 		/// </summary>
 		/// <param name="formatType">The <see cref="Type"/> of the required formatting service.</param>
 		/// <returns>
-		/// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>. 
+		/// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>.
 		/// </returns>
 		public object GetFormat(Type formatType)
 		{
@@ -214,7 +223,7 @@ namespace System.Globalization
 		}
 
 		/// <summary>
-		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent. 
+		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent.
 		/// </summary>
 		/// <param name="s">A string containing a time span to parse.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
@@ -326,11 +335,17 @@ namespace System.Globalization
 
 		private string CustomFormat(TimeSpan core, string format, string zeroFormat)
 		{
+			// Try for easy Zero value
+			if (core == TimeSpan.Zero)
+			{
+				Match zMatch = Regex.Match(format, post);
+				bool foundZ = zMatch.Success && zMatch.Groups["z"].Success;
+				if (zeroFormat != null || foundZ)
+					return foundZ ? zMatch.Groups["z"].Value : zeroFormat;
+			}
+
 			// Validate whole string
 			Match match = ValidateCustomPattern(format);
-			Group zGrp = match.Groups["z"];
-			if (core == TimeSpan.Zero && (zGrp.Success || zeroFormat != null))
-				return zGrp.Success ? zGrp.Value : zeroFormat;
 
 			ParseEntity head = GetParsedTokens(match);
 			if (head.children == null)
@@ -361,18 +376,23 @@ namespace System.Globalization
 				case 'd':
 					ret = value == 1 ? Properties.Resources.TimeSpanOneDayFormat : Properties.Resources.TimeSpanManyDayFormat;
 					break;
+
 				case 'h':
 					ret = value == 1 ? Properties.Resources.TimeSpanOneHourFormat : Properties.Resources.TimeSpanManyHourFormat;
 					break;
+
 				case 'm':
 					ret = value == 1 ? Properties.Resources.TimeSpanOneMinuteFormat : Properties.Resources.TimeSpanManyMinuteFormat;
 					break;
+
 				case 's':
-					ret = value == 1 ? Properties.Resources.TimeSpanOneSecondFormat: Properties.Resources.TimeSpanManySecondFormat;
+					ret = value == 1 ? Properties.Resources.TimeSpanOneSecondFormat : Properties.Resources.TimeSpanManySecondFormat;
 					break;
+
 				case 'k':
 					ret = value == 1 ? Properties.Resources.TimeSpanOneMillisecondFormat : Properties.Resources.TimeSpanManyMillisecondFormat;
 					break;
+
 				case 't':
 					ret = value == 1 ? Properties.Resources.TimeSpanOneTickFormat : Properties.Resources.TimeSpanManyTickFormat;
 					break;
@@ -407,7 +427,7 @@ namespace System.Globalization
 			// Handle each match group
 			ParseEntity head = new ParseEntity(".", m, null);
 			List<ParseEntity> list = head.children = new List<ParseEntity>();
-			foreach (string gn in regex.GetGroupNames())
+			foreach (string gn in MyRegex.GetGroupNames())
 			{
 				if (gn != "OPT" && gn != "0")
 				{
@@ -430,12 +450,12 @@ namespace System.Globalization
 				p.children.ForEach(delegate(ParseEntity pe) { pe.parent = p; });
 				list.Insert(f, p);
 			}
-			#if DEBUG
+#if DEBUG
 			for (int i = 0; i < list.Count; i++)
 			{
 				System.Diagnostics.Debug.WriteLine(string.Format("Match {3} = \"{1}\" ({0}:{2})", list[i].start, list[i].value, list[i].length, list[i].name));
 			}
-			#endif
+#endif
 			return head;
 		}
 
@@ -783,13 +803,20 @@ namespace System.Globalization
 			return ret;
 		}
 
+
+
 		private Match ValidateCustomPattern(string pattern)
 		{
 			try
 			{
-				Match m = regex.Match(pattern);
+				Match m = null;
+				if (fullPatternCache.TryGetValue(pattern, out m))
+					return m;
+
+				m = MyRegex.Match(pattern);
 				if (m == null || !m.Success)
 					throw new FormatException();
+				fullPatternCache.Add(pattern, m);
 				return m;
 			}
 			catch

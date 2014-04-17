@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 	public partial class TimeSpanPicker : ComboBox
 	{
 		private bool isValid = true;
-		private TimeSpan lastVal;
+		private TimeSpan tsValue;
 		private TimeSpanCollection list;
 		private string zero;
 
@@ -155,15 +155,12 @@ namespace System.Windows.Forms
 		{
 			get
 			{
-				TimeSpan ts;
-				if (this.FormatInfo.TryParse(base.Text, null, out ts))
-					return (TimeSpan2)ts;
-				return TimeSpan2.Zero;
+				return tsValue;
 			}
 			set
 			{
-				lastVal = this.Value;
-				base.Text = value.ToString(base.FormatString, this.FormatInfo);
+				tsValue = this.Value;
+				base.Text = TimeSpan.Zero.Equals(value) ? this.FormatInfo.TimeSpanZeroDisplay : value.ToString(base.FormatString, this.FormatInfo);
 			}
 		}
 
@@ -195,8 +192,11 @@ namespace System.Windows.Forms
 		{
 			TimeSpan ts;
 			isValid = this.FormatInfo.TryParse(base.Text, null, out ts);
-			if (ts != lastVal)
+			if (isValid && ts != tsValue)
+			{
+				tsValue = ts;
 				OnValueChanged(e);
+			}
 			base.OnTextChanged(e);
 		}
 
