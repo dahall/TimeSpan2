@@ -126,10 +126,13 @@ namespace System.Globalization
 			if (info2 != null)
 			{
 				TimeSpan2FormatInfo tsInfo = null;
-				if (cache.TryGetValue(info2.LCID, out tsInfo))
-					return tsInfo;
-				tsInfo = new TimeSpan2FormatInfo(CultureInfo.CurrentCulture);
-				cache.Add(info2.LCID, tsInfo);
+				lock (cache)
+				{
+					if (cache.TryGetValue(info2.LCID, out tsInfo))
+						return tsInfo;
+					tsInfo = new TimeSpan2FormatInfo(CultureInfo.CurrentCulture);
+					cache.Add(info2.LCID, tsInfo);
+				}
 				return tsInfo;
 			}
 
@@ -810,13 +813,16 @@ namespace System.Globalization
 			try
 			{
 				Match m = null;
-				if (fullPatternCache.TryGetValue(pattern, out m))
-					return m;
+				lock (fullPatternCache)
+				{
+					if (fullPatternCache.TryGetValue(pattern, out m))
+						return m;
 
-				m = MyRegex.Match(pattern);
-				if (m == null || !m.Success)
-					throw new FormatException();
-				fullPatternCache.Add(pattern, m);
+					m = MyRegex.Match(pattern);
+					if (m == null || !m.Success)
+						throw new FormatException();
+					fullPatternCache.Add(pattern, m);
+				}
 				return m;
 			}
 			catch
