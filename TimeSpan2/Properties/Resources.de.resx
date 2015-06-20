@@ -124,7 +124,7 @@
     <value>Stunden,Stunde</value>
   </data>
   <data name="TimeSpanManyDayFormat" xml:space="preserve">
-    <value>Tagen</value>
+    <value>Tage</value>
   </data>
   <data name="TimeSpanManyHourFormat" xml:space="preserve">
     <value>Stunden</value>
