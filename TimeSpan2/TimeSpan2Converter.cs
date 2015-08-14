@@ -17,12 +17,9 @@ namespace System
 		/// <returns>
 		/// true if this converter can perform the conversion; otherwise, false.
 		/// </returns>
-		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-		{
-			return sourceType == typeof(string) ||
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) => sourceType == typeof(string) ||
 				TypeDescriptor.GetConverter(sourceType).CanConvertTo(typeof(long)) ||
 				base.CanConvertFrom(context, sourceType);
-		}
 
 		/// <summary>
 		/// Returns whether this converter can convert the object to the specified type, using the specified context.
@@ -32,10 +29,7 @@ namespace System
 		/// <returns>
 		/// true if this converter can perform the conversion; otherwise, false.
 		/// </returns>
-		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-		{
-			return ((destinationType == typeof(InstanceDescriptor)) || base.CanConvertTo(context, destinationType));
-		}
+		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) => ((destinationType == typeof(InstanceDescriptor)) || base.CanConvertTo(context, destinationType));
 
 		/// <summary>
 		/// Converts the given object to the type of this converter, using the specified context and culture information.
@@ -51,9 +45,9 @@ namespace System
 		/// </exception>
 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
-			if (value is string)
+			string sval = value as string;
+			if (sval != null)
 			{
-				string sval = (string)value;
 				if (string.IsNullOrEmpty(sval))
 					return TimeSpan2.Zero;
 
@@ -131,7 +125,7 @@ namespace System
 		public override object CreateInstance(ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
 		{
 			if (propertyValues == null)
-				throw new ArgumentNullException("propertyValues");
+				throw new ArgumentNullException(nameof(propertyValues));
 
 			object obj = propertyValues["Ticks"];
 			if ((obj == null) || (!(obj is long)))
@@ -148,10 +142,7 @@ namespace System
 		/// <returns>
 		/// true if changing a property on this object requires a call to <see cref="M:System.ComponentModel.TypeConverter.CreateInstance(System.Collections.IDictionary)"/> to create a new value; otherwise, false.
 		/// </returns>
-		public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
-		{
-			return true;
-		}
+		public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) => true;
 
 		/// <summary>
 		/// Returns a collection of properties for the type of array specified by the value parameter, using the specified context and attributes.
@@ -164,8 +155,10 @@ namespace System
 		/// </returns>
 		public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
 		{
-			if (value == null || attributes == null)
-				throw new ArgumentNullException();
+			if (value == null)
+				throw new ArgumentNullException(nameof(value));
+			if (attributes == null)
+				throw new ArgumentNullException(nameof(attributes));
 			return TypeDescriptor.GetProperties(value.GetType(), attributes).Sort(new string[] { "Ticks" });
 		}
 
@@ -176,9 +169,6 @@ namespace System
 		/// <returns>
 		/// true if <see cref="M:System.ComponentModel.TypeConverter.GetProperties(System.Object)"/> should be called to find the properties of this object; otherwise, false.
 		/// </returns>
-		public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-		{
-			return true;
-		}
+		public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
 	}
 }

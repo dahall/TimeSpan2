@@ -11,13 +11,10 @@ namespace System.Windows.Forms.Design
 		{
 		}
 
-		protected virtual string InstructionText { get { return null; } }
-		protected virtual string FormTitle { get { return null; } }
+		protected virtual string InstructionText => null;
+		protected virtual string FormTitle => null;
 
-		protected override CollectionEditor.CollectionForm CreateCollectionForm()
-		{
-			return new StringCollectionForm(this);
-		}
+		protected override CollectionEditor.CollectionForm CreateCollectionForm() => new StringCollectionForm(this);
 
 		// Nested Types
 		private class StringCollectionForm : CollectionEditor.CollectionForm

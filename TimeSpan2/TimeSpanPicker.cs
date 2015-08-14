@@ -106,10 +106,7 @@ namespace System.Windows.Forms
 		/// 	<c>true</c> if this text is valid; otherwise, <c>false</c>.
 		/// </value>
 		[DefaultValue(true), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool IsTextValid
-		{
-			get { return isValid; }
-		}
+		public bool IsTextValid => isValid;
 
 		/// <summary>
 		/// Gets the items displayed in the drop-down list.
@@ -119,10 +116,7 @@ namespace System.Windows.Forms
 		[Editor(typeof(TimeSpanCollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
 		[RefreshProperties(RefreshProperties.All)]
-		public new TimeSpanCollection Items
-		{
-			get { return list; }
-		}
+		public new TimeSpanCollection Items => list;
 
 		/// <summary>
 		/// Gets or sets the text associated with this control.
@@ -169,10 +163,7 @@ namespace System.Windows.Forms
 			this.Value = TimeSpan2.Zero;
 		}
 
-		internal bool ShouldSerializeValue()
-		{
-			return this.Value != TimeSpan2.Zero;
-		}
+		internal bool ShouldSerializeValue() => this.Value != TimeSpan2.Zero;
 
 		/// <summary>
 		/// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.ComboBox"/> and optionally releases the managed resources.
@@ -264,20 +255,14 @@ namespace System.Windows.Forms
 			{
 			}
 
-			protected override string FormTitle
-			{
-				get { return "TimeSpan Collection Editor"; }
-			}
+			protected override string FormTitle => "TimeSpan Collection Editor";
 
-			protected override string InstructionText
-			{
-				get { return "Enter string representations of TimeSpan objects (one per line):"; }
-			}
+			protected override string InstructionText => "Enter string representations of TimeSpan objects (one per line):";
 
 			public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 			{
 				if (context == null)
-					throw new ArgumentNullException("context");
+					throw new ArgumentNullException(nameof(context));
 				TimeSpanPicker p = context.Instance as TimeSpanPicker;
 				if (p != null)
 					format = p.FormatString;

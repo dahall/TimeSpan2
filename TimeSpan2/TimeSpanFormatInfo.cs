@@ -71,10 +71,7 @@ namespace System.Globalization
 		/// Gets the default pattern.
 		/// </summary>
 		/// <value>The default pattern.</value>
-		public string DefaultPattern
-		{
-			get { return defaultPattern; }
-		}
+		public string DefaultPattern => defaultPattern;
 
 		/// <summary>
 		/// Gets or sets the long pattern.
@@ -172,7 +169,7 @@ namespace System.Globalization
 		/// </remarks>
 		public string Format(string format, object arg, IFormatProvider formatProvider)
 		{
-			if (arg == null) throw new ArgumentNullException("arg");
+			if (arg == null) throw new ArgumentNullException(nameof(arg));
 
 			if (format != null)
 			{
@@ -208,10 +205,7 @@ namespace System.Globalization
 		/// <returns>
 		/// An array containing the standard patterns in which <see cref="TimeSpan"/> values can be formatted using the specified format pattern.
 		/// </returns>
-		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType, char format)
-		{
-			return new string[] { GetTimeSpanPattern(patternType, format) };
-		}
+		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType, char format) => new string[] { GetTimeSpanPattern(patternType, format) };
 
 		/// <summary>
 		/// Returns an object of the specified type that provides a <see cref="TimeSpan"/> formatting service.
@@ -220,10 +214,7 @@ namespace System.Globalization
 		/// <returns>
 		/// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>.
 		/// </returns>
-		public object GetFormat(Type formatType)
-		{
-			return (formatType != typeof(ICustomFormatter)) ? null : this;
-		}
+		public object GetFormat(Type formatType) => (formatType != typeof(ICustomFormatter)) ? null : this;
 
 		/// <summary>
 		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent.
@@ -236,7 +227,7 @@ namespace System.Globalization
 		internal TimeSpan Parse(string s, IFormatProvider provider)
 		{
 			if (string.IsNullOrEmpty(s))
-				throw new ArgumentNullException("s");
+				throw new ArgumentNullException(nameof(s));
 			TimeSpan ts;
 			if (TryParse(s, provider, out ts))
 				return ts;
@@ -253,7 +244,7 @@ namespace System.Globalization
 		internal TimeSpan ParseExact(string s, string[] formats, IFormatProvider provider)
 		{
 			if (s == null)
-				throw new ArgumentNullException("s");
+				throw new ArgumentNullException(nameof(s));
 
 			TimeSpan ts;
 			if (!TryParseExact(s, formats, provider, out ts))
@@ -502,10 +493,11 @@ namespace System.Globalization
 				case 'x':
 					return ISO8601Pattern;
 				default:
-					throw new ArgumentException("Invalid format specified.", "format");
+					throw new ArgumentException("Invalid format specified.", nameof(format));
 			}
 		}
 
+		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private double GetValueForGroup(TimeSpan core, string matchGroup)
 		{
 			switch (matchGroup)
@@ -574,6 +566,7 @@ namespace System.Globalization
 			return string.Format(@"\b(?{1}:{0})\b", string.Join("|", parseWords.Split(',')), this.WordPatternIgnoreCase ? "i" : string.Empty);
 		}
 
+		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private bool ProcessFormatEntity(ParseEntity e, TimeSpan core)
 		{
 			if (e.name == null && e.children == null)
@@ -672,6 +665,7 @@ namespace System.Globalization
 			return foundValue;
 		}
 
+		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private void ProcessParseEntity(ParseEntity e)
 		{
 			if (e.name == null && e.children == null)
@@ -865,10 +859,7 @@ namespace System.Globalization
 				}
 			}
 
-			public override string ToString()
-			{
-				return output == null ? string.Empty : output;
-			}
+			public override string ToString() => output == null ? string.Empty : output;
 		}
 	}
 }

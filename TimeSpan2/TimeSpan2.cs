@@ -17,6 +17,7 @@ namespace System
 	[TypeConverter(typeof(TimeSpan2Converter))]
 	public struct TimeSpan2 : IComparable, IComparable<TimeSpan2>, IComparable<TimeSpan>, IEquatable<TimeSpan2>, IEquatable<TimeSpan>, IFormattable, IConvertible, ISerializable, IXmlSerializable
 	{
+		[ComVisible(false)]
 		private TimeSpan core;
 
 		/// <summary>Represents the maximum <see cref="TimeSpan2"/> value. This field is read-only.</summary>
@@ -105,140 +106,98 @@ namespace System
 		/// </summary>
 		/// <value>The day component of this instance. The return value can be positive or negative.</value>
 		[Browsable(false)]
-		public int Days
-		{
-			get { return core.Days; }
-		}
+		public int Days => core.Days;
 
 		/// <summary>
 		/// Gets the hours component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The hours component of this instance. The return value ranges from -23 through 23.</value>
 		[Browsable(false)]
-		public int Hours
-		{
-			get { return core.Hours; }
-		}
+		public int Hours => core.Hours;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is zero.
 		/// </summary>
 		/// <value><c>true</c> if this instance is zero; otherwise, <c>false</c>.</value>
 		[Browsable(false)]
-		public bool IsZero
-		{
-			get { return core == TimeSpan.Zero; }
-		}
+		public bool IsZero => core == TimeSpan.Zero;
 
 		/// <summary>
 		/// Gets the milliseconds component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The milliseconds component of this instance. The return value ranges from -999 through 999.</value>
 		[Browsable(false)]
-		public int Milliseconds
-		{
-			get { return core.Milliseconds; }
-		}
+		public int Milliseconds => core.Milliseconds;
 
 		/// <summary>
 		/// Gets the minutes component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The minutes component of this instance. The return value ranges from -59 through 59.</value>
 		[Browsable(false)]
-		public int Minutes
-		{
-			get { return core.Minutes; }
-		}
+		public int Minutes => core.Minutes;
 
 		/// <summary>
 		/// Gets the seconds component of the time interval represented by the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The seconds component of this instance. The return value ranges from -59 through 59.</value>
 		[Browsable(false)]
-		public int Seconds
-		{
-			get { return core.Seconds; }
-		}
+		public int Seconds => core.Seconds;
 
 		/// <summary>
 		/// Gets the number of ticks that represent the value of the current <see cref="TimeSpan2"/> structure.
 		/// </summary>
 		/// <value>The number of ticks contained in this instance.</value>
 		[Browsable(false)]
-		public long Ticks
-		{
-			get { return core.Ticks; }
-		}
+		public long Ticks => core.Ticks;
 
 		/// <summary>
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional days.
 		/// </summary>
 		/// <value>The total number of days represented by this instance.</value>
 		[Browsable(false)]
-		public double TotalDays
-		{
-			get { return core.TotalDays; }
-		}
+		public double TotalDays => core.TotalDays;
 
 		/// <summary>
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional hours.
 		/// </summary>
 		/// <value>The total number of hours represented by this instance.</value>
 		[Browsable(false)]
-		public double TotalHours
-		{
-			get { return core.TotalHours; }
-		}
+		public double TotalHours => core.TotalHours;
 
 		/// <summary>
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional milliseconds.
 		/// </summary>
 		/// <value>The total number of milliseconds represented by this instance.</value>
 		[Browsable(false)]
-		public double TotalMilliseconds
-		{
-			get { return core.TotalMilliseconds; }
-		}
+		public double TotalMilliseconds => core.TotalMilliseconds;
 
 		/// <summary>
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional minutes.
 		/// </summary>
 		/// <value>The total number of minutes represented by this instance.</value>
 		[Browsable(false)]
-		public double TotalMinutes
-		{
-			get { return core.TotalMinutes; }
-		}
+		public double TotalMinutes => core.TotalMinutes;
 
 		/// <summary>
 		/// Gets the value of the current <see cref="TimeSpan2"/> structure expressed in whole and fractional seconds.
 		/// </summary>
 		/// <value>The total number of seconds represented by this instance.</value>
 		[Browsable(false)]
-		public double TotalSeconds
-		{
-			get { return core.TotalSeconds; }
-		}
+		public double TotalSeconds => core.TotalSeconds;
 
 		/// <summary>
 		/// Performs an implicit conversion from <see cref="System.TimeSpan2"/> to <see cref="System.TimeSpan"/>.
 		/// </summary>
-		/// <param name="d">The <see cref="TimeSpan2"/> structure to convert.</param>
+		/// <param name="ts2">The <see cref="TimeSpan2"/> structure to convert.</param>
 		/// <returns>The <see cref="TimeSpan"/> equivalent of the converted <see cref="TimeSpan2"/>.</returns>
-		public static implicit operator TimeSpan(TimeSpan2 d)
-		{
-			return d.core;
-		}
+		public static implicit operator TimeSpan(TimeSpan2 ts2) => ts2.core;
 
 		/// <summary>
 		/// Performs an implicit conversion from <see cref="System.TimeSpan"/> to <see cref="System.TimeSpan2"/>.
 		/// </summary>
-		/// <param name="d">The <see cref="TimeSpan"/> structure to convert.</param>
+		/// <param name="ts">The <see cref="TimeSpan"/> structure to convert.</param>
 		/// <returns>The <see cref="TimeSpan2"/> equivalent of the converted <see cref="TimeSpan"/>.</returns>
-		public static implicit operator TimeSpan2(TimeSpan d)
-		{
-			return new TimeSpan2(d);
-		}
+		public static implicit operator TimeSpan2(TimeSpan ts) => new TimeSpan2(ts);
 
 		/// <summary>
 		/// Indicates whether two <see cref="TimeSpan2"/> instances are not equal.
@@ -246,20 +205,14 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the values of <paramref name="t1"/> and <paramref name="t2"/> are not equal; otherwise, <c>false</c>.</returns>
-		public static bool operator !=(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core != t2.core);
-		}
+		public static bool operator !=(TimeSpan2 t1, TimeSpan2 t2) => (t1.core != t2.core);
 
 		/// <summary>
 		/// Returns the specified instance of <see cref="TimeSpan2"/>.
 		/// </summary>
 		/// <param name="t">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>Returns <paramref name="t"/>.</returns>
-		public static TimeSpan2 operator +(TimeSpan2 t)
-		{
-			return t;
-		}
+		public static TimeSpan2 operator +(TimeSpan2 t) => t;
 
 		/// <summary>
 		/// Adds two specified <see cref="TimeSpan2"/> instances.
@@ -267,20 +220,14 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> whose value is the sum of the values of <paramref name="t1"/> and <paramref name="t2"/>.</returns>
-		public static TimeSpan2 operator +(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return t1.Add(t2);
-		}
+		public static TimeSpan2 operator +(TimeSpan2 t1, TimeSpan2 t2) => t1.Add(t2);
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> whose value is the negated value of the specified instance.
 		/// </summary>
 		/// <param name="t">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> with the same numeric value as this instance, but the opposite sign.</returns>
-		public static TimeSpan2 operator -(TimeSpan2 t)
-		{
-			return new TimeSpan2(-t.core);
-		}
+		public static TimeSpan2 operator -(TimeSpan2 t) => new TimeSpan2(-t.core);
 
 		/// <summary>
 		/// Subtracts a specified <see cref="TimeSpan2"/> from another specified <c>TimeSpan2</c>.
@@ -288,10 +235,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> whose value is the result of the value of <paramref name="t1"/> minus the value of <paramref name="t2"/>.</returns>
-		public static TimeSpan2 operator -(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return t1.Subtract(t2);
-		}
+		public static TimeSpan2 operator -(TimeSpan2 t1, TimeSpan2 t2) => t1.Subtract(t2);
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is less than another specified <see cref="TimeSpan2"/>. 
@@ -299,10 +243,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is less than the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator <(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core < t2.core);
-		}
+		public static bool operator <(TimeSpan2 t1, TimeSpan2 t2) => (t1.core < t2.core);
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is less than or equal to another specified <see cref="TimeSpan2"/>. 
@@ -310,10 +251,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is less than or equal to the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator <=(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core <= t2.core);
-		}
+		public static bool operator <=(TimeSpan2 t1, TimeSpan2 t2) => (t1.core <= t2.core);
 
 		/// <summary>
 		/// Indicates whether two <see cref="TimeSpan2"/> instances are equal.
@@ -321,10 +259,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the values of <paramref name="t1"/> and <paramref name="t2"/> are equal; otherwise, <c>false</c>.</returns>
-		public static bool operator ==(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core == t2.core);
-		}
+		public static bool operator ==(TimeSpan2 t1, TimeSpan2 t2) => (t1.core == t2.core);
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is greater than another specified <see cref="TimeSpan2"/>. 
@@ -332,10 +267,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is greater than the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator >(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core > t2.core);
-		}
+		public static bool operator >(TimeSpan2 t1, TimeSpan2 t2) => (t1.core > t2.core);
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is greater than or equal to another specified <see cref="TimeSpan2"/>. 
@@ -343,10 +275,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is greater than or equal to the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator >=(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core >= t2.core);
-		}
+		public static bool operator >=(TimeSpan2 t1, TimeSpan2 t2) => (t1.core >= t2.core);
 
 		/// <summary>
 		/// Compares two <see cref="TimeSpan2"/> values and returns an integer that indicates whether the first value is shorter than, equal to, or longer than the second value.
@@ -361,10 +290,7 @@ namespace System
 		/// <item><term>1</term><description><paramref name="t1"/> is longer than <paramref name="t2"/></description></item>
 		/// </list>
 		/// </returns>
-		public static int Compare(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return global::System.TimeSpan.Compare(t1.core, t2.core);
-		}
+		public static int Compare(TimeSpan2 t1, TimeSpan2 t2) => TimeSpan.Compare(t1.core, t2.core);
 
 		/// <summary>
 		/// Indicates whether two <see cref="TimeSpan2"/> instances are equal.
@@ -372,70 +298,49 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the values of <paramref name="t1"/> and <paramref name="t2"/> are equal; otherwise, <c>false</c>.</returns>
-		public static bool Equals(TimeSpan2 t1, TimeSpan2 t2)
-		{
-			return (t1.core == t2.core);
-		}
+		public static bool Equals(TimeSpan2 t1, TimeSpan2 t2) => (t1.core == t2.core);
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of days, where the specification is accurate to the nearest millisecond.
 		/// </summary>
 		/// <param name="value">A number of days, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromDays(double value)
-		{
-			return new TimeSpan2(global::System.TimeSpan.FromDays(value));
-		}
+		public static TimeSpan2 FromDays(double value) => new TimeSpan2(TimeSpan.FromDays(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of hours, where the specification is accurate to the nearest millisecond.
 		/// </summary>
 		/// <param name="value">A number of hours, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromHours(double value)
-		{
-			return new TimeSpan2(global::System.TimeSpan.FromHours(value));
-		}
+		public static TimeSpan2 FromHours(double value) => new TimeSpan2(TimeSpan.FromHours(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of milliseconds.
 		/// </summary>
 		/// <param name="value">A number of milliseconds.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromMilliseconds(double value)
-		{
-			return new TimeSpan2(global::System.TimeSpan.FromMilliseconds(value));
-		}
+		public static TimeSpan2 FromMilliseconds(double value) => new TimeSpan2(TimeSpan.FromMilliseconds(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of minutes, where the specification is accurate to the nearest millisecond.
 		/// </summary>
 		/// <param name="value">A number of minutes, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromMinutes(double value)
-		{
-			return new TimeSpan2(global::System.TimeSpan.FromMinutes(value));
-		}
+		public static TimeSpan2 FromMinutes(double value) => new TimeSpan2(TimeSpan.FromMinutes(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of seconds, where the specification is accurate to the nearest millisecond.
 		/// </summary>
 		/// <param name="value">A number of seconds, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromSeconds(double value)
-		{
-			return new TimeSpan2(global::System.TimeSpan.FromSeconds(value));
-		}
+		public static TimeSpan2 FromSeconds(double value) => new TimeSpan2(TimeSpan.FromSeconds(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified time, where the specification is in units of ticks.
 		/// </summary>
 		/// <param name="value">A number of ticks that represent a time.</param>
 		/// <returns>A <see cref="TimeSpan2"/> with a value of <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromTicks(long value)
-		{
-			return new TimeSpan2(global::System.TimeSpan.FromTicks(value));
-		}
+		public static TimeSpan2 FromTicks(long value) => new TimeSpan2(TimeSpan.FromTicks(value));
 
 		/// <summary>
 		/// Converts the specified string representation of a time span to its <see cref="TimeSpan2"/> equivalent. 
@@ -444,10 +349,7 @@ namespace System
 		/// <returns>A <see cref="TimeSpan2"/> equivalent to the time span contained in <paramref name="value"/>.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
 		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
-		public static TimeSpan2 Parse(string value)
-		{
-			return Parse(value, null);
-		}
+		public static TimeSpan2 Parse(string value) => Parse(value, null);
 
 		/// <summary>
 		/// Converts the specified string representation of a time span to its <see cref="TimeSpan2"/> equivalent using the specified culture-specific format information. 
@@ -470,10 +372,7 @@ namespace System
 		/// <param name="format">A standard or custom format string that defines the required format of <paramref name="input"/>.</param>
 		/// <param name="formatProvider">An object that provides culture-specific formatting information.</param>
 		/// <returns>A time interval that corresponds to <paramref name="input"/>, as specified by <paramref name="format"/> and <paramref name="formatProvider"/>.</returns>
-		public static TimeSpan2 ParseExact(string input, string format, IFormatProvider formatProvider)
-		{
-			return ParseExact(input, new string[] { format }, formatProvider);
-		}
+		public static TimeSpan2 ParseExact(string input, string format, IFormatProvider formatProvider) => ParseExact(input, new string[] { format }, formatProvider);
 
 		/// <summary>
 		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format and culture-specific format information. The format of the string representation must match the specified format exactly.
@@ -494,10 +393,7 @@ namespace System
 		/// <param name="s">A string containing a time span to convert.</param>
 		/// <param name="result">When this method returns, contains the <see cref="TimeSpan2"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="s"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
-		public static bool TryParse(string s, out TimeSpan2 result)
-		{
-			return TryParse(s, null, out result);
-		}
+		public static bool TryParse(string s, out TimeSpan2 result) => TryParse(s, null, out result);
 
 		/// <summary>
 		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan2"/> equivalent and returns a value that indicates whether the conversion succeeded. 
@@ -520,10 +416,7 @@ namespace System
 		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="input"/>.</param>
 		/// <param name="result">When this method returns, contains an object that represents the time interval specified by <paramref name="input"/>, or <see cref="TimeSpan.Zero"/> if the conversion failed. This parameter is passed uninitialized.</param>
 		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-		public static bool TryParseExact(string input, string format, IFormatProvider formatProvider, out TimeSpan2 result)
-		{
-			return TryParseExact(input, new string[] { format }, formatProvider, out result);
-		}
+		public static bool TryParseExact(string input, string format, IFormatProvider formatProvider, out TimeSpan2 result) => TryParseExact(input, new string[] { format }, formatProvider, out result);
 
 		/// <summary>
 		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified formats and culture-specific format information, and returns a value that indicates whether the conversion succeeded. The format of the string representation must match one of the specified formats exactly.
@@ -544,83 +437,71 @@ namespace System
 		/// </summary>
 		/// <param name="ts">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents the value of this instance plus the value of <paramref name="ts"/>.</returns>
-		public TimeSpan2 Add(TimeSpan2 ts)
-		{
-			return new TimeSpan2(core.Add(ts.core));
-		}
+		public TimeSpan2 Add(TimeSpan2 ts) => new TimeSpan2(core.Add(ts.core));
 
 		/// <summary>
 		/// Compares this instance to a specified object and returns an integer that indicates whether this [instance] is shorter than, equal to, or longer than the specified object. 
 		/// </summary>
-		/// <param name="value">An object to compare, or <c>null</c>.</param>
-		/// <returns>A signed number indicating the relative values of this instance and <paramref name="value"/>.
+		/// <param name="obj">An object to compare, or <c>null</c>.</param>
+		/// <returns>A signed number indicating the relative values of this instance and <paramref name="obj"/>.
 		/// <list>
 		/// <listheader><term>Value</term><description>Condition</description></listheader>
-		/// <item><term>-1</term><description>This instance is shorter than <paramref name="value"/></description></item>
-		/// <item><term>0</term><description>This instance is equal to <paramref name="value"/></description></item>
-		/// <item><term>1</term><description>This instance is longer than <paramref name="value"/></description></item>
+		/// <item><term>-1</term><description>This instance is shorter than <paramref name="obj"/></description></item>
+		/// <item><term>0</term><description>This instance is equal to <paramref name="obj"/></description></item>
+		/// <item><term>1</term><description>This instance is longer than <paramref name="obj"/></description></item>
 		/// </list>
 		/// </returns>
-		public int CompareTo(object value)
+		public int CompareTo(object obj)
 		{
-			if (value is TimeSpan2)
-				value = ((TimeSpan2)value).core;
-			return core.CompareTo(value);
+			if (obj is TimeSpan2)
+				obj = ((TimeSpan2)obj).core;
+			return core.CompareTo(obj);
 		}
 
 		/// <summary>
 		/// Compares this instance to a specified <see cref="TimeSpan2"/> object and returns an integer that indicates whether this [instance] is shorter than, equal to, or longer than the <see cref="TimeSpan2"/> object.
 		/// </summary>
-		/// <param name="value">A <see cref="TimeSpan2"/> object to compare to this instance.</param>
-		/// <returns>A signed number indicating the relative values of this instance and <paramref name="value"/>.
+		/// <param name="other">A <see cref="TimeSpan2"/> object to compare to this instance.</param>
+		/// <returns>A signed number indicating the relative values of this instance and <paramref name="other"/>.
 		/// <list>
 		/// <listheader><term>Value</term><description>Condition</description></listheader>
-		/// <item><term>-1</term><description>This instance is shorter than <paramref name="value"/></description></item>
-		/// <item><term>0</term><description>This instance is equal to <paramref name="value"/></description></item>
-		/// <item><term>1</term><description>This instance is longer than <paramref name="value"/></description></item>
+		/// <item><term>-1</term><description>This instance is shorter than <paramref name="other"/></description></item>
+		/// <item><term>0</term><description>This instance is equal to <paramref name="other"/></description></item>
+		/// <item><term>1</term><description>This instance is longer than <paramref name="other"/></description></item>
 		/// </list>
 		/// </returns>
-		public int CompareTo(TimeSpan2 value)
-		{
-			return core.CompareTo(value.core);
-		}
+		public int CompareTo(TimeSpan2 other) => core.CompareTo(other.core);
 
 		/// <summary>
 		/// Compares this instance to a specified <see cref="TimeSpan"/> object and returns an integer that indicates whether this [instance] is shorter than, equal to, or longer than the <see cref="TimeSpan2"/> object.
 		/// </summary>
-		/// <param name="value">A <see cref="TimeSpan"/> object to compare to this instance.</param>
-		/// <returns>A signed number indicating the relative values of this instance and <paramref name="value"/>.
+		/// <param name="other">A <see cref="TimeSpan"/> object to compare to this instance.</param>
+		/// <returns>A signed number indicating the relative values of this instance and <paramref name="other"/>.
 		/// <list>
 		/// <listheader><term>Value</term><description>Condition</description></listheader>
-		/// <item><term>-1</term><description>This instance is shorter than <paramref name="value"/></description></item>
-		/// <item><term>0</term><description>This instance is equal to <paramref name="value"/></description></item>
-		/// <item><term>1</term><description>This instance is longer than <paramref name="value"/></description></item>
+		/// <item><term>-1</term><description>This instance is shorter than <paramref name="other"/></description></item>
+		/// <item><term>0</term><description>This instance is equal to <paramref name="other"/></description></item>
+		/// <item><term>1</term><description>This instance is longer than <paramref name="other"/></description></item>
 		/// </list>
 		/// </returns>
-		public int CompareTo(TimeSpan value)
-		{
-			return core.CompareTo(value);
-		}
+		public int CompareTo(TimeSpan other) => core.CompareTo(other);
 
 		/// <summary>
 		/// Returns a new <see cref="TimeSpan2"/> object whose value is the absolute value of the current <see cref="TimeSpan2"/> object.
 		/// </summary>
 		/// <returns>A new <see cref="TimeSpan2"/> object whose value is the absolute value of the current <see cref="TimeSpan2"/> object.</returns>
-		public TimeSpan2 Duration()
-		{
-			return new TimeSpan2(core.Duration());
-		}
+		public TimeSpan2 Duration() => new TimeSpan2(core.Duration());
 
 		/// <summary>
 		/// Indicates whether the current object is equal to another object.
 		/// </summary>
-		/// <param name="value">An object to compare with this object.</param>
-		/// <returns><c>true</c> if the current object is equal to the <paramref name="value"/> parameter; otherwise, <c>false</c>.</returns>
-		public override bool Equals(object value)
+		/// <param name="obj">An object to compare with this object.</param>
+		/// <returns><c>true</c> if the current object is equal to the <paramref name="obj"/> parameter; otherwise, <c>false</c>.</returns>
+		public override bool Equals(object obj)
 		{
-			if (value is TimeSpan2)
-				return core.Equals(((TimeSpan2)value).core);
-			return core.Equals(value);
+			if (obj is TimeSpan2)
+				return core.Equals(((TimeSpan2)obj).core);
+			return core.Equals(obj);
 		}
 
 		/// <summary>
@@ -637,22 +518,16 @@ namespace System
 		/// <summary>
 		/// Indicates whether the current object is equal to a specified <see cref="TimeSpan2"/> object.
 		/// </summary>
-		/// <param name="obj">A <see cref="TimeSpan2"/> object to compare with this object.</param>
-		/// <returns><c>true</c> if the current object is equal to the <paramref name="obj"/> parameter; otherwise, <c>false</c>.</returns>
-		public bool Equals(TimeSpan2 obj)
-		{
-			return core.Equals(obj.core);
-		}
+		/// <param name="other">A <see cref="TimeSpan2"/> object to compare with this object.</param>
+		/// <returns><c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.</returns>
+		public bool Equals(TimeSpan2 other) => core.Equals(other.core);
 
 		/// <summary>
 		/// Indicates whether the current object is equal to a specified <see cref="TimeSpan"/> object.
 		/// </summary>
 		/// <param name="other">A <see cref="TimeSpan"/> object to compare with this object.</param>
 		/// <returns><c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.</returns>
-		public bool Equals(TimeSpan other)
-		{
-			return core.Equals(other);
-		}
+		public bool Equals(TimeSpan other) => core.Equals(other);
 
 		/// <summary>
 		/// Returns the hash code for this instance.
@@ -660,25 +535,16 @@ namespace System
 		/// <returns>
 		/// A 32-bit signed integer that is the hash code for this instance.
 		/// </returns>
-		public override int GetHashCode()
-		{
-			return core.GetHashCode();
-		}
+		public override int GetHashCode() => core.GetHashCode();
 
-		TypeCode IConvertible.GetTypeCode()
-		{
-			return TypeCode.Object;
-		}
+		TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
 
 		bool IConvertible.ToBoolean(IFormatProvider provider)
 		{
 			throw new InvalidCastException();
 		}
 
-		byte IConvertible.ToByte(IFormatProvider provider)
-		{
-			return Convert.ToByte(core.Ticks);
-		}
+		byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(core.Ticks);
 
 		char IConvertible.ToChar(IFormatProvider provider)
 		{
@@ -690,45 +556,21 @@ namespace System
 			throw new InvalidCastException();
 		}
 
-		decimal IConvertible.ToDecimal(IFormatProvider provider)
-		{
-			return Convert.ToDecimal(core.Ticks);
-		}
+		decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(core.Ticks);
 
-		double IConvertible.ToDouble(IFormatProvider provider)
-		{
-			return Convert.ToDouble(core.Ticks);
-		}
+		double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(core.Ticks);
 
-		short IConvertible.ToInt16(IFormatProvider provider)
-		{
-			return Convert.ToInt16(core.Ticks);
-		}
+		short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(core.Ticks);
 
-		int IConvertible.ToInt32(IFormatProvider provider)
-		{
-			return Convert.ToInt32(core.Ticks);
-		}
+		int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(core.Ticks);
 
-		long IConvertible.ToInt64(IFormatProvider provider)
-		{
-			return core.Ticks;
-		}
+		long IConvertible.ToInt64(IFormatProvider provider) => core.Ticks;
 
-		sbyte IConvertible.ToSByte(IFormatProvider provider)
-		{
-			return Convert.ToSByte(core.Ticks);
-		}
+		sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(core.Ticks);
 
-		float IConvertible.ToSingle(IFormatProvider provider)
-		{
-			return Convert.ToSingle(core.Ticks);
-		}
+		float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(core.Ticks);
 
-		string IConvertible.ToString(IFormatProvider provider)
-		{
-			return ToString(null, provider);
-		}
+		string IConvertible.ToString(IFormatProvider provider) => ToString(null, provider);
 
 		object IConvertible.ToType(Type conversionType, IFormatProvider provider)
 		{
@@ -739,62 +581,44 @@ namespace System
 			return Convert.ChangeType(this, conversionType, provider);
 		}
 
-		ushort IConvertible.ToUInt16(IFormatProvider provider)
-		{
-			return Convert.ToUInt16(core.Ticks);
-		}
+		ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(core.Ticks);
 
-		uint IConvertible.ToUInt32(IFormatProvider provider)
-		{
-			return Convert.ToUInt32(core.Ticks);
-		}
+		uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(core.Ticks);
 
-		ulong IConvertible.ToUInt64(IFormatProvider provider)
-		{
-			return Convert.ToUInt64(core.Ticks);
-		}
+		ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(core.Ticks);
 
 		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
 		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 			info.AddValue("ticks", core.Ticks);
 		}
 
-		Xml.Schema.XmlSchema IXmlSerializable.GetSchema()
-		{
-			return null;
-		}
+		Xml.Schema.XmlSchema IXmlSerializable.GetSchema() => null;
 
 		void IXmlSerializable.ReadXml(Xml.XmlReader reader)
 		{
-			core = System.Xml.XmlConvert.ToTimeSpan(reader.ReadContentAsString());
+			core = System.Xml.XmlConvert.ToTimeSpan(reader?.ReadContentAsString());
 		}
 
 		void IXmlSerializable.WriteXml(Xml.XmlWriter writer)
 		{
-			writer.WriteValue(System.Xml.XmlConvert.ToString(core));
+			writer?.WriteValue(System.Xml.XmlConvert.ToString(core));
 		}
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> whose value is the negated value of this instance.
 		/// </summary>
 		/// <returns>The same numeric value as this instance, but with the opposite sign.</returns>
-		public TimeSpan2 Negate()
-		{
-			return new TimeSpan2(core.Negate());
-		}
+		public TimeSpan2 Negate() => new TimeSpan2(core.Negate());
 
 		/// <summary>
 		/// Subtracts the specified <see cref="TimeSpan2"/> from this instance.
 		/// </summary>
 		/// <param name="ts">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> whose value is the result of the value of this instance minus the value of <paramref name="ts"/>.</returns>
-		public TimeSpan2 Subtract(TimeSpan2 ts)
-		{
-			return new TimeSpan2(core.Subtract(ts.core));
-		}
+		public TimeSpan2 Subtract(TimeSpan2 ts) => new TimeSpan2(core.Subtract(ts.core));
 
 		/// <summary>
 		/// Returns string representation of the value of this instance using the specified format.
@@ -869,10 +693,7 @@ namespace System
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public string ToString(string format)
-		{
-			return TimeSpan2FormatInfo.CurrentInfo.Format(format, this, null);
-		}
+		public string ToString(string format) => TimeSpan2FormatInfo.CurrentInfo.Format(format, this, null);
 
 		/// <summary>
 		/// Returns the string representation of the value of this instance.
@@ -881,9 +702,6 @@ namespace System
 		/// A string that represents the value of this instance. The return value is of the form: 
 		/// <para>[-][d.]hh:mm:ss[.fffffff]</para>
 		/// </returns>
-		public override string ToString()
-		{
-			return core.ToString();
-		}
+		public override string ToString() => core.ToString();
 	}
 }
