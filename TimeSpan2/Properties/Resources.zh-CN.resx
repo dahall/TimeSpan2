@@ -130,11 +130,11 @@
     <comment>Format for days when Days property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyHourFormat" xml:space="preserve">
-    <value>小时</value>
+    <value>时</value>
     <comment>Format for hours when Hours property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyMillisecondFormat" xml:space="preserve">
-    <value>微秒</value>
+    <value>毫秒</value>
     <comment>Format for milliseconds when Milliseconds property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyMinuteFormat" xml:space="preserve">
@@ -150,7 +150,7 @@
     <comment>Format for hours when Ticks property &gt; 1</comment>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
-    <value>微秒</value>
+    <value>毫秒</value>
     <comment>Comma separated list of all strings that can represent a millisecond</comment>
   </data>
   <data name="TimeSpanMinuteStrings" xml:space="preserve">
@@ -166,7 +166,7 @@
     <comment>Format for hours when Hours property equals 1</comment>
   </data>
   <data name="TimeSpanOneMillisecondFormat" xml:space="preserve">
-    <value>微秒</value>
+    <value>毫秒</value>
     <comment>Format for milliseconds when Milliseconds property equals 1</comment>
   </data>
   <data name="TimeSpanOneMinuteFormat" xml:space="preserve">
@@ -186,7 +186,7 @@
     <comment>Comma separated list of all strings that can represent a second</comment>
   </data>
   <data name="TimeSpanSeparator" xml:space="preserve">
-    <value>, </value>
+    <value>,</value>
     <comment>Separator string used in between individual formatted strings for each time element</comment>
   </data>
   <data name="TimeSpanTickStrings" xml:space="preserve">
