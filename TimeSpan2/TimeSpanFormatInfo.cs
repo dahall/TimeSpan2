@@ -127,7 +127,7 @@ namespace System.Globalization
 				{
 					if (cache.TryGetValue(info2.LCID, out tsInfo))
 						return tsInfo;
-					tsInfo = new TimeSpan2FormatInfo(CultureInfo.CurrentCulture);
+					tsInfo = new TimeSpan2FormatInfo(CultureInfo.CurrentUICulture);
 					cache.Add(info2.LCID, tsInfo);
 				}
 				return tsInfo;
@@ -614,7 +614,7 @@ namespace System.Globalization
 			{
 				case "n":
 					if (core.Ticks < 0)
-						e.output = CultureInfo.CurrentCulture.NumberFormat.NegativeSign;
+						e.output = CultureInfo.CurrentUICulture.NumberFormat.NegativeSign;
 					break;
 				case "d":
 				case "D":
@@ -637,10 +637,10 @@ namespace System.Globalization
 					foundValue = val != 0;
 					break;
 				case "ts":
-					e.output = CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator;
+					e.output = CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator;
 					break;
 				case "ds":
-					e.output = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+					e.output = CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
 					break;
 				case "ws":
 					e.output = " ";
@@ -697,7 +697,7 @@ namespace System.Globalization
 				case "z":
 					break;
 				case "n":
-					e.output = string.Format(@"(?<n>{0})?", Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NegativeSign));
+					e.output = string.Format(@"(?<n>{0})?", Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NegativeSign));
 					break;
 				case "d":
 				case "D":
@@ -717,7 +717,7 @@ namespace System.Globalization
 					e.output = string.Format(@"(?<{0}>\d+)", e.name);
 					break;
 				case "p":
-					e.output = string.Format(@"(?<p>\d+(?:{0}\d{{0,{1}}})?)", Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), e.value.Substring(1));
+					e.output = string.Format(@"(?<p>\d+(?:{0}\d{{0,{1}}})?)", Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator), e.value.Substring(1));
 					break;
 				case "vd":
 				case "vh":
@@ -728,10 +728,10 @@ namespace System.Globalization
 					e.output = GetVerboseParseString(e.name);
 					break;
 				case "ts":
-					e.output = Regex.Escape(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator);
+					e.output = Regex.Escape(CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator);
 					break;
 				case "ds":
-					e.output = Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+					e.output = Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator);
 					break;
 				case "ws":
 					e.output = @"\s+";
@@ -786,7 +786,7 @@ namespace System.Globalization
 				fVal = p.Groups["F"].Value;
 
 			if (fVal.Length > 0)
-				dk = double.Parse("0" + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator + fVal);
+				dk = double.Parse("0" + CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator + fVal);
 
 			if (p.Groups["k"].Success)
 				dk = int.Parse(p.Groups["k"].Value) / 1000.0;

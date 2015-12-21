@@ -221,7 +221,7 @@ namespace System.Windows.Forms
 
 		private void ResetLocale()
 		{
-			System.Threading.Thread.CurrentThread.CurrentCulture.ClearCachedData();
+			System.Threading.Thread.CurrentThread.CurrentUICulture.ClearCachedData();
 			this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 		}
 

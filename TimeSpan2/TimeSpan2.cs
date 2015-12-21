@@ -511,7 +511,7 @@ namespace System
 		/// <returns><c>true</c> if the current object is equal to the <paramref name="str"/> parameter once converted to a <see cref="TimeSpan2"/>; otherwise, <c>false</c>.</returns>
 		public bool Equals(string str)
 		{
-			try { return Equals(TimeSpan2.Parse(str, CultureInfo.CurrentCulture)); } catch { }
+			try { return Equals(TimeSpan2.Parse(str, CultureInfo.CurrentUICulture)); } catch { }
 			return false;
 		}
 

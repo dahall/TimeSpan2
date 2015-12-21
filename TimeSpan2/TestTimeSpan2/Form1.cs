@@ -36,7 +36,7 @@ namespace TestTimeSpan2
 		[STAThread]
 		static void Main()
 		{
-			/*System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("it-IT");
+			/*System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("it-IT");
 			TimeSpan2 ts = new TimeSpan2(2, 1, 4);
 			string s = ts.ToString("f", null);
 			Console.Write(s);

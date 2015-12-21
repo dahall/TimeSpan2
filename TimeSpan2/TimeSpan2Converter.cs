@@ -56,7 +56,7 @@ namespace System
 				if (fi.TryParse(sval, null, out ts))
 					return (TimeSpan2)ts;
 			}
-			try { long l = Convert.ToInt64(value, CultureInfo.CurrentCulture); return new TimeSpan2(l); }
+			try { long l = Convert.ToInt64(value, CultureInfo.CurrentUICulture); return new TimeSpan2(l); }
 			catch { }
 			return base.ConvertFrom(context, culture, value);
 		}
@@ -108,7 +108,7 @@ namespace System
 					}
 				}
 
-				try { return Convert.ChangeType(value, destinationType, CultureInfo.CurrentCulture); }
+				try { return Convert.ChangeType(value, destinationType, CultureInfo.CurrentUICulture); }
 				catch { }
 			}
 			return base.ConvertTo(context, culture, value, destinationType);
