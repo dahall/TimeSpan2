@@ -2,7 +2,7 @@
 <package>
   <metadata>
 	<id>TimeSpan2</id>
-	<version>2.1.1</version>
+	<version>2.1.4</version>
 	<title>TimeSpan Helper Library</title>
 	<authors>David Hall</authors>
 	<description>Library to extend the functionality of the TimeSpan structure to be comparable, serializable, and convertible. It also supports localized string formatting and parsing so a TimeSpan can be represented by something like "3 days, 2 hours, 19 minutes" instead of "3:02:19:00".</description>
@@ -22,6 +22,9 @@
 	<file src="bin\Release\v4.0\TimeSpan2.dll" target="lib\net40" />
 	<file src="bin\Release\v4.0\TimeSpan2.xml" target="lib\net40" />
 	<file src="bin\Release\v4.0\**\TimeSpan2.resources.dll" target="lib\net40" />
+	<file src="bin\Release\v4.5.2\TimeSpan2.dll" target="lib\net452" />
+	<file src="bin\Release\v4.5.2\TimeSpan2.xml" target="lib\net452" />
+	<file src="bin\Release\v4.5.2\**\TimeSpan2.resources.dll" target="lib\net452" />
 	<file src="*.cs" target="src" />
 	<file src="Properties\*.cs" target="src\Properties" />
   </files>

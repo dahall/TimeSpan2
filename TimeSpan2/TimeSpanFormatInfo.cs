@@ -563,7 +563,7 @@ namespace System.Globalization
 				default:
 					return string.Empty;
 			}
-			return string.Format(@"\b(?{1}:{0})\b", string.Join("|", parseWords.Split(',')), this.WordPatternIgnoreCase ? "i" : string.Empty);
+			return string.Format(@"\b(?{1}:{0})\b", string.Join("|", parseWords.Split(',')), WordPatternIgnoreCase ? "i" : string.Empty);
 		}
 
 		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]

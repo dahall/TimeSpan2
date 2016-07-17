@@ -26,10 +26,10 @@ namespace System.Windows.Forms
 			base.FormatString = "f";
 			base.FormattingEnabled = true;
 			//ResetLocale();
-			this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
+			FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 			list = new TimeSpanCollection(base.Items);
 			ResetValue();
-			Microsoft.Win32.SystemEvents.UserPreferenceChanged += this.UserPreferenceChanged;
+			Microsoft.Win32.SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
 		}
 
 		/// <summary>
@@ -54,8 +54,8 @@ namespace System.Windows.Forms
 			}
 			set
 			{
-				if (!string.IsNullOrEmpty(this.FormattedZero) && value != null)
-					((TimeSpan2FormatInfo)value).TimeSpanZeroDisplay = this.FormattedZero;
+				if (!string.IsNullOrEmpty(FormattedZero) && value != null)
+					value.TimeSpanZeroDisplay = FormattedZero;
 				base.FormatInfo = value;
 			}
 		}
@@ -81,8 +81,8 @@ namespace System.Windows.Forms
 			get { return zero; }
 			set
 			{
-				this.zero = value;
-				this.FormatInfo.TimeSpanZeroDisplay = value;
+				zero = value;
+				FormatInfo.TimeSpanZeroDisplay = value;
 			}
 		}
 
@@ -147,23 +147,20 @@ namespace System.Windows.Forms
 		//[RefreshProperties(RefreshProperties.Repaint)]
 		public TimeSpan2 Value
 		{
-			get
-			{
-				return tsValue;
-			}
+			get { return tsValue; }
 			set
 			{
-				tsValue = this.Value;
-				base.Text = TimeSpan.Zero.Equals(value) ? this.FormatInfo.TimeSpanZeroDisplay : value.ToString(base.FormatString, this.FormatInfo);
+				tsValue = Value;
+				base.Text = TimeSpan.Zero.Equals(value) ? FormatInfo.TimeSpanZeroDisplay : value.ToString(base.FormatString, FormatInfo);
 			}
 		}
 
 		internal void ResetValue()
 		{
-			this.Value = TimeSpan2.Zero;
+			Value = TimeSpan2.Zero;
 		}
 
-		internal bool ShouldSerializeValue() => this.Value != TimeSpan2.Zero;
+		internal bool ShouldSerializeValue() => Value != TimeSpan2.Zero;
 
 		/// <summary>
 		/// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.ComboBox"/> and optionally releases the managed resources.
@@ -171,7 +168,7 @@ namespace System.Windows.Forms
 		/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
-			Microsoft.Win32.SystemEvents.UserPreferenceChanged -= this.UserPreferenceChanged;
+			Microsoft.Win32.SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
 			base.Dispose(disposing);
 		}
 
@@ -182,7 +179,7 @@ namespace System.Windows.Forms
 		protected override void OnTextChanged(EventArgs e)
 		{
 			TimeSpan ts;
-			isValid = this.FormatInfo.TryParse(base.Text, null, out ts);
+			isValid = FormatInfo.TryParse(base.Text, null, out ts);
 			if (isValid && ts != tsValue)
 			{
 				tsValue = ts;
@@ -197,9 +194,7 @@ namespace System.Windows.Forms
 		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		protected virtual void OnValueChanged(EventArgs args)
 		{
-			EventHandler h = ValueChanged;
-			if (h != null)
-				h(this, args);
+			ValueChanged?.Invoke(this, args);
 		}
 
 		/// <summary>
@@ -210,7 +205,7 @@ namespace System.Windows.Forms
 		{
 			switch (m.Msg)
 			{
-				// change in a systemwide or policy setting
+				// change in a system-wide or policy setting
 				case 0x001A: // WM_SETTINGCHANGE
 					ResetLocale();
 					break;
@@ -221,8 +216,8 @@ namespace System.Windows.Forms
 
 		private void ResetLocale()
 		{
-			System.Threading.Thread.CurrentThread.CurrentUICulture.ClearCachedData();
-			this.FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
+			Thread.CurrentThread.CurrentUICulture.ClearCachedData();
+			FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 		}
 
 		private void UserPreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
@@ -240,7 +235,7 @@ namespace System.Windows.Forms
 		/// </summary>
 		public class TimeSpanCollection : StrongListWrapper<TimeSpan2>
 		{
-			internal TimeSpanCollection(ComboBox.ObjectCollection coll)
+			internal TimeSpanCollection(ObjectCollection coll)
 				: base(coll)
 			{
 			}

@@ -32,70 +32,70 @@ namespace System.Windows.Forms.Design
 				: base(editor)
 			{
 				this.editor = (ExposedStringCollectionEditor)editor;
-				this.InitializeComponent();
-				this.HookEvents();
+				InitializeComponent();
+				HookEvents();
 			}
 
 			private void Edit1_keyDown(object sender, KeyEventArgs e)
 			{
 				if (e.KeyCode == Keys.Escape)
 				{
-					this.cancelButton.PerformClick();
+					cancelButton.PerformClick();
 					e.Handled = true;
 				}
 			}
 
 			private void Form_HelpRequested(object sender, HelpEventArgs e)
 			{
-				this.editor.ShowHelp();
+				editor.ShowHelp();
 			}
 
 			private void HookEvents()
 			{
-				this.textEntry.KeyDown += new KeyEventHandler(this.Edit1_keyDown);
-				this.okButton.Click += new EventHandler(this.OKButton_click);
-				base.HelpButtonClicked += new CancelEventHandler(this.StringCollectionEditor_HelpButtonClicked);
+				textEntry.KeyDown += new KeyEventHandler(Edit1_keyDown);
+				okButton.Click += new EventHandler(OKButton_click);
+				base.HelpButtonClicked += new CancelEventHandler(StringCollectionEditor_HelpButtonClicked);
 			}
 
 			private void InitializeComponent()
 			{
 				ComponentResourceManager manager = new ComponentResourceManager(Type.GetType("System.Windows.Forms.Design.StringCollectionEditor, System.Design"));
-				this.instruction = new Label();
-				this.textEntry = new TextBox();
-				this.okButton = new Button();
-				this.cancelButton = new Button();
-				this.okCancelTableLayoutPanel = new TableLayoutPanel();
-				this.okCancelTableLayoutPanel.SuspendLayout();
+				instruction = new Label();
+				textEntry = new TextBox();
+				okButton = new Button();
+				cancelButton = new Button();
+				okCancelTableLayoutPanel = new TableLayoutPanel();
+				okCancelTableLayoutPanel.SuspendLayout();
 				base.SuspendLayout();
-				manager.ApplyResources(this.instruction, "instruction");
-				this.instruction.Margin = new Padding(3, 1, 3, 0);
-				this.instruction.Name = "instruction";
+				manager.ApplyResources(instruction, "instruction");
+				instruction.Margin = new Padding(3, 1, 3, 0);
+				instruction.Name = "instruction";
 				if (editor.InstructionText != null)
-					this.instruction.Text = editor.InstructionText;
-				this.textEntry.AcceptsTab = true;
-				this.textEntry.AcceptsReturn = true;
-				manager.ApplyResources(this.textEntry, "textEntry");
-				this.textEntry.Name = "textEntry";
-				manager.ApplyResources(this.okButton, "okButton");
-				this.okButton.DialogResult = DialogResult.OK;
-				this.okButton.Margin = new Padding(0, 0, 3, 0);
-				this.okButton.Name = "okButton";
-				manager.ApplyResources(this.cancelButton, "cancelButton");
-				this.cancelButton.DialogResult = DialogResult.Cancel;
-				this.cancelButton.Margin = new Padding(3, 0, 0, 0);
-				this.cancelButton.Name = "cancelButton";
-				manager.ApplyResources(this.okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
-				this.okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50f));
-				this.okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50f));
-				this.okCancelTableLayoutPanel.Controls.Add(this.okButton, 0, 0);
-				this.okCancelTableLayoutPanel.Controls.Add(this.cancelButton, 1, 0);
-				this.okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
-				this.okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
+					instruction.Text = editor.InstructionText;
+				textEntry.AcceptsTab = true;
+				textEntry.AcceptsReturn = true;
+				manager.ApplyResources(textEntry, "textEntry");
+				textEntry.Name = "textEntry";
+				manager.ApplyResources(okButton, "okButton");
+				okButton.DialogResult = DialogResult.OK;
+				okButton.Margin = new Padding(0, 0, 3, 0);
+				okButton.Name = "okButton";
+				manager.ApplyResources(cancelButton, "cancelButton");
+				cancelButton.DialogResult = DialogResult.Cancel;
+				cancelButton.Margin = new Padding(3, 0, 0, 0);
+				cancelButton.Name = "cancelButton";
+				manager.ApplyResources(okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+				okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50f));
+				okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50f));
+				okCancelTableLayoutPanel.Controls.Add(okButton, 0, 0);
+				okCancelTableLayoutPanel.Controls.Add(cancelButton, 1, 0);
+				okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
+				okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
 				manager.ApplyResources(this, "$this");
 				base.AutoScaleMode = AutoScaleMode.Font;
-				base.Controls.Add(this.okCancelTableLayoutPanel);
-				base.Controls.Add(this.instruction);
-				base.Controls.Add(this.textEntry);
+				base.Controls.Add(okCancelTableLayoutPanel);
+				base.Controls.Add(instruction);
+				base.Controls.Add(textEntry);
 				base.HelpButton = true;
 				base.MaximizeBox = false;
 				base.MinimizeBox = false;
@@ -104,9 +104,9 @@ namespace System.Windows.Forms.Design
 				base.ShowInTaskbar = false;
 				if (editor.FormTitle != null)
 					base.Text = editor.FormTitle;
-				this.okCancelTableLayoutPanel.ResumeLayout(false);
-				this.okCancelTableLayoutPanel.PerformLayout();
-				base.HelpRequested += new HelpEventHandler(this.Form_HelpRequested);
+				okCancelTableLayoutPanel.ResumeLayout(false);
+				okCancelTableLayoutPanel.PerformLayout();
+				base.HelpRequested += new HelpEventHandler(Form_HelpRequested);
 				base.ResumeLayout(false);
 				base.PerformLayout();
 			}
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
 			{
 				char[] separator = new char[] { '\n' };
 				char[] trimChars = new char[] { '\r' };
-				string[] strArray = this.textEntry.Text.Split(separator);
+				string[] strArray = textEntry.Text.Split(separator);
 				object[] items = base.Items;
 				int length = strArray.Length;
 				for (int i = 0; i < length; i++)
@@ -173,13 +173,13 @@ namespace System.Windows.Forms.Design
 						}
 					}
 				}
-				this.textEntry.Text = str;
+				textEntry.Text = str;
 			}
 
 			private void StringCollectionEditor_HelpButtonClicked(object sender, CancelEventArgs e)
 			{
 				e.Cancel = true;
-				this.editor.ShowHelp();
+				editor.ShowHelp();
 			}
 		}
 	}
