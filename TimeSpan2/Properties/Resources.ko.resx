@@ -146,7 +146,7 @@
     <comment>초</comment>
   </data>
   <data name="TimeSpanManyTickFormat" xml:space="preserve">
-    <value>刻度(tick)</value>
+    <value>刻度</value>
     <comment>눈금</comment>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
@@ -178,7 +178,7 @@
     <comment>초</comment>
   </data>
   <data name="TimeSpanOneTickFormat" xml:space="preserve">
-    <value>刻度(tick)</value>
+    <value>刻度</value>
     <comment>눈금</comment>
   </data>
   <data name="TimeSpanSecondStrings" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>,</comment>
   </data>
   <data name="TimeSpanTickStrings" xml:space="preserve">
-    <value>刻度(tick)</value>
+    <value>刻度</value>
     <comment>눈금,눈금,눈금</comment>
   </data>
   <data name="TimeSpanWordFormat" xml:space="preserve">

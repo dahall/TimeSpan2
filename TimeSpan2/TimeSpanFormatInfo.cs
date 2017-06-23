@@ -36,6 +36,7 @@ namespace System.Globalization
 		private static readonly string fullPattern = string.Concat(pre, pattern, post);
 		private static readonly Dictionary<int, TimeSpan2FormatInfo> cache = new Dictionary<int, TimeSpan2FormatInfo>();
 		private static readonly Dictionary<string, Match> fullPatternCache = new Dictionary<string, Match>();
+		private static readonly string validFormats = "cgGfjx";
 
 		private Regex regex = new Regex(fullPattern, opts);
 
@@ -409,8 +410,7 @@ namespace System.Globalization
 				else
 					return format;
 			}
-
-			return GetTimeSpanPattern(patternType, fmt);
+			return validFormats.IndexOf(fmt) >= 0 ? GetTimeSpanPattern(patternType, fmt) : format;
 		}
 
 		private ParseEntity GetParsedTokens(Match m)

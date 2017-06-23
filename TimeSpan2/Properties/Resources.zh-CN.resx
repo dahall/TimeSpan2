@@ -146,7 +146,7 @@
     <comment>Format for seconds when Seconds property &gt; 1</comment>
   </data>
   <data name="TimeSpanManyTickFormat" xml:space="preserve">
-    <value>刻度(tick)</value>
+    <value>刻度</value>
     <comment>Format for hours when Ticks property &gt; 1</comment>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
@@ -178,7 +178,7 @@
     <comment>Format for seconds when Seconds property equals 1</comment>
   </data>
   <data name="TimeSpanOneTickFormat" xml:space="preserve">
-    <value>刻度(tick)</value>
+    <value>刻度</value>
     <comment>Format for hours when Ticks property equals 1</comment>
   </data>
   <data name="TimeSpanSecondStrings" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Separator string used in between individual formatted strings for each time element</comment>
   </data>
   <data name="TimeSpanTickStrings" xml:space="preserve">
-    <value>刻度(tick)</value>
+    <value>刻度</value>
     <comment>Comma separated list of all strings that can represent a tick</comment>
   </data>
   <data name="TimeSpanWordFormat" xml:space="preserve">
