@@ -139,7 +139,7 @@
     <value>sekunder</value>
   </data>
   <data name="TimeSpanManyTickFormat" xml:space="preserve">
-    <value>ticks</value>
+    <value>tikker</value>
   </data>
   <data name="TimeSpanMillisecondStrings" xml:space="preserve">
     <value>millisekunder,millisekund,ms</value>
@@ -163,7 +163,7 @@
     <value>sekund</value>
   </data>
   <data name="TimeSpanOneTickFormat" xml:space="preserve">
-    <value>tick</value>
+    <value>tik</value>
   </data>
   <data name="TimeSpanSecondStrings" xml:space="preserve">
     <value>sekunder,sekund,sek,s</value>
@@ -172,9 +172,9 @@
     <value>,</value>
   </data>
   <data name="TimeSpanTickStrings" xml:space="preserve">
-    <value>ticks,tick,t</value>
+    <value>tikker,tik,t</value>
   </data>
   <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">
-    <value>sand</value>
+    <value>true</value>
   </data>
 </root>

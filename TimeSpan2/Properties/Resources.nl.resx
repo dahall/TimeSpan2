@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -112,46 +112,69 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanTickStrings" xml:space="preserve">
+    <value>tikken, tik, t</value>
   </data>
-  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanDayStrings" xml:space="preserve">
+    <value>dagen, dag, d</value>
   </data>
-  <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanHourStrings" xml:space="preserve">
+    <value>uren,uur,u.,u.,h</value>
   </data>
-  <data name="label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanManyDayFormat" xml:space="preserve">
+    <value>dagen</value>
   </data>
-  <data name="label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanManyHourFormat" xml:space="preserve">
+    <value>uren</value>
   </data>
-  <data name="label6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanManyMillisecondFormat" xml:space="preserve">
+    <value>milliseconden</value>
   </data>
-  <data name="outputLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanManyMinuteFormat" xml:space="preserve">
+    <value>minuten</value>
   </data>
-  <data name="parseBtn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanManySecondFormat" xml:space="preserve">
+    <value>seconden</value>
   </data>
-  <data name="parseLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanManyTickFormat" xml:space="preserve">
+    <value>tikken</value>
   </data>
-  <data name="pickerValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanMillisecondStrings" xml:space="preserve">
+    <value>milliseconden, milliseconde, ms</value>
   </data>
-  <data name="timeSpanPicker.FormattedZero" xml:space="preserve">
-    <value>零</value>
+  <data name="TimeSpanMinuteStrings" xml:space="preserve">
+    <value>minuten, minuut, minuten, min, m</value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="TimeSpanOneDayFormat" xml:space="preserve">
+    <value>dag</value>
+  </data>
+  <data name="TimeSpanOneHourFormat" xml:space="preserve">
+    <value>uur</value>
+  </data>
+  <data name="TimeSpanOneMillisecondFormat" xml:space="preserve">
+    <value>milliseconde</value>
+  </data>
+  <data name="TimeSpanOneMinuteFormat" xml:space="preserve">
+    <value>minuut</value>
+  </data>
+  <data name="TimeSpanOneSecondFormat" xml:space="preserve">
+    <value>seconde</value>
+  </data>
+  <data name="TimeSpanOneTickFormat" xml:space="preserve">
+    <value>tik</value>
+  </data>
+  <data name="TimeSpanSecondStrings" xml:space="preserve">
+    <value>seconden, seconde, sec, sec, s</value>
+  </data>
+  <data name="TimeSpanSeparator" xml:space="preserve">
+    <value>,</value>
+  </data>
+  <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">
+    <value>true</value>
   </data>
 </root>

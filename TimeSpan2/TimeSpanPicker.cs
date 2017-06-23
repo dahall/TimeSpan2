@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms.Design;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
@@ -11,11 +12,11 @@ namespace System.Windows.Forms
 	/// Drop down control that will display a formatted TimeSpan.
 	/// </summary>
 	[DefaultEvent("ValueChanged"), DefaultProperty("Value")]
-	public partial class TimeSpanPicker : ComboBox
+	public class TimeSpanPicker : ComboBox
 	{
 		private bool isValid = true;
 		private TimeSpan tsValue;
-		private TimeSpanCollection list;
+		private readonly TimeSpanCollection list;
 		private string zero;
 
 		/// <summary>
@@ -29,7 +30,7 @@ namespace System.Windows.Forms
 			FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 			list = new TimeSpanCollection(base.Items);
 			ResetValue();
-			Microsoft.Win32.SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
+			SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
 		}
 
 		/// <summary>
@@ -113,7 +114,7 @@ namespace System.Windows.Forms
 		/// </summary>
 		/// <value>The items.</value>
 		[Category("Data"), Localizable(false)]
-		[Editor(typeof(TimeSpanCollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+		[Editor(typeof(TimeSpanCollectionEditor), typeof(UITypeEditor))]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
 		[RefreshProperties(RefreshProperties.All)]
 		public new TimeSpanCollection Items => list;
@@ -168,7 +169,7 @@ namespace System.Windows.Forms
 		/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
-			Microsoft.Win32.SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
+			SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
 			base.Dispose(disposing);
 		}
 
@@ -220,11 +221,11 @@ namespace System.Windows.Forms
 			FormatInfo = TimeSpan2FormatInfo.CurrentInfo;
 		}
 
-		private void UserPreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
+		private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
 		{
 			switch(e.Category)
 			{
-				case Microsoft.Win32.UserPreferenceCategory.Locale:
+				case UserPreferenceCategory.Locale:
 					ResetLocale();
 					break;
 			}
@@ -258,7 +259,7 @@ namespace System.Windows.Forms
 			{
 				if (context == null)
 					throw new ArgumentNullException(nameof(context));
-				TimeSpanPicker p = context.Instance as TimeSpanPicker;
+				var p = context.Instance as TimeSpanPicker;
 				if (p != null)
 					format = p.FormatString;
 				return base.EditValue(context, provider, value);
@@ -266,13 +267,14 @@ namespace System.Windows.Forms
 
 			protected override object[] GetItems(object editValue)
 			{
-				if (editValue is TimeSpanCollection)
+				var value = editValue as TimeSpanCollection;
+				if (value != null)
 				{
-					TimeSpanCollection c = (TimeSpanCollection)editValue;
-					List<string> output = new List<string>(c.Count);
+					var c = value;
+					var output = new List<string>(c.Count);
 					foreach (var t in c)
 					{
-						string s = t.ToString(format);
+						var s = t.ToString(format);
 						output.Add(string.IsNullOrEmpty(s) ? "0:0:0" : s);
 					}
 					return output.ToArray();
@@ -282,12 +284,12 @@ namespace System.Windows.Forms
 
 			protected override object SetItems(object editValue, object[] value)
 			{
-				if (editValue != null && !(editValue is TimeSpanCollection))
+				if (!(editValue is TimeSpanCollection))
 					return editValue;
 
-				TimeSpanCollection c = (TimeSpanCollection)editValue;
+				var c = (TimeSpanCollection)editValue;
 				c.Clear();
-				TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.CurrentInfo;
+				var fi = TimeSpan2FormatInfo.CurrentInfo;
 				foreach (var v in value)
 				{
 					TimeSpan ts;

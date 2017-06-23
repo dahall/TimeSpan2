@@ -194,11 +194,11 @@
     <comment>눈금,눈금,눈금</comment>
   </data>
   <data name="TimeSpanWordFormat" xml:space="preserve">
-    <value>[%d_@d],[%h_@h],[%m_@m],[%s_@s],[%k_@k]</value>
+    <value></value>
     <comment>[%d_@d],[%h_@h],[%m_@m],[%s_@s],[%k_@k]</comment>
   </data>
   <data name="TimeSpanWordPattern" xml:space="preserve">
-    <value>[%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t]</value>
+    <value></value>
     <comment>[%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t]</comment>
   </data>
   <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">

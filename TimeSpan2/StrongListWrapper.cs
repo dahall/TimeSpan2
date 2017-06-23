@@ -1,21 +1,21 @@
 ﻿namespace System.Collections.Generic
 {
-    /// <summary>
-    /// Takes a collection that supports an <see cref="IList"/> and makes it strongly typed like <see cref="List{T}"/>.
-    /// </summary>
-    /// <typeparam name="T">Type to cast object to from the provided <see cref="IList"/>.</typeparam>
-    public class StrongListWrapper<T> : IList<T>, ICollection
-    {
-        private IList list;
+	/// <summary>
+	/// Takes a collection that supports an <see cref="IList"/> and makes it strongly typed like <see cref="List{T}"/>.
+	/// </summary>
+	/// <typeparam name="T">Type to cast object to from the provided <see cref="IList"/>.</typeparam>
+	public class StrongListWrapper<T> : IList<T>, ICollection
+	{
+		private readonly IList list;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StrongListWrapper&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="baseList">The base list.</param>
-        public StrongListWrapper(IList baseList)
-        {
-            list = baseList;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StrongListWrapper&lt;T&gt;"/> class.
+		/// </summary>
+		/// <param name="baseList">The base list.</param>
+		public StrongListWrapper(IList baseList)
+		{
+			list = baseList;
+		}
 
 		/// <summary>
 		/// Gets the core list.
@@ -51,51 +51,51 @@
 		/// </summary>
 		/// <value>The index of the list item to get.</value>
 		public T this[int index]
-        {
-            get
-            {
-                return (T)list[index];
-            }
-            set
-            {
-                list[index] = value;
-            }
-        }
+		{
+			get
+			{
+				return (T)list[index];
+			}
+			set
+			{
+				list[index] = value;
+			}
+		}
 
-        /// <summary>
-        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// </summary>
-        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
-        /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
-        /// </exception>
-        public void Add(T item)
-        {
-            list.Add(item);
-        }
+		/// <summary>
+		/// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// </summary>
+		/// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+		/// </exception>
+		public void Add(T item)
+		{
+			list.Add(item);
+		}
 
-        /// <summary>
-        /// Adds the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        public void AddRange(T[] items)
-        {
+		/// <summary>
+		/// Adds the range.
+		/// </summary>
+		/// <param name="items">The items.</param>
+		public void AddRange(T[] items)
+		{
 			if (items == null)
 				throw new ArgumentNullException();
-            for (int i = 0; i < items.Length; i++)
-                list.Add(items[i]);
-        }
+			for (var i = 0; i < items.Length; i++)
+				list.Add(items[i]);
+		}
 
-        /// <summary>
-        /// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// </summary>
-        /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
-        /// </exception>
-        public void Clear()
-        {
-            list.Clear();
-        }
+		/// <summary>
+		/// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// </summary>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+		/// </exception>
+		public void Clear()
+		{
+			list.Clear();
+		}
 
 		/// <summary>
 		/// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
@@ -127,9 +127,9 @@
 		/// Type T cannot be cast automatically to the type of the destination <paramref name="array"/>.
 		/// </exception>
 		public void CopyTo(T[] array, int arrayIndex)
-        {
-            list.CopyTo(array, arrayIndex);
-        }
+		{
+			list.CopyTo(array, arrayIndex);
+		}
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
@@ -140,9 +140,9 @@
 		public IEnumerator<T> GetEnumerator() => new StrongListWrapperEnumerator<T>(list.GetEnumerator());
 
 		void ICollection.CopyTo(Array array, int index)
-        {
-            list.CopyTo(array, index);
-        }
+		{
+			list.CopyTo(array, index);
+		}
 
 		/// <summary>
 		/// Returns an enumerator that iterates through a collection.
@@ -173,9 +173,9 @@
 		/// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
 		/// </exception>
 		public void Insert(int index, T item)
-        {
-            list.Insert(index, item);
-        }
+		{
+			list.Insert(index, item);
+		}
 
 		/// <summary>
 		/// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
@@ -200,22 +200,22 @@
 		/// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
 		/// </exception>
 		public void RemoveAt(int index)
-        {
-            list.RemoveAt(index);
-        }
+		{
+			list.RemoveAt(index);
+		}
 
-        /// <summary>
-        /// Enumerator class for the <see cref="StrongListWrapper{T}"/>.
-        /// </summary>
-        /// <typeparam name="ET">Type to cast object to from the provided <see cref="IEnumerator"/>.</typeparam>
-        public class StrongListWrapperEnumerator<ET> : IEnumerator<ET>
-        {
-            private IEnumerator iEnum;
+		/// <summary>
+		/// Enumerator class for the <see cref="StrongListWrapper{T}"/>.
+		/// </summary>
+		/// <typeparam name="ET">Type to cast object to from the provided <see cref="IEnumerator"/>.</typeparam>
+		public class StrongListWrapperEnumerator<ET> : IEnumerator<ET>
+		{
+			private IEnumerator iEnum;
 
-            internal StrongListWrapperEnumerator(IEnumerator ienum)
-            {
-                iEnum = ienum;
-            }
+			internal StrongListWrapperEnumerator(IEnumerator ienum)
+			{
+				iEnum = ienum;
+			}
 
 			/// <summary>
 			/// Gets the element in the collection at the current position of the enumerator.
@@ -239,10 +239,10 @@
 			/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 			/// </summary>
 			public void Dispose()
-            {
-                Reset();
-                iEnum = null;
-            }
+			{
+				Reset();
+				iEnum = null;
+			}
 
 			/// <summary>
 			/// Advances the enumerator to the next element of the collection.
@@ -262,9 +262,9 @@
 			/// The collection was modified after the enumerator was created.
 			/// </exception>
 			public void Reset()
-            {
-                iEnum.Reset();
-            }
-        }
-    }
+			{
+				iEnum.Reset();
+			}
+		}
+	}
 }

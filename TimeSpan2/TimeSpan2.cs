@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace System
@@ -205,7 +207,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the values of <paramref name="t1"/> and <paramref name="t2"/> are not equal; otherwise, <c>false</c>.</returns>
-		public static bool operator !=(TimeSpan2 t1, TimeSpan2 t2) => (t1.core != t2.core);
+		public static bool operator !=(TimeSpan2 t1, TimeSpan2 t2) => t1.core != t2.core;
 
 		/// <summary>
 		/// Returns the specified instance of <see cref="TimeSpan2"/>.
@@ -243,7 +245,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is less than the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator <(TimeSpan2 t1, TimeSpan2 t2) => (t1.core < t2.core);
+		public static bool operator <(TimeSpan2 t1, TimeSpan2 t2) => t1.core < t2.core;
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is less than or equal to another specified <see cref="TimeSpan2"/>. 
@@ -251,7 +253,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is less than or equal to the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator <=(TimeSpan2 t1, TimeSpan2 t2) => (t1.core <= t2.core);
+		public static bool operator <=(TimeSpan2 t1, TimeSpan2 t2) => t1.core <= t2.core;
 
 		/// <summary>
 		/// Indicates whether two <see cref="TimeSpan2"/> instances are equal.
@@ -259,7 +261,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the values of <paramref name="t1"/> and <paramref name="t2"/> are equal; otherwise, <c>false</c>.</returns>
-		public static bool operator ==(TimeSpan2 t1, TimeSpan2 t2) => (t1.core == t2.core);
+		public static bool operator ==(TimeSpan2 t1, TimeSpan2 t2) => t1.core == t2.core;
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is greater than another specified <see cref="TimeSpan2"/>. 
@@ -267,7 +269,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is greater than the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator >(TimeSpan2 t1, TimeSpan2 t2) => (t1.core > t2.core);
+		public static bool operator >(TimeSpan2 t1, TimeSpan2 t2) => t1.core > t2.core;
 
 		/// <summary>
 		/// Indicates whether a specified <see cref="TimeSpan2"/> is greater than or equal to another specified <see cref="TimeSpan2"/>. 
@@ -275,7 +277,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the value of <paramref name="t1"/> is greater than or equal to the value of <paramref name="t2"/>; otherwise, <c>false</c>.</returns>
-		public static bool operator >=(TimeSpan2 t1, TimeSpan2 t2) => (t1.core >= t2.core);
+		public static bool operator >=(TimeSpan2 t1, TimeSpan2 t2) => t1.core >= t2.core;
 
 		/// <summary>
 		/// Compares two <see cref="TimeSpan2"/> values and returns an integer that indicates whether the first value is shorter than, equal to, or longer than the second value.
@@ -298,7 +300,7 @@ namespace System
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
 		/// <param name="t2">A <c>TimeSpan2</c>.</param>
 		/// <returns><c>true</c> if the values of <paramref name="t1"/> and <paramref name="t2"/> are equal; otherwise, <c>false</c>.</returns>
-		public static bool Equals(TimeSpan2 t1, TimeSpan2 t2) => (t1.core == t2.core);
+		public static bool Equals(TimeSpan2 t1, TimeSpan2 t2) => t1.core == t2.core;
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of days, where the specification is accurate to the nearest millisecond.
@@ -361,7 +363,7 @@ namespace System
 		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
 		public static TimeSpan2 Parse(string value, IFormatProvider formatProvider)
 		{
-			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return new TimeSpan2(fi.Parse(value, null));
 		}
 
@@ -372,7 +374,7 @@ namespace System
 		/// <param name="format">A standard or custom format string that defines the required format of <paramref name="input"/>.</param>
 		/// <param name="formatProvider">An object that provides culture-specific formatting information.</param>
 		/// <returns>A time interval that corresponds to <paramref name="input"/>, as specified by <paramref name="format"/> and <paramref name="formatProvider"/>.</returns>
-		public static TimeSpan2 ParseExact(string input, string format, IFormatProvider formatProvider) => ParseExact(input, new string[] { format }, formatProvider);
+		public static TimeSpan2 ParseExact(string input, string format, IFormatProvider formatProvider) => ParseExact(input, new[] { format }, formatProvider);
 
 		/// <summary>
 		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format and culture-specific format information. The format of the string representation must match the specified format exactly.
@@ -383,7 +385,7 @@ namespace System
 		/// <returns>A time interval that corresponds to <paramref name="input"/>, as specified by <paramref name="formats"/> and <paramref name="formatProvider"/>.</returns>
 		public static TimeSpan2 ParseExact(string input, string[] formats, IFormatProvider formatProvider)
 		{
-			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.ParseExact(input, formats, null);
 		}
 
@@ -404,7 +406,7 @@ namespace System
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParse(string s, IFormatProvider formatProvider, out TimeSpan2 result)
 		{
-			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.TryParse(s, null, out result.core);
 		}
 
@@ -416,7 +418,7 @@ namespace System
 		/// <param name="formatProvider">An object that supplies culture-specific format information about <paramref name="input"/>.</param>
 		/// <param name="result">When this method returns, contains an object that represents the time interval specified by <paramref name="input"/>, or <see cref="TimeSpan.Zero"/> if the conversion failed. This parameter is passed uninitialized.</param>
 		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-		public static bool TryParseExact(string input, string format, IFormatProvider formatProvider, out TimeSpan2 result) => TryParseExact(input, new string[] { format }, formatProvider, out result);
+		public static bool TryParseExact(string input, string format, IFormatProvider formatProvider, out TimeSpan2 result) => TryParseExact(input, new[] { format }, formatProvider, out result);
 
 		/// <summary>
 		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified formats and culture-specific format information, and returns a value that indicates whether the conversion succeeded. The format of the string representation must match one of the specified formats exactly.
@@ -428,7 +430,7 @@ namespace System
 		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParseExact(string input, string[] formats, IFormatProvider formatProvider, out TimeSpan2 result)
 		{
-			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.TryParseExact(input, formats, null, out result.core);
 		}
 
@@ -511,7 +513,7 @@ namespace System
 		/// <returns><c>true</c> if the current object is equal to the <paramref name="str"/> parameter once converted to a <see cref="TimeSpan2"/>; otherwise, <c>false</c>.</returns>
 		public bool Equals(string str)
 		{
-			try { return Equals(TimeSpan2.Parse(str, CultureInfo.CurrentUICulture)); } catch { }
+			try { return Equals(Parse(str, CultureInfo.CurrentUICulture)); } catch { }
 			return false;
 		}
 
@@ -576,7 +578,7 @@ namespace System
 		{
 			if (conversionType == typeof(TimeSpan))
 				return core;
-			else if (conversionType == typeof(TimeSpan2))
+			if (conversionType == typeof(TimeSpan2))
 				return this;
 			return Convert.ChangeType(this, conversionType, provider);
 		}
@@ -595,16 +597,16 @@ namespace System
 			info.AddValue("ticks", core.Ticks);
 		}
 
-		Xml.Schema.XmlSchema IXmlSerializable.GetSchema() => null;
+		XmlSchema IXmlSerializable.GetSchema() => null;
 
-		void IXmlSerializable.ReadXml(Xml.XmlReader reader)
+		void IXmlSerializable.ReadXml(XmlReader reader)
 		{
-			core = System.Xml.XmlConvert.ToTimeSpan(reader?.ReadContentAsString());
+			core = XmlConvert.ToTimeSpan(reader?.ReadContentAsString());
 		}
 
-		void IXmlSerializable.WriteXml(Xml.XmlWriter writer)
+		void IXmlSerializable.WriteXml(XmlWriter writer)
 		{
-			writer?.WriteValue(System.Xml.XmlConvert.ToString(core));
+			writer?.WriteValue(XmlConvert.ToString(core));
 		}
 
 		/// <summary>
@@ -628,7 +630,7 @@ namespace System
 		/// <returns>A string representation of value of the current <see cref="TimeSpan2"/> object as specified by format.</returns>
 		public string ToString(string format, IFormatProvider formatProvider)
 		{
-			TimeSpan2FormatInfo tfi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			var tfi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return tfi.Format(format, this, formatProvider);
 		}
 

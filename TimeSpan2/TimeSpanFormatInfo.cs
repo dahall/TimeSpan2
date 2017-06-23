@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace System.Globalization
 {
@@ -31,12 +34,10 @@ namespace System.Globalization
 		private const string standardPatternsArray = "cgGfxj";
 
 		private static readonly string fullPattern = string.Concat(pre, pattern, post);
-		private static Dictionary<int, TimeSpan2FormatInfo> cache = new Dictionary<int, TimeSpan2FormatInfo>();
-		private static Dictionary<string, Match> fullPatternCache = new Dictionary<string, Match>();
+		private static readonly Dictionary<int, TimeSpan2FormatInfo> cache = new Dictionary<int, TimeSpan2FormatInfo>();
+		private static readonly Dictionary<string, Match> fullPatternCache = new Dictionary<string, Match>();
 
-		private string longPattern = generalLongPattern;
 		private Regex regex = new Regex(fullPattern, opts);
-		private string shortPattern = generalShortPattern;
 
 		/// <summary>
 		/// Initializes a new writable instance of the <see cref="TimeSpan2FormatInfo"/> class that is culture-independent (invariant).
@@ -62,7 +63,7 @@ namespace System.Globalization
 		{
 			get
 			{
-				CultureInfo currentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+				var currentCulture = Thread.CurrentThread.CurrentUICulture;
 				return GetInstance(currentCulture);
 			}
 		}
@@ -77,28 +78,20 @@ namespace System.Globalization
 		/// Gets or sets the long pattern.
 		/// </summary>
 		/// <value>The long pattern.</value>
-		public string LongPattern
-		{
-			get { return longPattern; }
-			set { longPattern = value; }
-		}
+		public string LongPattern { get; set; } = generalLongPattern;
 
 		/// <summary>
 		/// Gets or sets the short pattern.
 		/// </summary>
 		/// <value>The short pattern.</value>
-		public string ShortPattern
-		{
-			get { return shortPattern; }
-			set { shortPattern = value; }
-		}
+		public string ShortPattern { get; set; } = generalShortPattern;
 
 		/// <summary>
 		/// Gets or sets the string to display the representing <c>TimeSpan.Zero</c>.
 		/// </summary>
 		public string TimeSpanZeroDisplay { get; set; }
 
-		private Regex MyRegex { get { if (regex == null) { regex = new Regex(fullPattern, opts); } return regex; } }
+		private Regex MyRegex => regex ?? (regex = new Regex(fullPattern, opts));
 
 		/// <summary>
 		/// Gets a value indicating whether to ignore case when parsing word formatted time spans. Pulls value, if available, from localized resources.
@@ -119,10 +112,10 @@ namespace System.Globalization
 		/// <returns>A <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</returns>
 		public static TimeSpan2FormatInfo GetInstance(IFormatProvider provider)
 		{
-			CultureInfo info2 = provider as CultureInfo;
+			var info2 = provider as CultureInfo;
 			if (info2 != null)
 			{
-				TimeSpan2FormatInfo tsInfo = null;
+				TimeSpan2FormatInfo tsInfo;
 				lock (cache)
 				{
 					if (cache.TryGetValue(info2.LCID, out tsInfo))
@@ -133,7 +126,7 @@ namespace System.Globalization
 				return tsInfo;
 			}
 
-			TimeSpan2FormatInfo timeSpanInfo = provider as TimeSpan2FormatInfo;
+			var timeSpanInfo = provider as TimeSpan2FormatInfo;
 			if (timeSpanInfo != null)
 				return timeSpanInfo;
 
@@ -175,11 +168,16 @@ namespace System.Globalization
 			{
 				if (arg is TimeSpan)
 					return FormatTimeSpan((TimeSpan)arg, format);
-				else if (arg is TimeSpan2)
-					return FormatTimeSpan((TimeSpan)Convert.ChangeType(arg, typeof(TimeSpan), formatProvider), format);
+				if (arg is TimeSpan2)
+				{
+					var changeType = Convert.ChangeType(arg, typeof(TimeSpan), formatProvider);
+					if (changeType != null)
+						return FormatTimeSpan((TimeSpan) changeType, format);
+				}
 			}
 
-			return (arg is IFormattable && !(arg is TimeSpan2)) ? ((IFormattable)arg).ToString(format, formatProvider) : arg.ToString();
+			var formattable = arg as IFormattable;
+			return formattable != null && !(arg is TimeSpan2) ? formattable.ToString(format, formatProvider) : arg.ToString();
 		}
 
 		/// <summary>
@@ -191,8 +189,8 @@ namespace System.Globalization
 		/// </returns>
 		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType)
 		{
-			List<string> output = new List<string>();
-			foreach (char f in standardPatternsArray.ToCharArray())
+			var output = new List<string>();
+			foreach (var f in standardPatternsArray.ToCharArray())
 				output.AddRange(GetAllTimeSpanPatterns(patternType, f));
 			return output.ToArray();
 		}
@@ -205,7 +203,7 @@ namespace System.Globalization
 		/// <returns>
 		/// An array containing the standard patterns in which <see cref="TimeSpan"/> values can be formatted using the specified format pattern.
 		/// </returns>
-		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType, char format) => new string[] { GetTimeSpanPattern(patternType, format) };
+		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType, char format) => new[] { GetTimeSpanPattern(patternType, format) };
 
 		/// <summary>
 		/// Returns an object of the specified type that provides a <see cref="TimeSpan"/> formatting service.
@@ -214,7 +212,7 @@ namespace System.Globalization
 		/// <returns>
 		/// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>.
 		/// </returns>
-		public object GetFormat(Type formatType) => (formatType != typeof(ICustomFormatter)) ? null : this;
+		public object GetFormat(Type formatType) => formatType != typeof(ICustomFormatter) ? null : this;
 
 		/// <summary>
 		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent.
@@ -273,7 +271,7 @@ namespace System.Globalization
 				return true;
 
 			// Setup
-			if (!string.IsNullOrEmpty(TimeSpanZeroDisplay) && (string.Compare(s, TimeSpanZeroDisplay, StringComparison.CurrentCultureIgnoreCase) == 0))
+			if (!string.IsNullOrEmpty(TimeSpanZeroDisplay) && string.Compare(s, TimeSpanZeroDisplay, StringComparison.CurrentCultureIgnoreCase) == 0)
 				return true;
 
 			return false;
@@ -291,18 +289,18 @@ namespace System.Globalization
 		/// </returns>
 		internal bool TryParseExact(string s, string[] formats, IFormatProvider provider, out TimeSpan result)
 		{
-			foreach (string f in formats)
+			foreach (var f in formats)
 			{
 				string zeroFormat;
-				string cFormat = GetCustomFormatString(TimeSpanPatternType.Parsing, f, out zeroFormat);
+				var cFormat = GetCustomFormatString(TimeSpanPatternType.Parsing, f, out zeroFormat);
 				if (cFormat.Length == 0)
 					return TimeSpan.TryParse(s, out result);
 
-				Match m = ValidateCustomPattern(cFormat);
+				var m = ValidateCustomPattern(cFormat);
 
-				string pExp = BuildParsingExpression(m);
-				System.Diagnostics.Debug.WriteLine(pExp);
-				Match p = Regex.Match(s, pExp, opts);
+				var pExp = BuildParsingExpression(m);
+				Debug.WriteLine(pExp);
+				var p = Regex.Match(s, pExp, opts);
 				if (!p.Success)
 					continue;
 
@@ -320,7 +318,7 @@ namespace System.Globalization
 
 		private string BuildParsingExpression(Match m)
 		{
-			ParseEntity head = GetParsedTokens(m);
+			var head = GetParsedTokens(m);
 			if (head.children == null)
 				throw new FormatException();
 			ProcessParseEntity(head);
@@ -332,23 +330,22 @@ namespace System.Globalization
 			// Try for easy Zero value
 			if (core == TimeSpan.Zero)
 			{
-				Match zMatch = Regex.Match(format, post);
-				bool foundZ = zMatch.Success && zMatch.Groups["z"].Success;
+				var zMatch = Regex.Match(format, post);
+				var foundZ = zMatch.Success && zMatch.Groups["z"].Success;
 				if (zeroFormat != null || foundZ)
 					return foundZ ? zMatch.Groups["z"].Value : zeroFormat;
 			}
 
 			// Validate whole string
-			Match match = ValidateCustomPattern(format);
+			var match = ValidateCustomPattern(format);
 
-			ParseEntity head = GetParsedTokens(match);
+			var head = GetParsedTokens(match);
 			if (head.children == null)
 				throw new FormatException();
-			ParseEntity z = head.children.Find(delegate(ParseEntity p) { return p.name == "z"; });
+			var z = head.children.Find(p => p.name == "z");
 			if (z != null && core == TimeSpan.Zero)
 				return z.value;
-			else
-				head.children.Remove(z);
+			head.children.Remove(z);
 			ProcessFormatEntity(head, core);
 			return head.ToString();
 		}
@@ -356,15 +353,15 @@ namespace System.Globalization
 		private string FormatTimeSpan(TimeSpan core, string format)
 		{
 			string zeroFormat;
-			string cFormat = GetCustomFormatString(TimeSpanPatternType.Formatting, format, out zeroFormat);
+			var cFormat = GetCustomFormatString(TimeSpanPatternType.Formatting, format, out zeroFormat);
 			if (cFormat.Length == 0)
-				return (core == TimeSpan.Zero && zeroFormat != null) ? zeroFormat : core.ToString();
+				return core == TimeSpan.Zero && zeroFormat != null ? zeroFormat : core.ToString();
 			return CustomFormat(core, cFormat, zeroFormat);
 		}
 
 		private string GetCultureString(long value, string matchValue)
 		{
-			string ret = string.Empty;
+			var ret = string.Empty;
 			switch (char.ToLower(matchValue[1]))
 			{
 				case 'd':
@@ -398,9 +395,9 @@ namespace System.Globalization
 
 		private string GetCustomFormatString(TimeSpanPatternType patternType, string format, out string zeroFormat)
 		{
-			char fmt = string.IsNullOrEmpty(format) ? 'c' : format[0];
+			var fmt = string.IsNullOrEmpty(format) ? 'c' : format[0];
 			zeroFormat = string.IsNullOrEmpty(TimeSpanZeroDisplay) ? string.Empty : TimeSpanZeroDisplay;
-			if (format.Length > 1)
+			if (format != null && format.Length > 1)
 			{
 				if (format[0] == ';')
 				{
@@ -419,35 +416,34 @@ namespace System.Globalization
 		private ParseEntity GetParsedTokens(Match m)
 		{
 			// Handle each match group
-			ParseEntity head = new ParseEntity(".", m, null);
-			List<ParseEntity> list = head.children = new List<ParseEntity>();
-			foreach (string gn in MyRegex.GetGroupNames())
+			var head = new ParseEntity(".", m, null);
+			var list = head.children = new List<ParseEntity>();
+			foreach (var gn in MyRegex.GetGroupNames())
 			{
 				if (gn != "OPT" && gn != "0")
 				{
-					Group g = m.Groups[gn];
+					var g = m.Groups[gn];
 					if (g.Success)
 						foreach (Capture c in g.Captures)
 							list.Add(new ParseEntity(gn, c, head));
 				}
 			}
-			list.Sort(delegate(ParseEntity p1, ParseEntity p2) { return p1.start - p2.start; });
+			list.Sort((p1, p2) => p1.start - p2.start);
 
 			// Put in groupings
 			foreach (Capture c in m.Groups["OPT"].Captures)
 			{
-				int f = list.FindIndex(delegate(ParseEntity p1) { return p1.start > c.Index; });
-				int l = list.FindLastIndex(delegate(ParseEntity p1) { return p1.start + p1.length < c.Index + c.Length; });
-				ParseEntity p = new ParseEntity(null, c, head);
-				p.children = list.GetRange(f, l - f + 1);
+				var f = list.FindIndex(p1 => p1.start > c.Index);
+				var l = list.FindLastIndex(p1 => p1.start + p1.length < c.Index + c.Length);
+				var p = new ParseEntity(null, c, head) {children = list.GetRange(f, l - f + 1)};
 				list.RemoveRange(f, l - f + 1);
 				p.children.ForEach(delegate(ParseEntity pe) { pe.parent = p; });
 				list.Insert(f, p);
 			}
 #if DEBUG
-			for (int i = 0; i < list.Count; i++)
+			for (var i = 0; i < list.Count; i++)
 			{
-				System.Diagnostics.Debug.WriteLine(string.Format("Match {3} = \"{1}\" ({0}:{2})", list[i].start, list[i].value, list[i].length, list[i].name));
+				Debug.WriteLine(string.Format("Match {3} = \"{1}\" ({0}:{2})", list[i].start, list[i].value, list[i].length, list[i].name));
 			}
 #endif
 			return head;
@@ -457,23 +453,20 @@ namespace System.Globalization
 		{
 			if (e.name == "F" || e.name == "f")
 			{
-				int fcnt = e.value.Length;
+				var fcnt = e.value.Length;
 				if (e.value[0] == '%')
 					fcnt--;
-				string ret = value.ToString("f7").Substring(2, fcnt);
+				var ret = value.ToString("f7").Substring(2, fcnt);
 				if (e.name == "F")
 					ret = ret.TrimEnd('0');
 				return ret;
 			}
-			else if (e.value.StartsWith("%") || e.value.Length == 1)
-				return value.ToString();
-			else if (char.IsDigit(e.value, 1))
-			{
-				int precision = int.Parse(e.value.Substring(1));
-				double newVal = Math.Round(value, precision, MidpointRounding.AwayFromZero);
-				return newVal.ToString();
-			}
-			return value.ToString(e.value.Replace(e.value[0], '0'));
+			if (e.value.StartsWith("%") || e.value.Length == 1)
+				return value.ToString(CultureInfo.CurrentCulture);
+			if (!char.IsDigit(e.value, 1)) return value.ToString(e.value.Replace(e.value[0], '0'));
+			var precision = int.Parse(e.value.Substring(1));
+			var newVal = Math.Round(value, precision, MidpointRounding.AwayFromZero);
+			return newVal.ToString(CultureInfo.CurrentCulture);
 		}
 
 		private string GetTimeSpanPattern(TimeSpanPatternType patternType, char format)
@@ -497,7 +490,7 @@ namespace System.Globalization
 			}
 		}
 
-		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		[SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private double GetValueForGroup(TimeSpan core, string matchGroup)
 		{
 			switch (matchGroup)
@@ -530,7 +523,7 @@ namespace System.Globalization
 				case "p":
 					return core.TotalSeconds % 60;
 				case "w":
-					return core.Days / 7;
+					return core.Days / 7d;
 				case "r":
 					return core.Days % 7;
 			}
@@ -539,7 +532,7 @@ namespace System.Globalization
 
 		private string GetVerboseParseString(string entityName)
 		{
-			string parseWords = null;
+			string parseWords;
 			switch (entityName)
 			{
 				case "vd":
@@ -566,7 +559,7 @@ namespace System.Globalization
 			return string.Format(@"\b(?{1}:{0})\b", string.Join("|", parseWords.Split(',')), WordPatternIgnoreCase ? "i" : string.Empty);
 		}
 
-		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		[SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private bool ProcessFormatEntity(ParseEntity e, TimeSpan core)
 		{
 			if (e.name == null && e.children == null)
@@ -577,8 +570,8 @@ namespace System.Globalization
 			bool foundValue = false, foundSep = false, foundSpace = false;
 			if (e.children != null)
 			{
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < e.children.Count; i++)
+				var sb = new StringBuilder();
+				for (var i = 0; i < e.children.Count; i++)
 				{
 					if (ProcessFormatEntity(e.children[i], core) && !foundValue)
 						foundValue = true;
@@ -607,7 +600,7 @@ namespace System.Globalization
 						sb.Append(e.children[i].output);
 					}
 				}
-				e.output = (foundValue) ? sb.ToString() : string.Empty;
+				e.output = foundValue ? sb.ToString() : string.Empty;
 				return foundValue;
 			}
 			switch (e.name)
@@ -632,7 +625,7 @@ namespace System.Globalization
 				case "F":
 				case "w":
 				case "r":
-					double val = GetValueForGroup(core, e.name);
+					var val = GetValueForGroup(core, e.name);
 					e.output = GetStringValue(val, e);
 					foundValue = val != 0;
 					break;
@@ -665,7 +658,7 @@ namespace System.Globalization
 			return foundValue;
 		}
 
-		[Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		[SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private void ProcessParseEntity(ParseEntity e)
 		{
 			if (e.name == null && e.children == null)
@@ -675,20 +668,14 @@ namespace System.Globalization
 			}
 			if (e.children != null)
 			{
-				StringBuilder sb = new StringBuilder();
-				if (e.name != ".")
-					sb.Append(@"(?:");
-				else
-					sb.Append(@"^\s*");
-				for (int i = 0; i < e.children.Count; i++)
+				var sb = new StringBuilder();
+				sb.Append(e.name != "." ? @"(?:" : @"^\s*");
+				for (var i = 0; i < e.children.Count; i++)
 				{
 					ProcessParseEntity(e.children[i]);
 					sb.Append(e.children[i].output);
 				}
-				if (e.name != ".")
-					sb.Append(@")?");
-				else
-					sb.Append(@"\s*$");
+				sb.Append(e.name != "." ? @")?" : @"\s*$");
 				e.output = sb.ToString();
 				return;
 			}
@@ -697,7 +684,7 @@ namespace System.Globalization
 				case "z":
 					break;
 				case "n":
-					e.output = string.Format(@"(?<n>{0})?", Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NegativeSign));
+					e.output = $@"(?<n>{Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NegativeSign)})?";
 					break;
 				case "d":
 				case "D":
@@ -714,10 +701,10 @@ namespace System.Globalization
 				case "F":
 				case "w":
 				case "r":
-					e.output = string.Format(@"(?<{0}>\d+)", e.name);
+					e.output = $@"(?<{e.name}>\d+)";
 					break;
 				case "p":
-					e.output = string.Format(@"(?<p>\d+(?:{0}\d{{0,{1}}})?)", Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator), e.value.Substring(1));
+					e.output = $@"(?<p>\d+(?:{Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator)}\d{{0,{e.value.Substring(1)}}})?)";
 					break;
 				case "vd":
 				case "vh":
@@ -750,13 +737,13 @@ namespace System.Globalization
 		private TimeSpan TimeSpanFromParseMatch(Match p)
 		{
 			int d = 0, h = 0, m = 0, s = 0;
-			double ps = 0, dk = 0;
+			double dk = 0;
 			try
 			{
 				if (p.Groups["d"].Success)
 					d = int.Parse(p.Groups["d"].Value);
 				if (p.Groups["w"].Success)
-					d += (int.Parse(p.Groups["w"].Value) * 7);
+					d += int.Parse(p.Groups["w"].Value) * 7;
 				if (p.Groups["h"].Success)
 					h = int.Parse(p.Groups["h"].Value);
 				if (p.Groups["m"].Success)
@@ -765,7 +752,7 @@ namespace System.Globalization
 					s = int.Parse(p.Groups["s"].Value);
 				if (p.Groups["p"].Success)
 				{
-					ps = double.Parse(p.Groups["p"].Value);
+					var ps = double.Parse(p.Groups["p"].Value);
 					s = (int)Math.Truncate(ps);
 					dk = ps - s;
 				}
@@ -777,9 +764,9 @@ namespace System.Globalization
 				throw new OverflowException();
 			}
 
-			TimeSpan ret = new TimeSpan(d, h, m, s);
+			var ret = new TimeSpan(d, h, m, s);
 
-			string fVal = string.Empty;
+			var fVal = string.Empty;
 			if (p.Groups["f"].Success)
 				fVal = p.Groups["f"].Value;
 			else if (p.Groups["F"].Success)
@@ -800,22 +787,20 @@ namespace System.Globalization
 			return ret;
 		}
 
-
-
-		private Match ValidateCustomPattern(string pattern)
+		private Match ValidateCustomPattern(string custPattern)
 		{
 			try
 			{
 				Match m = null;
 				lock (fullPatternCache)
 				{
-					if (fullPatternCache.TryGetValue(pattern, out m))
+					if (fullPatternCache.TryGetValue(custPattern, out m))
 						return m;
 
-					m = MyRegex.Match(pattern);
-					if (m == null || !m.Success)
+					m = MyRegex.Match(custPattern);
+					if (!m.Success)
 						throw new FormatException();
-					fullPatternCache.Add(pattern, m);
+					fullPatternCache.Add(custPattern, m);
 				}
 				return m;
 			}
@@ -828,9 +813,12 @@ namespace System.Globalization
 		private class ParseEntity
 		{
 			public List<ParseEntity> children;
-			public string name, value, output;
+			public readonly string name;
+			public readonly string value;
+			public string output;
 			public ParseEntity parent;
-			public int start, length;
+			public readonly int start;
+			public readonly int length;
 
 			public ParseEntity(string n, Capture c, ParseEntity p)
 			{
@@ -841,10 +829,8 @@ namespace System.Globalization
 			{
 				get
 				{
-					int idx = parent.children.IndexOf(this);
-					if (idx < parent.children.Count - 1)
-						return parent.children[idx + 1];
-					return null;
+					var idx = parent.children.IndexOf(this);
+					return idx < parent.children.Count - 1 ? parent.children[idx + 1] : null;
 				}
 			}
 
@@ -852,14 +838,12 @@ namespace System.Globalization
 			{
 				get
 				{
-					int idx = parent.children.IndexOf(this);
-					if (idx > 0)
-						return parent.children[idx - 1];
-					return null;
+					var idx = parent.children.IndexOf(this);
+					return idx > 0 ? parent.children[idx - 1] : null;
 				}
 			}
 
-			public override string ToString() => output == null ? string.Empty : output;
+			public override string ToString() => output ?? string.Empty;
 		}
 	}
 }

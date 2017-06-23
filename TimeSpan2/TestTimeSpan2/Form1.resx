@@ -631,7 +631,7 @@
     <value>timeSpanPicker</value>
   </data>
   <data name="&gt;&gt;timeSpanPicker.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TimeSpanPicker, TimeSpan2, Version=2.1.5.0, Culture=neutral, PublicKeyToken=0f30172e1249faac</value>
+    <value>System.Windows.Forms.TimeSpanPicker, TimeSpan2, Version=2.1.6.0, Culture=neutral, PublicKeyToken=0f30172e1249faac</value>
   </data>
   <data name="&gt;&gt;timeSpanPicker.Parent" xml:space="preserve">
     <value>$this</value>

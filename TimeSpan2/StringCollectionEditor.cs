@@ -14,14 +14,14 @@ namespace System.Windows.Forms.Design
 		protected virtual string InstructionText => null;
 		protected virtual string FormTitle => null;
 
-		protected override CollectionEditor.CollectionForm CreateCollectionForm() => new StringCollectionForm(this);
+		protected override CollectionForm CreateCollectionForm() => new StringCollectionForm(this);
 
 		// Nested Types
-		private class StringCollectionForm : CollectionEditor.CollectionForm
+		private class StringCollectionForm : CollectionForm
 		{
 			// Fields
 			private Button cancelButton;
-			private ExposedStringCollectionEditor editor;
+			private readonly ExposedStringCollectionEditor editor;
 			private Label instruction;
 			private Button okButton;
 			private TableLayoutPanel okCancelTableLayoutPanel;
@@ -52,21 +52,21 @@ namespace System.Windows.Forms.Design
 
 			private void HookEvents()
 			{
-				textEntry.KeyDown += new KeyEventHandler(Edit1_keyDown);
-				okButton.Click += new EventHandler(OKButton_click);
-				base.HelpButtonClicked += new CancelEventHandler(StringCollectionEditor_HelpButtonClicked);
+				textEntry.KeyDown += Edit1_keyDown;
+				okButton.Click += OKButton_click;
+				HelpButtonClicked += StringCollectionEditor_HelpButtonClicked;
 			}
 
 			private void InitializeComponent()
 			{
-				ComponentResourceManager manager = new ComponentResourceManager(Type.GetType("System.Windows.Forms.Design.StringCollectionEditor, System.Design"));
+				var manager = new ComponentResourceManager(Type.GetType("System.Windows.Forms.Design.StringCollectionEditor, System.Design"));
 				instruction = new Label();
 				textEntry = new TextBox();
 				okButton = new Button();
 				cancelButton = new Button();
 				okCancelTableLayoutPanel = new TableLayoutPanel();
 				okCancelTableLayoutPanel.SuspendLayout();
-				base.SuspendLayout();
+				SuspendLayout();
 				manager.ApplyResources(instruction, "instruction");
 				instruction.Margin = new Padding(3, 1, 3, 0);
 				instruction.Name = "instruction";
@@ -92,40 +92,40 @@ namespace System.Windows.Forms.Design
 				okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
 				okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
 				manager.ApplyResources(this, "$this");
-				base.AutoScaleMode = AutoScaleMode.Font;
-				base.Controls.Add(okCancelTableLayoutPanel);
-				base.Controls.Add(instruction);
-				base.Controls.Add(textEntry);
-				base.HelpButton = true;
-				base.MaximizeBox = false;
-				base.MinimizeBox = false;
-				base.Name = "StringCollectionEditor";
-				base.ShowIcon = false;
-				base.ShowInTaskbar = false;
+				AutoScaleMode = AutoScaleMode.Font;
+				Controls.Add(okCancelTableLayoutPanel);
+				Controls.Add(instruction);
+				Controls.Add(textEntry);
+				HelpButton = true;
+				MaximizeBox = false;
+				MinimizeBox = false;
+				Name = "StringCollectionEditor";
+				ShowIcon = false;
+				ShowInTaskbar = false;
 				if (editor.FormTitle != null)
-					base.Text = editor.FormTitle;
+					Text = editor.FormTitle;
 				okCancelTableLayoutPanel.ResumeLayout(false);
 				okCancelTableLayoutPanel.PerformLayout();
-				base.HelpRequested += new HelpEventHandler(Form_HelpRequested);
-				base.ResumeLayout(false);
-				base.PerformLayout();
+				HelpRequested += Form_HelpRequested;
+				ResumeLayout(false);
+				PerformLayout();
 			}
 
 			private void OKButton_click(object sender, EventArgs e)
 			{
-				char[] separator = new char[] { '\n' };
-				char[] trimChars = new char[] { '\r' };
-				string[] strArray = textEntry.Text.Split(separator);
-				object[] items = base.Items;
-				int length = strArray.Length;
-				for (int i = 0; i < length; i++)
+				var separator = new[] { '\n' };
+				var trimChars = new[] { '\r' };
+				var strArray = textEntry.Text.Split(separator);
+				var items = Items;
+				var length = strArray.Length;
+				for (var i = 0; i < length; i++)
 				{
 					strArray[i] = strArray[i].Trim(trimChars);
 				}
-				bool flag = true;
+				var flag = true;
 				if (length == items.Length)
 				{
-					int index = 0;
+					var index = 0;
 					while (index < length)
 					{
 						if (!strArray[index].Equals((string)items[index]))
@@ -141,33 +141,34 @@ namespace System.Windows.Forms.Design
 				}
 				if (!flag)
 				{
-					base.DialogResult = DialogResult.Cancel;
+					DialogResult = DialogResult.Cancel;
 				}
 				else
 				{
-					if ((strArray.Length > 0) && (strArray[strArray.Length - 1].Length == 0))
+					if (strArray.Length > 0 && strArray[strArray.Length - 1].Length == 0)
 					{
 						length--;
 					}
-					object[] objArray2 = new object[length];
-					for (int j = 0; j < length; j++)
+					var objArray2 = new object[length];
+					for (var j = 0; j < length; j++)
 					{
 						objArray2[j] = strArray[j];
 					}
-					base.Items = objArray2;
+					Items = objArray2;
 				}
 			}
 
 			protected override void OnEditValueChanged()
 			{
-				object[] items = base.Items;
-				string str = string.Empty;
-				for (int i = 0; i < items.Length; i++)
+				var items = Items;
+				var str = string.Empty;
+				for (var i = 0; i < items.Length; i++)
 				{
-					if (items[i] is string)
+					var s = items[i] as string;
+					if (s != null)
 					{
-						str = str + ((string)items[i]);
-						if (i != (items.Length - 1))
+						str = str + s;
+						if (i != items.Length - 1)
 						{
 							str = str + "\r\n";
 						}

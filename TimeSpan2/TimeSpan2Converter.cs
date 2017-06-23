@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 
@@ -29,7 +30,7 @@ namespace System
 		/// <returns>
 		/// true if this converter can perform the conversion; otherwise, false.
 		/// </returns>
-		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) => ((destinationType == typeof(InstanceDescriptor)) || base.CanConvertTo(context, destinationType));
+		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) => destinationType == typeof(InstanceDescriptor) || base.CanConvertTo(context, destinationType);
 
 		/// <summary>
 		/// Converts the given object to the type of this converter, using the specified context and culture information.
@@ -45,18 +46,18 @@ namespace System
 		/// </exception>
 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
-			string sval = value as string;
+			var sval = value as string;
 			if (sval != null)
 			{
 				if (string.IsNullOrEmpty(sval))
 					return TimeSpan2.Zero;
 
-				TimeSpan2FormatInfo fi = new TimeSpan2FormatInfo(culture);
+				var fi = new TimeSpan2FormatInfo(culture);
 				TimeSpan ts;
 				if (fi.TryParse(sval, null, out ts))
 					return (TimeSpan2)ts;
 			}
-			try { long l = Convert.ToInt64(value, CultureInfo.CurrentUICulture); return new TimeSpan2(l); }
+			try { var l = Convert.ToInt64(value, CultureInfo.CurrentUICulture); return new TimeSpan2(l); }
 			catch { }
 			return base.ConvertFrom(context, culture, value);
 		}
@@ -85,7 +86,7 @@ namespace System
 			{
 				if (destinationType == typeof(InstanceDescriptor))
 				{
-					TimeSpan2 ts = (TimeSpan2)value;
+					var ts = (TimeSpan2)value;
 					/*if (ts.IsZero)
 					{
 						System.Reflection.FieldInfo field = outType.GetField("Zero");
@@ -96,13 +97,13 @@ namespace System
 					{*/
 					if (ts.Ticks % TimeSpan.TicksPerSecond == 0)
 					{
-						System.Reflection.ConstructorInfo constructor = typeof(TimeSpan2).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(int) });
+						var constructor = typeof(TimeSpan2).GetConstructor(new[] { typeof(int), typeof(int), typeof(int), typeof(int) });
 						if (constructor != null)
 							return new InstanceDescriptor(constructor, new object[] { ts.Days, ts.Hours, ts.Minutes, ts.Seconds });
 					}
 					else
 					{
-						System.Reflection.ConstructorInfo constructor = typeof(TimeSpan2).GetConstructor(new Type[] { typeof(long) });
+						var constructor = typeof(TimeSpan2).GetConstructor(new[] { typeof(long) });
 						if (constructor != null)
 							return new InstanceDescriptor(constructor, new object[] { ts.Ticks });
 					}
@@ -122,13 +123,13 @@ namespace System
 		/// <returns>
 		/// An <see cref="T:System.Object"/> representing the given <see cref="T:System.Collections.IDictionary"/>, or null if the object cannot be created. This method always returns null.
 		/// </returns>
-		public override object CreateInstance(ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
+		public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
 		{
 			if (propertyValues == null)
 				throw new ArgumentNullException(nameof(propertyValues));
 
-			object obj = propertyValues["Ticks"];
-			if ((obj == null) || (!(obj is long)))
+			var obj = propertyValues["Ticks"];
+			if (!(obj is long))
 			{
 				throw new ArgumentException("Invalid property entry.");
 			}
@@ -159,7 +160,7 @@ namespace System
 				throw new ArgumentNullException(nameof(value));
 			if (attributes == null)
 				throw new ArgumentNullException(nameof(attributes));
-			return TypeDescriptor.GetProperties(value.GetType(), attributes).Sort(new string[] { "Ticks" });
+			return TypeDescriptor.GetProperties(value.GetType(), attributes).Sort(new[] { "Ticks" });
 		}
 
 		/// <summary>
