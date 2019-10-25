@@ -7,20 +7,17 @@ using System.Threading;
 
 namespace System.Globalization
 {
-	/// <summary>
-	/// Type of pattern to extract.
-	/// </summary>
+	/// <summary>Type of pattern to extract.</summary>
 	public enum TimeSpanPatternType
 	{
 		/// <summary>Pattern used for formatting output.</summary>
 		Formatting,
+
 		/// <summary>Pattern used for parsing input string.</summary>
 		Parsing
 	}
 
-	/// <summary>
-	/// Defines how <see cref="TimeSpan"/> values are formatted and displayed, depending on the culture.
-	/// </summary>
+	/// <summary>Defines how <see cref="TimeSpan"/> values are formatted and displayed, depending on the culture.</summary>
 	public sealed class TimeSpan2FormatInfo : IFormatProvider, ICustomFormatter
 	{
 		private const string defaultPattern = "-[d'.']hh':'mm':'ss['.'fffffff]";
@@ -40,25 +37,16 @@ namespace System.Globalization
 
 		private Regex regex = new Regex(fullPattern, opts);
 
-		/// <summary>
-		/// Initializes a new writable instance of the <see cref="TimeSpan2FormatInfo"/> class that is culture-independent (invariant).
-		/// </summary>
+		/// <summary>Initializes a new writable instance of the <see cref="TimeSpan2FormatInfo"/> class that is culture-independent (invariant).</summary>
 		public TimeSpan2FormatInfo()
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TimeSpan2FormatInfo"/> class that is associated with the supplied culture.
-		/// </summary>
+		/// <summary>Initializes a new instance of the <see cref="TimeSpan2FormatInfo"/> class that is associated with the supplied culture.</summary>
 		/// <param name="culture">The culture.</param>
-		internal TimeSpan2FormatInfo(CultureInfo culture)
-		{
-			Properties.Resources.Culture = culture;
-		}
+		internal TimeSpan2FormatInfo(CultureInfo culture) => Properties.Resources.Culture = culture;
 
-		/// <summary>
-		/// Gets a read-only <see cref="TimeSpan2FormatInfo"/> object that formats values based on the current culture.
-		/// </summary>
+		/// <summary>Gets a read-only <see cref="TimeSpan2FormatInfo"/> object that formats values based on the current culture.</summary>
 		/// <value>A read-only <see cref="TimeSpan2FormatInfo"/> object based on the <see cref="CultureInfo"/> object for the current thread.</value>
 		public static TimeSpan2FormatInfo CurrentInfo
 		{
@@ -69,27 +57,19 @@ namespace System.Globalization
 			}
 		}
 
-		/// <summary>
-		/// Gets the default pattern.
-		/// </summary>
+		/// <summary>Gets the default pattern.</summary>
 		/// <value>The default pattern.</value>
 		public string DefaultPattern => defaultPattern;
 
-		/// <summary>
-		/// Gets or sets the long pattern.
-		/// </summary>
+		/// <summary>Gets or sets the long pattern.</summary>
 		/// <value>The long pattern.</value>
 		public string LongPattern { get; set; } = generalLongPattern;
 
-		/// <summary>
-		/// Gets or sets the short pattern.
-		/// </summary>
+		/// <summary>Gets or sets the short pattern.</summary>
 		/// <value>The short pattern.</value>
 		public string ShortPattern { get; set; } = generalShortPattern;
 
-		/// <summary>
-		/// Gets or sets the string to display the representing <c>TimeSpan.Zero</c>.
-		/// </summary>
+		/// <summary>Gets or sets the string to display the representing <c>TimeSpan.Zero</c>.</summary>
 		public string TimeSpanZeroDisplay { get; set; }
 
 		private Regex MyRegex => regex ?? (regex = new Regex(fullPattern, opts));
@@ -106,10 +86,11 @@ namespace System.Globalization
 			}
 		}
 
-		/// <summary>
-		/// Returns the <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.
-		/// </summary>
-		/// <param name="provider">The <see cref="IFormatProvider"/> that gets the <see cref="TimeSpan2FormatInfo"/>. -or- <c>null</c> reference (Nothing in Visual Basic) to get <see cref="CurrentInfo"/>.</param>
+		/// <summary>Returns the <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</summary>
+		/// <param name="provider">
+		/// The <see cref="IFormatProvider"/> that gets the <see cref="TimeSpan2FormatInfo"/>. -or- <c>null</c> reference (Nothing in Visual
+		/// Basic) to get <see cref="CurrentInfo"/>.
+		/// </param>
 		/// <returns>A <see cref="TimeSpan2FormatInfo"/> associated with the specified <see cref="IFormatProvider"/>.</returns>
 		public static TimeSpan2FormatInfo GetInstance(IFormatProvider provider)
 		{
@@ -145,20 +126,53 @@ namespace System.Globalization
 		/// </summary>
 		/// <param name="format">A TimeSpan format string.</param>
 		/// <param name="arg">An object to format.</param>
-		/// <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> object that supplies format information about the current instance.</param>
+		/// <param name="formatProvider">
+		/// An <see cref="T:System.IFormatProvider"/> object that supplies format information about the current instance.
+		/// </param>
 		/// <returns>A string representation of value of the current <see cref="TimeSpan"/> object as specified by format.</returns>
-		/// <remarks>The following table lists the standard TimeSpan format patterns associated with TimeSpan2FormatInfo properties.
+		/// <remarks>
+		/// The following table lists the standard TimeSpan format patterns associated with TimeSpan2FormatInfo properties.
 		/// <list type="table">
-		/// <listheader><term>Format pattern</term><description>Associated Property/Description</description></listheader>
-		/// <item><term>d</term><description>Localized string for TotalDays</description></item>
-		/// <item><term>f</term><description>Full localized string displaying each time element with separator between</description></item>
-		/// <item><term>h</term><description>Localized string for TotalHours</description></item>
-		/// <item><term>j</term><description>JIRA style output</description></item>
-		/// <item><term>m</term><description>Localized string for TotalMinutes</description></item>
-		/// <item><term>n</term><description>Standard TimeSpan format (00:00:00:00)</description></item>
-		/// <item><term>s</term><description>Localized string for TotalSeconds</description></item>
-		/// <item><term>t</term><description>Localized string for TotalMilliseconds</description></item>
-		/// <item><term>x</term><description>ISO 8601 XML standard for durations</description></item>
+		/// <listheader>
+		/// <term>Format pattern</term>
+		/// <description>Associated Property/Description</description>
+		/// </listheader>
+		/// <item>
+		/// <term>d</term>
+		/// <description>Localized string for TotalDays</description>
+		/// </item>
+		/// <item>
+		/// <term>f</term>
+		/// <description>Full localized string displaying each time element with separator between</description>
+		/// </item>
+		/// <item>
+		/// <term>h</term>
+		/// <description>Localized string for TotalHours</description>
+		/// </item>
+		/// <item>
+		/// <term>j</term>
+		/// <description>JIRA style output</description>
+		/// </item>
+		/// <item>
+		/// <term>m</term>
+		/// <description>Localized string for TotalMinutes</description>
+		/// </item>
+		/// <item>
+		/// <term>n</term>
+		/// <description>Standard TimeSpan format (00:00:00:00)</description>
+		/// </item>
+		/// <item>
+		/// <term>s</term>
+		/// <description>Localized string for TotalSeconds</description>
+		/// </item>
+		/// <item>
+		/// <term>t</term>
+		/// <description>Localized string for TotalMilliseconds</description>
+		/// </item>
+		/// <item>
+		/// <term>x</term>
+		/// <description>ISO 8601 XML standard for durations</description>
+		/// </item>
 		/// </list>
 		/// </remarks>
 		public string Format(string format, object arg, IFormatProvider formatProvider)
@@ -173,7 +187,7 @@ namespace System.Globalization
 				{
 					var changeType = Convert.ChangeType(arg, typeof(TimeSpan), formatProvider);
 					if (changeType != null)
-						return FormatTimeSpan((TimeSpan) changeType, format);
+						return FormatTimeSpan((TimeSpan)changeType, format);
 				}
 			}
 
@@ -181,13 +195,9 @@ namespace System.Globalization
 			return formattable != null && !(arg is TimeSpan2) ? formattable.ToString(format, formatProvider) : arg.ToString();
 		}
 
-		/// <summary>
-		/// Returns all the standard patterns in which <see cref="TimeSpan"/> values can be formatted.
-		/// </summary>
+		/// <summary>Returns all the standard patterns in which <see cref="TimeSpan"/> values can be formatted.</summary>
 		/// <param name="patternType">Type of the pattern.</param>
-		/// <returns>
-		/// An array containing the standard patterns in which <see cref="TimeSpan"/> values can be formatted.
-		/// </returns>
+		/// <returns>An array containing the standard patterns in which <see cref="TimeSpan"/> values can be formatted.</returns>
 		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType)
 		{
 			var output = new List<string>();
@@ -206,18 +216,15 @@ namespace System.Globalization
 		/// </returns>
 		public string[] GetAllTimeSpanPatterns(TimeSpanPatternType patternType, char format) => new[] { GetTimeSpanPattern(patternType, format) };
 
-		/// <summary>
-		/// Returns an object of the specified type that provides a <see cref="TimeSpan"/> formatting service.
-		/// </summary>
+		/// <summary>Returns an object of the specified type that provides a <see cref="TimeSpan"/> formatting service.</summary>
 		/// <param name="formatType">The <see cref="Type"/> of the required formatting service.</param>
 		/// <returns>
-		/// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>.
+		/// The current <see cref="TimeSpan2FormatInfo"/>, if <paramref name="formatType"/> is the same as the type of the current <see
+		/// cref="TimeSpan2FormatInfo"/>; otherwise, <c>null</c>.
 		/// </returns>
 		public object GetFormat(Type formatType) => formatType != typeof(ICustomFormatter) ? null : this;
 
-		/// <summary>
-		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent.
-		/// </summary>
+		/// <summary>Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent.</summary>
 		/// <param name="s">A string containing a time span to parse.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
 		/// <returns>A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/>.</returns>
@@ -227,40 +234,46 @@ namespace System.Globalization
 		{
 			if (string.IsNullOrEmpty(s))
 				throw new ArgumentNullException(nameof(s));
-			TimeSpan ts;
-			if (TryParse(s, provider, out ts))
+			if (TryParse(s, provider, out var ts))
 				return ts;
 			throw new FormatException();
 		}
 
 		/// <summary>
-		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent using the specified format and culture-specific format information. The format of the string representation must match the specified format exactly.
+		/// Converts the specified string representation of a time span to its <see cref="TimeSpan"/> equivalent using the specified format
+		/// and culture-specific format information. The format of the string representation must match the specified format exactly.
 		/// </summary>
 		/// <param name="s">A string containing a time span to parse.</param>
 		/// <param name="formats">An array of standard or custom format strings that define the required format of <paramref name="s"/>.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
-		/// <returns>A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/> as specified by <paramref name="formats"/> and <paramref name="provider"/>.</returns>
+		/// <returns>
+		/// A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/> as specified by <paramref name="formats"/>
+		/// and <paramref name="provider"/>.
+		/// </returns>
 		internal TimeSpan ParseExact(string s, string[] formats, IFormatProvider provider)
 		{
 			if (s == null)
 				throw new ArgumentNullException(nameof(s));
 
-			TimeSpan ts;
-			if (!TryParseExact(s, formats, provider, out ts))
+			if (!TryParseExact(s, formats, provider, out var ts))
 				throw new FormatException();
 
 			return ts;
 		}
 
 		/// <summary>
-		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value that indicates whether the conversion succeeded.
+		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value that
+		/// indicates whether the conversion succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a time span to convert.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
-		/// <param name="result">When this method returns, contains the <see cref="TimeSpan"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref name="s"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span. This parameter is passed uninitialized.</param>
-		/// <returns>
-		/// 	<c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.
-		/// </returns>
+		/// <param name="result">
+		/// When this method returns, contains the <see cref="TimeSpan"/> value equivalent to the time span contained in <paramref
+		/// name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if the <paramref
+		/// name="s"/> parameter is <c>null</c>, is an empty string (""), or does not contain a valid string representation of a time span.
+		/// This parameter is passed uninitialized.
+		/// </param>
+		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		internal bool TryParse(string s, IFormatProvider provider, out TimeSpan result)
 		{
 			s = s.Trim();
@@ -279,21 +292,25 @@ namespace System.Globalization
 		}
 
 		/// <summary>
-		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value that indicates whether the conversion succeeded.
+		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value that
+		/// indicates whether the conversion succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a time span to convert.</param>
 		/// <param name="formats">An array of allowable formats of <paramref name="s"/>.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
-		/// <param name="result">When this method returns, contains the <see cref="TimeSpan"/> value equivalent to the time span contained in <paramref name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if <paramref name="s"/> or <paramref name="formats"/> is <c>null</c>, <paramref name="s"/> or an element of <paramref name="formats"/> is an empty string, or the format of <paramref name="s"/> is not exactly as specified by at least one of the format patterns in <paramref name="formats"/>. This parameter is passed uninitialized.</param>
-		/// <returns>
-		/// 	<c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.
-		/// </returns>
+		/// <param name="result">
+		/// When this method returns, contains the <see cref="TimeSpan"/> value equivalent to the time span contained in <paramref
+		/// name="s"/>, if the conversion succeeded, or <c>TimeSpan.Zero</c> if the conversion failed. The conversion fails if <paramref
+		/// name="s"/> or <paramref name="formats"/> is <c>null</c>, <paramref name="s"/> or an element of <paramref name="formats"/> is an
+		/// empty string, or the format of <paramref name="s"/> is not exactly as specified by at least one of the format patterns in
+		/// <paramref name="formats"/>. This parameter is passed uninitialized.
+		/// </param>
+		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		internal bool TryParseExact(string s, string[] formats, IFormatProvider provider, out TimeSpan result)
 		{
 			foreach (var f in formats)
 			{
-				string zeroFormat;
-				var cFormat = GetCustomFormatString(TimeSpanPatternType.Parsing, f, out zeroFormat);
+				var cFormat = GetCustomFormatString(TimeSpanPatternType.Parsing, f, out var zeroFormat);
 				if (cFormat.Length == 0)
 					return TimeSpan.TryParse(s, out result);
 
@@ -353,8 +370,7 @@ namespace System.Globalization
 
 		private string FormatTimeSpan(TimeSpan core, string format)
 		{
-			string zeroFormat;
-			var cFormat = GetCustomFormatString(TimeSpanPatternType.Formatting, format, out zeroFormat);
+			var cFormat = GetCustomFormatString(TimeSpanPatternType.Formatting, format, out var zeroFormat);
 			if (cFormat.Length == 0)
 				return core == TimeSpan.Zero && zeroFormat != null ? zeroFormat : core.ToString();
 			return CustomFormat(core, cFormat, zeroFormat);
@@ -435,9 +451,9 @@ namespace System.Globalization
 			{
 				var f = list.FindIndex(p1 => p1.start > c.Index);
 				var l = list.FindLastIndex(p1 => p1.start + p1.length < c.Index + c.Length);
-				var p = new ParseEntity(null, c, head) {children = list.GetRange(f, l - f + 1)};
+				var p = new ParseEntity(null, c, head) { children = list.GetRange(f, l - f + 1) };
 				list.RemoveRange(f, l - f + 1);
-				p.children.ForEach(delegate(ParseEntity pe) { pe.parent = p; });
+				p.children.ForEach(delegate (ParseEntity pe) { pe.parent = p; });
 				list.Insert(f, p);
 			}
 #if DEBUG
@@ -475,16 +491,22 @@ namespace System.Globalization
 			{
 				case 'c':
 					return DefaultPattern;
+
 				case 'g':
 					return ShortPattern;
+
 				case 'G':
 					return LongPattern;
+
 				case 'f':
 					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanWordFormat : Properties.Resources.TimeSpanWordPattern;
+
 				case 'j':
 					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanJiraFormat : Properties.Resources.TimeSpanJiraPattern;
+
 				case 'x':
 					return ISO8601Pattern;
+
 				default:
 					throw new ArgumentException("Invalid format specified.", nameof(format));
 			}
@@ -497,33 +519,47 @@ namespace System.Globalization
 			{
 				case "d":
 					return core.Days;
+
 				case "D":
 					return core.TotalDays;
+
 				case "h":
 					return core.Hours;
+
 				case "H":
 					return core.TotalHours;
+
 				case "m":
 					return core.Minutes;
+
 				case "M":
 					return core.TotalMinutes;
+
 				case "s":
 					return core.Seconds;
+
 				case "S":
 					return core.TotalSeconds;
+
 				case "t":
 					return core.Ticks;
+
 				case "k":
 					return core.Milliseconds;
+
 				case "K":
 					return core.TotalMilliseconds;
+
 				case "f":
 				case "F":
 					return (double)core.Ticks % TimeSpan.TicksPerSecond / 10000000;
+
 				case "p":
 					return core.TotalSeconds % 60;
+
 				case "w":
 					return core.Days / 7d;
+
 				case "r":
 					return core.Days % 7;
 			}
@@ -538,21 +574,27 @@ namespace System.Globalization
 				case "vd":
 					parseWords = Properties.Resources.TimeSpanDayStrings;
 					break;
+
 				case "vh":
 					parseWords = Properties.Resources.TimeSpanHourStrings;
 					break;
+
 				case "vm":
 					parseWords = Properties.Resources.TimeSpanMinuteStrings;
 					break;
+
 				case "vs":
 					parseWords = Properties.Resources.TimeSpanSecondStrings;
 					break;
+
 				case "vk":
 					parseWords = Properties.Resources.TimeSpanMillisecondStrings;
 					break;
+
 				case "vt":
 					parseWords = Properties.Resources.TimeSpanTickStrings;
 					break;
+
 				default:
 					return string.Empty;
 			}
@@ -609,6 +651,7 @@ namespace System.Globalization
 					if (core.Ticks < 0)
 						e.output = CultureInfo.CurrentUICulture.NumberFormat.NegativeSign;
 					break;
+
 				case "d":
 				case "D":
 				case "h":
@@ -629,18 +672,23 @@ namespace System.Globalization
 					e.output = GetStringValue(val, e);
 					foundValue = val != 0;
 					break;
+
 				case "ts":
 					e.output = CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator;
 					break;
+
 				case "ds":
 					e.output = CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
 					break;
+
 				case "ws":
 					e.output = " ";
 					break;
+
 				case "fs":
 					e.output = string.Empty;
 					break;
+
 				case "vd":
 				case "vh":
 				case "vm":
@@ -649,6 +697,7 @@ namespace System.Globalization
 				case "vt":
 					e.output = GetCultureString((long)GetValueForGroup(core, e.name.Substring(1)), e.value);
 					break;
+
 				case "q":
 				case "e":
 				default:
@@ -683,9 +732,11 @@ namespace System.Globalization
 			{
 				case "z":
 					break;
+
 				case "n":
 					e.output = $@"(?<n>{Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NegativeSign)})?";
 					break;
+
 				case "d":
 				case "D":
 				case "h":
@@ -703,9 +754,11 @@ namespace System.Globalization
 				case "r":
 					e.output = $@"(?<{e.name}>\d+)";
 					break;
+
 				case "p":
 					e.output = $@"(?<p>\d+(?:{Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator)}\d{{0,{e.value.Substring(1)}}})?)";
 					break;
+
 				case "vd":
 				case "vh":
 				case "vm":
@@ -714,18 +767,23 @@ namespace System.Globalization
 				case "vt":
 					e.output = GetVerboseParseString(e.name);
 					break;
+
 				case "ts":
 					e.output = Regex.Escape(CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator);
 					break;
+
 				case "ds":
 					e.output = Regex.Escape(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator);
 					break;
+
 				case "ws":
 					e.output = @"\s+";
 					break;
+
 				case "fs":
 					e.output = @"\s*" + Regex.Escape(Properties.Resources.TimeSpanSeparator.Trim()) + @"\s*";
 					break;
+
 				case "q":
 				case "e":
 				default:

@@ -11,17 +11,19 @@ namespace System.Windows.Forms.Design
 		{
 		}
 
-		protected virtual string InstructionText => null;
 		protected virtual string FormTitle => null;
+		protected virtual string InstructionText => null;
 
 		protected override CollectionForm CreateCollectionForm() => new StringCollectionForm(this);
 
 		// Nested Types
 		private class StringCollectionForm : CollectionForm
 		{
+			private readonly ExposedStringCollectionEditor editor;
+
 			// Fields
 			private Button cancelButton;
-			private readonly ExposedStringCollectionEditor editor;
+
 			private Label instruction;
 			private Button okButton;
 			private TableLayoutPanel okCancelTableLayoutPanel;
@@ -36,6 +38,25 @@ namespace System.Windows.Forms.Design
 				HookEvents();
 			}
 
+			protected override void OnEditValueChanged()
+			{
+				var items = Items;
+				var str = string.Empty;
+				for (var i = 0; i < items.Length; i++)
+				{
+					var s = items[i] as string;
+					if (s != null)
+					{
+						str = str + s;
+						if (i != items.Length - 1)
+						{
+							str = str + "\r\n";
+						}
+					}
+				}
+				textEntry.Text = str;
+			}
+
 			private void Edit1_keyDown(object sender, KeyEventArgs e)
 			{
 				if (e.KeyCode == Keys.Escape)
@@ -45,10 +66,7 @@ namespace System.Windows.Forms.Design
 				}
 			}
 
-			private void Form_HelpRequested(object sender, HelpEventArgs e)
-			{
-				editor.ShowHelp();
-			}
+			private void Form_HelpRequested(object sender, HelpEventArgs e) => editor.ShowHelp();
 
 			private void HookEvents()
 			{
@@ -156,25 +174,6 @@ namespace System.Windows.Forms.Design
 					}
 					Items = objArray2;
 				}
-			}
-
-			protected override void OnEditValueChanged()
-			{
-				var items = Items;
-				var str = string.Empty;
-				for (var i = 0; i < items.Length; i++)
-				{
-					var s = items[i] as string;
-					if (s != null)
-					{
-						str = str + s;
-						if (i != items.Length - 1)
-						{
-							str = str + "\r\n";
-						}
-					}
-				}
-				textEntry.Text = str;
 			}
 
 			private void StringCollectionEditor_HelpButtonClicked(object sender, CancelEventArgs e)

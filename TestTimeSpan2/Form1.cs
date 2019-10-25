@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
@@ -36,9 +35,7 @@ namespace TestTimeSpan2
 					yield return culture;
 		}
 
-		/// <summary>
-		///     The main entry point for the application.
-		/// </summary>
+		/// <summary>The main entry point for the application.</summary>
 		[STAThread]
 		private static void Main()
 		{
@@ -68,8 +65,7 @@ namespace TestTimeSpan2
 		{
 			try
 			{
-				TimeSpan2 ts;
-				if (TimeSpan2.TryParse(parseText.Text, out ts))
+				if (TimeSpan2.TryParse(parseText.Text, out var ts))
 				{
 					parseLabel.Text = ts.ToString(formatTextBox.Text, formatInfo);
 					timeSpanPicker.Value = ts;
@@ -83,8 +79,8 @@ namespace TestTimeSpan2
 
 		private void dayUpDn_ValueChanged(object sender, EventArgs e)
 		{
-			var ts = new TimeSpan2((int) dayUpDn.Value, (int) hrUpDn.Value, (int) minUpDn.Value,
-				(int) secUpDn.Value, (int) msUpDn.Value);
+			var ts = new TimeSpan2((int)dayUpDn.Value, (int)hrUpDn.Value, (int)minUpDn.Value,
+				(int)secUpDn.Value, (int)msUpDn.Value);
 			try
 			{
 				outputLabel.Text = ts.ToString(formatTextBox.Text, formatInfo);
@@ -100,7 +96,7 @@ namespace TestTimeSpan2
 		{
 			Thread.CurrentThread.CurrentUICulture = langCombo.SelectedItem as CultureInfo;
 			formatInfo = TimeSpan2FormatInfo.CurrentInfo;
-			((TimeSpan2FormatInfo) formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero;
+			((TimeSpan2FormatInfo)formatInfo).TimeSpanZeroDisplay = timeSpanPicker.FormattedZero;
 			dayUpDn_ValueChanged(dayUpDn, EventArgs.Empty);
 			timeSpanPicker_ValueChanged(timeSpanPicker, EventArgs.Empty);
 			//timeSpanPicker.FormatInfo = (System.Globalization.TimeSpan2FormatInfo)formatInfo;
@@ -108,19 +104,10 @@ namespace TestTimeSpan2
 			parseLabel.Text = string.Empty;
 		}
 
-		private void outputLabel_DoubleClick(object sender, EventArgs e)
-		{
-			Clipboard.SetText(outputLabel.Text, TextDataFormat.Text);
-		}
+		private void outputLabel_DoubleClick(object sender, EventArgs e) => Clipboard.SetText(outputLabel.Text, TextDataFormat.Text);
 
-		private void parseLabel_Click(object sender, EventArgs e)
-		{
-			Clipboard.SetText(parseLabel.Text, TextDataFormat.Text);
-		}
+		private void parseLabel_Click(object sender, EventArgs e) => Clipboard.SetText(parseLabel.Text, TextDataFormat.Text);
 
-		private void timeSpanPicker_ValueChanged(object sender, EventArgs e)
-		{
-			pickerValueLabel.Text = timeSpanPicker.Value.ToString(formatTextBox.Text, formatInfo);
-		}
+		private void timeSpanPicker_ValueChanged(object sender, EventArgs e) => pickerValueLabel.Text = timeSpanPicker.Value.ToString(formatTextBox.Text, formatInfo);
 	}
 }
