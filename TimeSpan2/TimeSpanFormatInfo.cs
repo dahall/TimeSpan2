@@ -247,8 +247,8 @@ namespace System.Globalization
 		/// <param name="formats">An array of standard or custom format strings that define the required format of <paramref name="s"/>.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
 		/// <returns>
-		/// A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/> as specified by <paramref name="formats"/>
-		/// and <paramref name="provider"/>.
+		/// A <see cref="TimeSpan"/> equivalent to the time span contained in <paramref name="s"/> as specified by <paramref
+		/// name="formats"/> and <paramref name="provider"/>.
 		/// </returns>
 		internal TimeSpan ParseExact(string s, string[] formats, IFormatProvider provider)
 		{
@@ -262,8 +262,8 @@ namespace System.Globalization
 		}
 
 		/// <summary>
-		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value that
-		/// indicates whether the conversion succeeded.
+		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value
+		/// that indicates whether the conversion succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a time span to convert.</param>
 		/// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s"/>.</param>
@@ -292,8 +292,8 @@ namespace System.Globalization
 		}
 
 		/// <summary>
-		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value that
-		/// indicates whether the conversion succeeded.
+		/// Converts the specified string representation of a date and time to its <see cref="TimeSpan"/> equivalent and returns a value
+		/// that indicates whether the conversion succeeded.
 		/// </summary>
 		/// <param name="s">A string containing a time span to convert.</param>
 		/// <param name="formats">An array of allowable formats of <paramref name="s"/>.</param>
@@ -487,29 +487,16 @@ namespace System.Globalization
 
 		private string GetTimeSpanPattern(TimeSpanPatternType patternType, char format)
 		{
-			switch (format)
+			return format switch
 			{
-				case 'c':
-					return DefaultPattern;
-
-				case 'g':
-					return ShortPattern;
-
-				case 'G':
-					return LongPattern;
-
-				case 'f':
-					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanWordFormat : Properties.Resources.TimeSpanWordPattern;
-
-				case 'j':
-					return patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanJiraFormat : Properties.Resources.TimeSpanJiraPattern;
-
-				case 'x':
-					return ISO8601Pattern;
-
-				default:
-					throw new ArgumentException("Invalid format specified.", nameof(format));
-			}
+				'c' => DefaultPattern,
+				'g' => ShortPattern,
+				'G' => LongPattern,
+				'f' => patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanWordFormat : Properties.Resources.TimeSpanWordPattern,
+				'j' => patternType == TimeSpanPatternType.Formatting ? Properties.Resources.TimeSpanJiraFormat : Properties.Resources.TimeSpanJiraPattern,
+				'x' => ISO8601Pattern,
+				_ => throw new ArgumentException("Invalid format specified.", nameof(format)),
+			};
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -562,8 +549,10 @@ namespace System.Globalization
 
 				case "r":
 					return core.Days % 7;
+
+				default:
+					throw new FormatException();
 			}
-			throw new FormatException();
 		}
 
 		private string GetVerboseParseString(string entityName)

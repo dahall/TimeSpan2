@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms.Design;
-
-using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {

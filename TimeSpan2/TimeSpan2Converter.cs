@@ -104,15 +104,11 @@ namespace System
 		/// </returns>
 		public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
 		{
-			if (propertyValues == null)
+			if (propertyValues is null)
 				throw new ArgumentNullException(nameof(propertyValues));
 
 			var obj = propertyValues["Ticks"];
-			if (!(obj is long))
-			{
-				throw new ArgumentException("Invalid property entry.");
-			}
-			return new TimeSpan2((long)obj);
+			return obj is long l ? new TimeSpan2(l) : throw new ArgumentException("Invalid property entry.");
 		}
 
 		/// <summary>
@@ -139,9 +135,9 @@ namespace System
 		/// </returns>
 		public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
 		{
-			if (value == null)
+			if (value is null)
 				throw new ArgumentNullException(nameof(value));
-			if (attributes == null)
+			if (attributes is null)
 				throw new ArgumentNullException(nameof(attributes));
 			return TypeDescriptor.GetProperties(value.GetType(), attributes).Sort(new[] { "Ticks" });
 		}

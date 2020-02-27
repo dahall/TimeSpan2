@@ -11,9 +11,9 @@ namespace System
 {
 	/// <summary>Represents a time interval.</summary>
 	/// <remarks>
-	/// A TimeSpan2 object represents a time interval (duration of time or elapsed time) that is measured as a positive or negative number of
-	/// days, hours, minutes, seconds, and fractions of a second. The TimeSpan2 structure can also be used to represent the time of day, but
-	/// only if the time is unrelated to a particular date.
+	/// A TimeSpan2 object represents a time interval (duration of time or elapsed time) that is measured as a positive or negative number
+	/// of days, hours, minutes, seconds, and fractions of a second. The TimeSpan2 structure can also be used to represent the time of day,
+	/// but only if the time is unrelated to a particular date.
 	/// </remarks>
 	[Serializable, StructLayout(LayoutKind.Sequential), ComVisible(true)]
 	[TypeConverter(typeof(TimeSpan2Converter))]
@@ -261,7 +261,8 @@ namespace System
 		public static TimeSpan2 FromDays(double value) => new TimeSpan2(TimeSpan.FromDays(value));
 
 		/// <summary>
-		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of hours, where the specification is accurate to the nearest millisecond.
+		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of hours, where the specification is accurate to the
+		/// nearest millisecond.
 		/// </summary>
 		/// <param name="value">A number of hours, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
@@ -330,8 +331,8 @@ namespace System
 		public static TimeSpan2 ParseExact(string input, string format, IFormatProvider formatProvider) => ParseExact(input, new[] { format }, formatProvider);
 
 		/// <summary>
-		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format and
-		/// culture-specific format information. The format of the string representation must match the specified format exactly.
+		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format
+		/// and culture-specific format information. The format of the string representation must match the specified format exactly.
 		/// </summary>
 		/// <param name="input">A string that specifies the time interval to convert.</param>
 		/// <param name="formats">A array of standard or custom format strings that defines the required format of <paramref name="input"/>.</param>
@@ -379,8 +380,8 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format and
-		/// culture-specific format information, and returns a value that indicates whether the conversion succeeded. The format of the
+		/// Converts the string representation of a time interval to its <see cref="TimeSpan2"/> equivalent by using the specified format
+		/// and culture-specific format information, and returns a value that indicates whether the conversion succeeded. The format of the
 		/// string representation must match the specified format exactly.
 		/// </summary>
 		/// <param name="input">A string that specifies the time interval to convert.</param>
@@ -418,8 +419,8 @@ namespace System
 		public TimeSpan2 Add(TimeSpan2 ts) => new TimeSpan2(core.Add(ts.core));
 
 		/// <summary>
-		/// Compares this instance to a specified object and returns an integer that indicates whether this [instance] is shorter than, equal
-		/// to, or longer than the specified object.
+		/// Compares this instance to a specified object and returns an integer that indicates whether this [instance] is shorter than,
+		/// equal to, or longer than the specified object.
 		/// </summary>
 		/// <param name="obj">An object to compare, or <c>null</c>.</param>
 		/// <returns>
@@ -443,12 +444,7 @@ namespace System
 		/// </item>
 		/// </list>
 		/// </returns>
-		public int CompareTo(object obj)
-		{
-			if (obj is TimeSpan2)
-				obj = ((TimeSpan2)obj).core;
-			return core.CompareTo(obj);
-		}
+		public int CompareTo(object obj) => core.CompareTo(obj is TimeSpan2 ts2 ? ts2.core : obj);
 
 		/// <summary>
 		/// Compares this instance to a specified <see cref="TimeSpan2"/> object and returns an integer that indicates whether this
@@ -479,8 +475,8 @@ namespace System
 		public int CompareTo(TimeSpan2 other) => core.CompareTo(other.core);
 
 		/// <summary>
-		/// Compares this instance to a specified <see cref="TimeSpan"/> object and returns an integer that indicates whether this [instance]
-		/// is shorter than, equal to, or longer than the <see cref="TimeSpan2"/> object.
+		/// Compares this instance to a specified <see cref="TimeSpan"/> object and returns an integer that indicates whether this
+		/// [instance] is shorter than, equal to, or longer than the <see cref="TimeSpan2"/> object.
 		/// </summary>
 		/// <param name="other">A <see cref="TimeSpan"/> object to compare to this instance.</param>
 		/// <returns>
@@ -515,12 +511,7 @@ namespace System
 		/// <summary>Indicates whether the current object is equal to another object.</summary>
 		/// <param name="obj">An object to compare with this object.</param>
 		/// <returns><c>true</c> if the current object is equal to the <paramref name="obj"/> parameter; otherwise, <c>false</c>.</returns>
-		public override bool Equals(object obj)
-		{
-			if (obj is TimeSpan2)
-				return core.Equals(((TimeSpan2)obj).core);
-			return core.Equals(obj);
-		}
+		public override bool Equals(object obj) => obj is TimeSpan2 ts2 ? core.Equals(ts2.core) : core.Equals(obj);
 
 		/// <summary>Indicates whether the current object is equal to a specified <see cref="string"/>.</summary>
 		/// <param name="str">A <see cref="string"/> to compare with this object.</param>
@@ -639,10 +630,9 @@ namespace System
 		/// <item>
 		/// <term>"c"</term>
 		/// <description>Constant (invariant) format</description>
-		/// <description>
-		/// This specifier is not culture-sensitive. It takes the form
+		/// <description>This specifier is not culture-sensitive. It takes the form
 		/// <code>
-		/// [-][d’.’]hh’:’mm’:’ss[‘.’fffffff]
+		///[-][d’.’]hh’:’mm’:’ss[‘.’fffffff]
 		/// </code>
 		/// .
 		/// </description>
@@ -657,10 +647,9 @@ namespace System
 		/// <item>
 		/// <term>"g"</term>
 		/// <description>General short format</description>
-		/// <description>
-		/// This specifier outputs only what is needed. It is culture-sensitive and takes the form
+		/// <description>This specifier outputs only what is needed. It is culture-sensitive and takes the form
 		/// <code>
-		/// [-][d’:’]h’:’mm’:’ss[.FFFFFFF]
+		///[-][d’:’]h’:’mm’:’ss[.FFFFFFF]
 		/// </code>
 		/// .
 		/// </description>
@@ -669,10 +658,9 @@ namespace System
 		/// <item>
 		/// <term>"G"</term>
 		/// <description>General long format</description>
-		/// <description>
-		/// This specifier always outputs days and seven fractional digits. It is culture-sensitive and takes the form
+		/// <description>This specifier always outputs days and seven fractional digits. It is culture-sensitive and takes the form
 		/// <code>
-		/// [-]d’:’hh’:’mm’:’ss.fffffff
+		///[-]d’:’hh’:’mm’:’ss.fffffff
 		/// </code>
 		/// .
 		/// </description>
@@ -681,10 +669,9 @@ namespace System
 		/// <item>
 		/// <term>"j"</term>
 		/// <description>JIRA duration format</description>
-		/// <description>
-		/// This specifier outputs days, hours, minutes and seconds in the style defined by JIRA. It takes the form
+		/// <description>This specifier outputs days, hours, minutes and seconds in the style defined by JIRA. It takes the form
 		/// <code>
-		/// [w'w'] [d'd'] [h'h'] [m'm'] [s's']
+		///[w'w'] [d'd'] [h'h'] [m'm'] [s's']
 		/// </code>
 		/// .
 		/// </description>
@@ -696,7 +683,7 @@ namespace System
 		/// <description>
 		/// This specifier outputs days, hours, minutes, seconds and milliseconds in the style defined by ISO 8601. It takes the form
 		/// <code>
-		/// 'P'[d'D']['T'[h'H'][m'M'][p3'S']]
+		///'P'[d'D']['T'[h'H'][m'M'][p3'S']]
 		/// </code>
 		/// .
 		/// </description>
