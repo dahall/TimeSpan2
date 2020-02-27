@@ -127,11 +127,11 @@
   </data>
   <data name="TimeSpanJiraFormat" xml:space="preserve">
     <value>[%w'w']_[%r'd']_[%h'h']_[%m'm']_[%s's']</value>
-    <comment>Pattern string for formatting JIRA style time spans</comment>
+    <comment>Pattern string for formatting JIRA style time spans@Invariant</comment>
   </data>
   <data name="TimeSpanJiraPattern" xml:space="preserve">
     <value>[%w\w][_][%d\d][_][%h\h][_][%m\m][_][%s\s]</value>
-    <comment>Pattern string for parsing JIRA style time spans</comment>
+    <comment>Pattern string for parsing JIRA style time spans@Invariant</comment>
   </data>
   <data name="TimeSpanManyDayFormat" xml:space="preserve">
     <value>days</value>
@@ -203,11 +203,11 @@
   </data>
   <data name="TimeSpanWordFormat" xml:space="preserve">
     <value>[%d_@d],[%h_@h],[%m_@m],[%s_@s],[%k_@k]</value>
-    <comment>Pattern string for formatting worded time spans</comment>
+    <comment>Pattern string for formatting worded time spans@Invariant</comment>
   </data>
   <data name="TimeSpanWordPattern" xml:space="preserve">
     <value>[%d_@d][_][\,][_][%h_@h][_][\,][_][%m_@m][_][\,][_][%s_@s][_][\,][_][%k_@k][_][\,][_][%t_@t]</value>
-    <comment>Pattern string for parsing worded time spans</comment>
+    <comment>Pattern string for parsing worded time spans@Invariant</comment>
   </data>
   <data name="TimeSpanWordPatternIgnoreCase" xml:space="preserve">
     <value>true</value>

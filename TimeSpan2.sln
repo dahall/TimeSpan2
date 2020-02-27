@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTimeSpan2", "TestTimeSpan2\TestTimeSpan2.csproj", "{14567D26-78A4-4DE3-9EEB-03BD14755C68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTimeSpan2", "TestTimeSpan2\TestTimeSpan2.csproj", "{14567D26-78A4-4DE3-9EEB-03BD14755C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSpan2", "TimeSpan2\TimeSpan2.csproj", "{A267F123-EAFE-4F02-9AC9-283FE5D9A031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSpan2", "TimeSpan2\TimeSpan2.csproj", "{A267F123-EAFE-4F02-9AC9-283FE5D9A031}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0020BD40-0144-43F4-8DD4-FF2E3E7327A8}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +29,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C8AE7F4-B185-4E67-BEB8-CCB80C2B598A}
 	EndGlobalSection
 EndGlobal

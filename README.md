@@ -20,6 +20,7 @@ For sample code, see the [Documentation](docs\Documentation.md).
 
 ## Release History
 
+* 2.3.0 - Added support for .NET Core 3.0 and 3.1
 * 2.1.6 - Added Dutch and fixed a bug
 * 2.1.5 - Added Danish
 * 2.1.4 - Added .NET version builds
@@ -27,12 +28,6 @@ For sample code, see the [Documentation](docs\Documentation.md).
 * Since 2.0.1 - Added .NET 2.0 and 4.0 assemblies and build, improved performance, added support for IXmlSerialization, improved error checking.
 
 Not backwards compatible with 1.x library. Aligned and expanded upon functionality in .NET 4.0. Provides TimeSpan2FormatInfo which is culturally aware. It now provides an advanced syntax for formatting and parsing. TimeSpan2 is now functionally equivalent to the 4.0 TimeSpan. See inline Documentation for more detail on syntax. Significant work to enrich design-time experience with TimeSpanPicker.
-
-## Meta
-
-Distributed under the New BSD license. See [LICENSE](LICENSE.md) for more information.
-
-[https://github.com/dahall/timespan2](https://github.com/dahall/)
 
 ## Contributing
 
