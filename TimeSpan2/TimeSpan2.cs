@@ -580,7 +580,6 @@ namespace System
 
 		ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(core.Ticks);
 
-		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
 		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			if (info == null)

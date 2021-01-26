@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <UseWindowsForms>true</UseWindowsForms>
-    <TargetFrameworks>net20;net35;net40;net45;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <TargetFrameworks>net20;net35;net40;net45;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <RootNamespace>System</RootNamespace>
-    <VersionPrefix>2.3.0</VersionPrefix>
+    <Version>2.3.1</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dahall/TimeSpan2</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dahall/TimeSpan2</RepositoryUrl>
@@ -15,6 +16,8 @@
     <Authors>David Hall</Authors>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <LangVersion>latest</LangVersion>
@@ -25,7 +28,7 @@
     <OutputType>Library</OutputType>
     <Company />
     <Description>Library to extend the functionality of the TimeSpan structure to be comparable, serializable, and convertible. It also supports localized string formatting and parsing so a TimeSpan can be represented by something like "3 days, 2 hours, 19 minutes" instead of "3:02:19:00".</Description>
-    <Copyright>Copyright © 2017-2020</Copyright>
+    <Copyright>Copyright © 2017-2021</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
