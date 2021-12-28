@@ -10,7 +10,7 @@ This project has translations for English, Spanish, French, Italian, Russian, Ch
 
 ## Installation
 
-This is a standard Visual Studio 2015 solution containing the library as a project and a test harness as another project.
+This is a standard Visual Studio 2022 solution containing the library as a project and a test harness as another project.
 
 It is available for inclusion into .NET projects via [NuGet](https://www.nuget.org/packages/TimeSpan2/).
 
@@ -20,6 +20,7 @@ For sample code, see the [Documentation](docs\Documentation.md).
 
 ## Release History
 
+* 2.4.0 - Added support for .NET 6.0
 * 2.3.0 - Added support for .NET Core 3.0 and 3.1
 * 2.1.6 - Added Dutch and fixed a bug
 * 2.1.5 - Added Danish
