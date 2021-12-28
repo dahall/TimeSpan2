@@ -47,10 +47,15 @@
 		/// <param name="items">The items.</param>
 		public void AddRange(T[] items)
 		{
-			if (items == null)
+			if (items is null)
+			{
 				throw new ArgumentNullException();
-			for (var i = 0; i < items.Length; i++)
+			}
+
+			for (int i = 0; i < items.Length; i++)
+			{
 				list.Add(items[i]);
+			}
 		}
 
 		/// <summary>Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</summary>

@@ -32,17 +32,20 @@ namespace System
 		/// <exception cref="T:System.NotSupportedException">The conversion cannot be performed.</exception>
 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
-			var sval = value as string;
-			if (sval != null)
+			if (value is string sval)
 			{
 				if (string.IsNullOrEmpty(sval))
+				{
 					return TimeSpan2.Zero;
+				}
 
-				var fi = new TimeSpan2FormatInfo(culture);
-				if (fi.TryParse(sval, null, out var ts))
+				TimeSpan2FormatInfo fi = new(culture);
+				if (fi.TryParse(sval, null, out TimeSpan ts))
+				{
 					return (TimeSpan2)ts;
+				}
 			}
-			try { var l = Convert.ToInt64(value, CultureInfo.CurrentUICulture); return new TimeSpan2(l); }
+			try { long l = Convert.ToInt64(value, CultureInfo.CurrentUICulture); return new TimeSpan2(l); }
 			catch { }
 			return base.ConvertFrom(context, culture, value);
 		}
@@ -57,32 +60,39 @@ namespace System
 		/// <exception cref="T:System.NotSupportedException">The conversion cannot be performed.</exception>
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
 		{
-			if (value is TimeSpan)
-				value = new TimeSpan2((TimeSpan)value);
-			if (value is TimeSpan2)
+			if (value is TimeSpan span)
+			{
+				value = new TimeSpan2(span);
+			}
+
+			if (value is TimeSpan2 span2)
 			{
 				if (destinationType == typeof(InstanceDescriptor))
 				{
-					var ts = (TimeSpan2)value;
+					TimeSpan2 ts = span2;
 					/*if (ts.IsZero)
 					{
 						System.Reflection.FieldInfo field = outType.GetField("Zero");
-						if (field != null)
+						if (field is not null)
 							return new InstanceDescriptor(field, new object[0]);
 					}
 					else
 					{*/
 					if (ts.Ticks % TimeSpan.TicksPerSecond == 0)
 					{
-						var constructor = typeof(TimeSpan2).GetConstructor(new[] { typeof(int), typeof(int), typeof(int), typeof(int) });
-						if (constructor != null)
+						Reflection.ConstructorInfo constructor = typeof(TimeSpan2).GetConstructor(new[] { typeof(int), typeof(int), typeof(int), typeof(int) });
+						if (constructor is not null)
+						{
 							return new InstanceDescriptor(constructor, new object[] { ts.Days, ts.Hours, ts.Minutes, ts.Seconds });
+						}
 					}
 					else
 					{
-						var constructor = typeof(TimeSpan2).GetConstructor(new[] { typeof(long) });
-						if (constructor != null)
+						Reflection.ConstructorInfo constructor = typeof(TimeSpan2).GetConstructor(new[] { typeof(long) });
+						if (constructor is not null)
+						{
 							return new InstanceDescriptor(constructor, new object[] { ts.Ticks });
+						}
 					}
 				}
 
@@ -105,9 +115,11 @@ namespace System
 		public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
 		{
 			if (propertyValues is null)
+			{
 				throw new ArgumentNullException(nameof(propertyValues));
+			}
 
-			var obj = propertyValues["Ticks"];
+			object obj = propertyValues["Ticks"];
 			return obj is long l ? new TimeSpan2(l) : throw new ArgumentException("Invalid property entry.");
 		}
 
@@ -136,9 +148,15 @@ namespace System
 		public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
 		{
 			if (value is null)
+			{
 				throw new ArgumentNullException(nameof(value));
+			}
+
 			if (attributes is null)
+			{
 				throw new ArgumentNullException(nameof(attributes));
+			}
+
 			return TypeDescriptor.GetProperties(value.GetType(), attributes).Sort(new[] { "Ticks" });
 		}
 

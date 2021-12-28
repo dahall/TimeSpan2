@@ -20,19 +20,26 @@ namespace TestTimeSpan2
 			langCombo.BeginUpdate();
 			langCombo.SelectedIndex = -1;
 			foreach (
-				var culture in
+				CultureInfo culture in
 				GetAsmCultures(typeof(TimeSpan2).Assembly.DefinedTypes.First(t => t.Name == "Resources").AsType()))
+			{
 				langCombo.Items.Add(culture);
+			}
+
 			langCombo.EndUpdate();
 			langCombo.SelectedItem = Thread.CurrentThread.CurrentUICulture;
 		}
 
 		private static IEnumerable<CultureInfo> GetAsmCultures(Type type)
 		{
-			var rm = new ResourceManager(type);
-			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
-				if (!culture.Equals(CultureInfo.InvariantCulture) && rm.GetResourceSet(culture, true, false) != null)
+			ResourceManager rm = new ResourceManager(type);
+			foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
+			{
+				if (!culture.Equals(CultureInfo.InvariantCulture) && rm.GetResourceSet(culture, true, false) is not null)
+				{
 					yield return culture;
+				}
+			}
 		}
 
 		/// <summary>The main entry point for the application.</summary>
@@ -65,7 +72,7 @@ namespace TestTimeSpan2
 		{
 			try
 			{
-				if (TimeSpan2.TryParse(parseText.Text, out var ts))
+				if (TimeSpan2.TryParse(parseText.Text, out TimeSpan2 ts))
 				{
 					parseLabel.Text = ts.ToString(formatTextBox.Text, formatInfo);
 					timeSpanPicker.Value = ts;
@@ -79,7 +86,7 @@ namespace TestTimeSpan2
 
 		private void dayUpDn_ValueChanged(object sender, EventArgs e)
 		{
-			var ts = new TimeSpan2((int)dayUpDn.Value, (int)hrUpDn.Value, (int)minUpDn.Value,
+			TimeSpan2 ts = new TimeSpan2((int)dayUpDn.Value, (int)hrUpDn.Value, (int)minUpDn.Value,
 				(int)secUpDn.Value, (int)msUpDn.Value);
 			try
 			{

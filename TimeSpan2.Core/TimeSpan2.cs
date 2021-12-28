@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -23,13 +22,13 @@ namespace System
 		private TimeSpan core;
 
 		/// <summary>Represents the maximum <see cref="TimeSpan2"/> value. This field is read-only.</summary>
-		public static readonly TimeSpan2 MaxValue = new TimeSpan2(TimeSpan.MaxValue);
+		public static readonly TimeSpan2 MaxValue = new(TimeSpan.MaxValue);
 
 		/// <summary>Represents the minimum <see cref="TimeSpan2"/> value. This field is read-only.</summary>
-		public static readonly TimeSpan2 MinValue = new TimeSpan2(TimeSpan.MinValue);
+		public static readonly TimeSpan2 MinValue = new(TimeSpan.MinValue);
 
 		/// <summary>Represents the zero <see cref="TimeSpan2"/> value. This field is read-only.</summary>
-		public static readonly TimeSpan2 Zero = new TimeSpan2(TimeSpan.Zero);
+		public static readonly TimeSpan2 Zero = new(TimeSpan.Zero);
 
 		/// <summary>Represents the number of ticks in 1 day. This field is constant.</summary>
 		public static readonly long TicksPerDay = TimeSpan.TicksPerDay;
@@ -151,7 +150,7 @@ namespace System
 		/// <summary>Performs an implicit conversion from <see cref="System.TimeSpan"/> to <see cref="System.TimeSpan2"/>.</summary>
 		/// <param name="ts">The <see cref="TimeSpan"/> structure to convert.</param>
 		/// <returns>The <see cref="TimeSpan2"/> equivalent of the converted <see cref="TimeSpan"/>.</returns>
-		public static implicit operator TimeSpan2(TimeSpan ts) => new TimeSpan2(ts);
+		public static implicit operator TimeSpan2(TimeSpan ts) => new(ts);
 
 		/// <summary>Indicates whether two <see cref="TimeSpan2"/> instances are not equal.</summary>
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
@@ -173,7 +172,7 @@ namespace System
 		/// <summary>Returns a <see cref="TimeSpan2"/> whose value is the negated value of the specified instance.</summary>
 		/// <param name="t">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> with the same numeric value as this instance, but the opposite sign.</returns>
-		public static TimeSpan2 operator -(TimeSpan2 t) => new TimeSpan2(-t.core);
+		public static TimeSpan2 operator -(TimeSpan2 t) => new(-t.core);
 
 		/// <summary>Subtracts a specified <see cref="TimeSpan2"/> from another specified <c>TimeSpan2</c>.</summary>
 		/// <param name="t1">A <see cref="TimeSpan2"/>.</param>
@@ -258,7 +257,7 @@ namespace System
 		/// </summary>
 		/// <param name="value">A number of days, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromDays(double value) => new TimeSpan2(TimeSpan.FromDays(value));
+		public static TimeSpan2 FromDays(double value) => new(TimeSpan.FromDays(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of hours, where the specification is accurate to the
@@ -266,12 +265,12 @@ namespace System
 		/// </summary>
 		/// <param name="value">A number of hours, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromHours(double value) => new TimeSpan2(TimeSpan.FromHours(value));
+		public static TimeSpan2 FromHours(double value) => new(TimeSpan.FromHours(value));
 
 		/// <summary>Returns a <see cref="TimeSpan2"/> that represents a specified number of milliseconds.</summary>
 		/// <param name="value">A number of milliseconds.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromMilliseconds(double value) => new TimeSpan2(TimeSpan.FromMilliseconds(value));
+		public static TimeSpan2 FromMilliseconds(double value) => new(TimeSpan.FromMilliseconds(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of minutes, where the specification is accurate to the
@@ -279,7 +278,7 @@ namespace System
 		/// </summary>
 		/// <param name="value">A number of minutes, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromMinutes(double value) => new TimeSpan2(TimeSpan.FromMinutes(value));
+		public static TimeSpan2 FromMinutes(double value) => new(TimeSpan.FromMinutes(value));
 
 		/// <summary>
 		/// Returns a <see cref="TimeSpan2"/> that represents a specified number of seconds, where the specification is accurate to the
@@ -287,12 +286,12 @@ namespace System
 		/// </summary>
 		/// <param name="value">A number of seconds, accurate to the nearest millisecond.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromSeconds(double value) => new TimeSpan2(TimeSpan.FromSeconds(value));
+		public static TimeSpan2 FromSeconds(double value) => new(TimeSpan.FromSeconds(value));
 
 		/// <summary>Returns a <see cref="TimeSpan2"/> that represents a specified time, where the specification is in units of ticks.</summary>
 		/// <param name="value">A number of ticks that represent a time.</param>
 		/// <returns>A <see cref="TimeSpan2"/> with a value of <paramref name="value"/>.</returns>
-		public static TimeSpan2 FromTicks(long value) => new TimeSpan2(TimeSpan.FromTicks(value));
+		public static TimeSpan2 FromTicks(long value) => new(TimeSpan.FromTicks(value));
 
 		/// <summary>Converts the specified string representation of a time span to its <see cref="TimeSpan2"/> equivalent.</summary>
 		/// <param name="value">A string containing a time span to parse.</param>
@@ -314,7 +313,7 @@ namespace System
 		/// <exception cref="FormatException"><paramref name="value"/> does not contain a valid string representation of a time span.</exception>
 		public static TimeSpan2 Parse(string value, IFormatProvider formatProvider)
 		{
-			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return new TimeSpan2(fi.Parse(value, null));
 		}
 
@@ -342,7 +341,7 @@ namespace System
 		/// </returns>
 		public static TimeSpan2 ParseExact(string input, string[] formats, IFormatProvider formatProvider)
 		{
-			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.ParseExact(input, formats, null);
 		}
 
@@ -375,7 +374,7 @@ namespace System
 		/// <returns><c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParse(string s, IFormatProvider formatProvider, out TimeSpan2 result)
 		{
-			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.TryParse(s, null, out result.core);
 		}
 
@@ -409,14 +408,14 @@ namespace System
 		/// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
 		public static bool TryParseExact(string input, string[] formats, IFormatProvider formatProvider, out TimeSpan2 result)
 		{
-			var fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			TimeSpan2FormatInfo fi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return fi.TryParseExact(input, formats, null, out result.core);
 		}
 
 		/// <summary>Adds the specified <see cref="TimeSpan2"/> to this instance.</summary>
 		/// <param name="ts">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> that represents the value of this instance plus the value of <paramref name="ts"/>.</returns>
-		public TimeSpan2 Add(TimeSpan2 ts) => new TimeSpan2(core.Add(ts.core));
+		public TimeSpan2 Add(TimeSpan2 ts) => new(core.Add(ts.core));
 
 		/// <summary>
 		/// Compares this instance to a specified object and returns an integer that indicates whether this [instance] is shorter than,
@@ -506,7 +505,7 @@ namespace System
 		/// Returns a new <see cref="TimeSpan2"/> object whose value is the absolute value of the current <see cref="TimeSpan2"/> object.
 		/// </summary>
 		/// <returns>A new <see cref="TimeSpan2"/> object whose value is the absolute value of the current <see cref="TimeSpan2"/> object.</returns>
-		public TimeSpan2 Duration() => new TimeSpan2(core.Duration());
+		public TimeSpan2 Duration() => new(core.Duration());
 
 		/// <summary>Indicates whether the current object is equal to another object.</summary>
 		/// <param name="obj">An object to compare with this object.</param>
@@ -568,9 +567,15 @@ namespace System
 		object IConvertible.ToType(Type conversionType, IFormatProvider provider)
 		{
 			if (conversionType == typeof(TimeSpan))
+			{
 				return core;
+			}
+
 			if (conversionType == typeof(TimeSpan2))
+			{
 				return this;
+			}
+
 			return Convert.ChangeType(this, conversionType, provider);
 		}
 
@@ -582,8 +587,11 @@ namespace System
 
 		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			if (info == null)
+			if (info is null)
+			{
 				throw new ArgumentNullException(nameof(info));
+			}
+
 			info.AddValue("ticks", core.Ticks);
 		}
 
@@ -595,12 +603,12 @@ namespace System
 
 		/// <summary>Returns a <see cref="TimeSpan2"/> whose value is the negated value of this instance.</summary>
 		/// <returns>The same numeric value as this instance, but with the opposite sign.</returns>
-		public TimeSpan2 Negate() => new TimeSpan2(core.Negate());
+		public TimeSpan2 Negate() => new(core.Negate());
 
 		/// <summary>Subtracts the specified <see cref="TimeSpan2"/> from this instance.</summary>
 		/// <param name="ts">A <see cref="TimeSpan2"/>.</param>
 		/// <returns>A <see cref="TimeSpan2"/> whose value is the result of the value of this instance minus the value of <paramref name="ts"/>.</returns>
-		public TimeSpan2 Subtract(TimeSpan2 ts) => new TimeSpan2(core.Subtract(ts.core));
+		public TimeSpan2 Subtract(TimeSpan2 ts) => new(core.Subtract(ts.core));
 
 		/// <summary>Returns string representation of the value of this instance using the specified format.</summary>
 		/// <param name="format">A TimeSpan format string.</param>
@@ -610,7 +618,7 @@ namespace System
 		/// <returns>A string representation of value of the current <see cref="TimeSpan2"/> object as specified by format.</returns>
 		public string ToString(string format, IFormatProvider formatProvider)
 		{
-			var tfi = TimeSpan2FormatInfo.GetInstance(formatProvider);
+			TimeSpan2FormatInfo tfi = TimeSpan2FormatInfo.GetInstance(formatProvider);
 			return tfi.Format(format, this, formatProvider);
 		}
 

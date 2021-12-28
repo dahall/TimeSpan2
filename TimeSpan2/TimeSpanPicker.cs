@@ -42,8 +42,11 @@ namespace System.Windows.Forms
 			get => (TimeSpan2FormatInfo)base.FormatInfo;
 			set
 			{
-				if (!string.IsNullOrEmpty(FormattedZero) && value != null)
+				if (!string.IsNullOrEmpty(FormattedZero) && value is not null)
+				{
 					value.TimeSpanZeroDisplay = FormattedZero;
+				}
+
 				base.FormatInfo = value;
 			}
 		}
@@ -155,8 +158,8 @@ namespace System.Windows.Forms
 		/// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
 		protected override void OnTextChanged(EventArgs e)
 		{
-			isValid = FormatInfo.TryParse(base.Text, null, out var ts);
-			if (isValid && ts != tsValue)
+			isValid = TimeSpan2.TryParse(base.Text, TimeSpan2FormatInfo.CurrentInfo, out var ts);
+			if (isValid && !ts.Equals(tsValue))
 			{
 				tsValue = ts;
 				OnValueChanged(e);
@@ -223,24 +226,28 @@ namespace System.Windows.Forms
 
 			public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 			{
-				if (context == null)
+				if (context is null)
+				{
 					throw new ArgumentNullException(nameof(context));
-				var p = context.Instance as TimeSpanPicker;
-				if (p != null)
+				}
+
+				if (context.Instance is TimeSpanPicker p)
+				{
 					format = p.FormatString;
+				}
+
 				return base.EditValue(context, provider, value);
 			}
 
 			protected override object[] GetItems(object editValue)
 			{
-				var value = editValue as TimeSpanCollection;
-				if (value != null)
+				if (editValue is TimeSpanCollection value)
 				{
-					var c = value;
-					var output = new List<string>(c.Count);
-					foreach (var t in c)
+					TimeSpanCollection c = value;
+					List<string> output = new(c.Count);
+					foreach (TimeSpan2 t in c)
 					{
-						var s = t.ToString(format);
+						string s = t.ToString(format);
 						output.Add(string.IsNullOrEmpty(s) ? "0:0:0" : s);
 					}
 					return output.ToArray();
@@ -250,16 +257,19 @@ namespace System.Windows.Forms
 
 			protected override object SetItems(object editValue, object[] value)
 			{
-				if (!(editValue is TimeSpanCollection))
-					return editValue;
-
-				var c = (TimeSpanCollection)editValue;
-				c.Clear();
-				var fi = TimeSpan2FormatInfo.CurrentInfo;
-				foreach (var v in value)
+				if (editValue is not TimeSpanCollection)
 				{
-					if (fi.TryParse(v.ToString(), null, out var ts))
+					return editValue;
+				}
+
+				TimeSpanCollection c = (TimeSpanCollection)editValue;
+				c.Clear();
+				foreach (object v in value)
+				{
+					if (TimeSpan2.TryParse(v.ToString(), TimeSpan2FormatInfo.CurrentInfo, out TimeSpan2 ts))
+					{
 						c.Add(ts);
+					}
 				}
 				return c;
 			}

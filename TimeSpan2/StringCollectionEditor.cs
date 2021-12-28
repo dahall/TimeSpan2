@@ -40,17 +40,16 @@ namespace System.Windows.Forms.Design
 
 			protected override void OnEditValueChanged()
 			{
-				var items = Items;
-				var str = string.Empty;
-				for (var i = 0; i < items.Length; i++)
+				object[] items = Items;
+				string str = string.Empty;
+				for (int i = 0; i < items.Length; i++)
 				{
-					var s = items[i] as string;
-					if (s != null)
+					if (items[i] is string s)
 					{
-						str = str + s;
+						str += s;
 						if (i != items.Length - 1)
 						{
-							str = str + "\r\n";
+							str += "\r\n";
 						}
 					}
 				}
@@ -77,7 +76,7 @@ namespace System.Windows.Forms.Design
 
 			private void InitializeComponent()
 			{
-				var manager = new ComponentResourceManager(Type.GetType("System.Windows.Forms.Design.StringCollectionEditor, System.Design"));
+				ComponentResourceManager manager = new(Type.GetType("System.Windows.Forms.Design.StringCollectionEditor, System.Design"));
 				instruction = new Label();
 				textEntry = new TextBox();
 				okButton = new Button();
@@ -88,8 +87,11 @@ namespace System.Windows.Forms.Design
 				manager.ApplyResources(instruction, "instruction");
 				instruction.Margin = new Padding(3, 1, 3, 0);
 				instruction.Name = "instruction";
-				if (editor.InstructionText != null)
+				if (editor.InstructionText is not null)
+				{
 					instruction.Text = editor.InstructionText;
+				}
+
 				textEntry.AcceptsTab = true;
 				textEntry.AcceptsReturn = true;
 				manager.ApplyResources(textEntry, "textEntry");
@@ -120,8 +122,11 @@ namespace System.Windows.Forms.Design
 				Name = "StringCollectionEditor";
 				ShowIcon = false;
 				ShowInTaskbar = false;
-				if (editor.FormTitle != null)
+				if (editor.FormTitle is not null)
+				{
 					Text = editor.FormTitle;
+				}
+
 				okCancelTableLayoutPanel.ResumeLayout(false);
 				okCancelTableLayoutPanel.PerformLayout();
 				HelpRequested += Form_HelpRequested;
@@ -131,19 +136,19 @@ namespace System.Windows.Forms.Design
 
 			private void OKButton_click(object sender, EventArgs e)
 			{
-				var separator = new[] { '\n' };
-				var trimChars = new[] { '\r' };
-				var strArray = textEntry.Text.Split(separator);
-				var items = Items;
-				var length = strArray.Length;
-				for (var i = 0; i < length; i++)
+				char[] separator = new[] { '\n' };
+				char[] trimChars = new[] { '\r' };
+				string[] strArray = textEntry.Text.Split(separator);
+				object[] items = Items;
+				int length = strArray.Length;
+				for (int i = 0; i < length; i++)
 				{
 					strArray[i] = strArray[i].Trim(trimChars);
 				}
-				var flag = true;
+				bool flag = true;
 				if (length == items.Length)
 				{
-					var index = 0;
+					int index = 0;
 					while (index < length)
 					{
 						if (!strArray[index].Equals((string)items[index]))
@@ -167,8 +172,8 @@ namespace System.Windows.Forms.Design
 					{
 						length--;
 					}
-					var objArray2 = new object[length];
-					for (var j = 0; j < length; j++)
+					object[] objArray2 = new object[length];
+					for (int j = 0; j < length; j++)
 					{
 						objArray2[j] = strArray[j];
 					}
