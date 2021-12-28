@@ -4,22 +4,24 @@
 There are three public classes of note:
 * `TimeSpan2` is a wrapper around the existing `TimeSpan` structure that adds serialization, comparability, and convertibility. It can be used anywhere a TimeSpan is used.
 * `TimeSpanFormatInfo` is an `IFormatProvider` for TimeSpan instances and provides a richer set of output formats. It works similarly to DateTimeFormatInfo. If you use the TimeSpan2 structure, you can access the parsing and output functionality directly from the structure's Parse and ToString methods. A list of format strings can be found here and in the inline documentation for `TimeSpanFormatInfo`.
-* `TimeSpanPicker` is a editable ComboBox that exposes a localized list of TimeSpan instances and allows for text entry.
+* `TimeSpanPicker` is a editable ComboBox that exposes a localized list of TimeSpan instances and allows for text entry. This is only available in the `TimeSpan2` package.
 
-This project has translations for English, Spanish, French, Italian, Russian, Chinese, and German. If anyone would like to provide translations for other languages, or better ones for those in the project, please post them in the Discussions area. A description of the translations needed for each localization are here.
+This project has translations for English, Spanish, French, Italian, Russian, Chinese, and German. If anyone would like to provide translations for other languages, or better ones for those in the project, please post them in the Discussions area.
 
 ## Installation
 
-This is a standard Visual Studio 2022 solution containing the library as a project and a test harness as another project.
+This is a standard Visual Studio 2022 solution containing the core library and control library as projects and a test harness as another project.
 
-It is available for inclusion into .NET projects via [NuGet](https://www.nuget.org/packages/TimeSpan2/).
+It is available for inclusion into .NET projects via NuGet:
+* [TimeSpan2.Core - System neutral, localized time spans.](https://www.nuget.org/packages/TimeSpan2.Core/).
+* [TimeSpan2 - WinForms control for natural language time spans](https://www.nuget.org/packages/TimeSpan2/).
 
 ## Documentation
 
 For sample code, see the [Documentation](docs\Documentation.md).
 
 ## Release History
-
+* 2.4.1 - Split into two packages (`TimeSpan2.Core` and `TimeSpan2`) to remove WinForms dependency from core package.
 * 2.4.0 - Added support for .NET 6.0
 * 2.3.0 - Added support for .NET Core 3.0 and 3.1
 * 2.1.6 - Added Dutch and fixed a bug
