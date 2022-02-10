@@ -1,67 +1,68 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net20;net35;net40;net45;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-		<RootNamespace>System</RootNamespace>
-		<Version>2.4.1</Version>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/dahall/TimeSpan2</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/dahall/TimeSpan2</RepositoryUrl>
-		<PackageTags>timespan;duration;localization</PackageTags>
-		<PackageIcon>stopwatch.png</PackageIcon>
-		<AssemblyName>TimeSpan2.Core</AssemblyName>
-		<AssemblyTitle>$(AssemblyName)</AssemblyTitle>
-		<PackageId>$(AssemblyName)</PackageId>
-		<Authors>David Hall</Authors>
-		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-		<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<LangVersion>latest</LangVersion>
-		<IncludeSource>true</IncludeSource>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>TimeSpan2.snk</AssemblyOriginatorKeyFile>
-		<RepositoryType>git</RepositoryType>
-		<OutputType>Library</OutputType>
-		<Company />
-		<Description>Library to extend the functionality of the TimeSpan structure to be comparable, serializable, and convertible. It also supports localized string formatting and parsing so a TimeSpan can be represented by something like "3 days, 2 hours, 19 minutes" instead of "3:02:19:00".</Description>
-		<Copyright>Copyright © 2017-2021</Copyright>
-		<NeutralLanguage>en-US</NeutralLanguage>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
-		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
-		<DocumentationFile>bin\$(Configuration)\$(TargetFrameworkVersion)\TimeSpan2.Core.xml</DocumentationFile>
-		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	</PropertyGroup>
-	<ItemGroup Condition=" $(TargetFramework.StartsWith('net2')) Or $(TargetFramework.StartsWith('net3')) Or $(TargetFramework.StartsWith('net4')) ">
-		<Reference Include="System" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="..\docs\stopwatch.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net20;net35;net40;net45;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <RootNamespace>System</RootNamespace>
+    <Version>2.4.2</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/dahall/TimeSpan2</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dahall/TimeSpan2</RepositoryUrl>
+    <PackageTags>timespan;duration;localization</PackageTags>
+    <PackageIcon>stopwatch.png</PackageIcon>
+    <AssemblyName>TimeSpan2.Core</AssemblyName>
+    <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Authors>David Hall</Authors>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <LangVersion>latest</LangVersion>
+    <IncludeSource>true</IncludeSource>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>TimeSpan2.snk</AssemblyOriginatorKeyFile>
+    <RepositoryType>git</RepositoryType>
+    <OutputType>Library</OutputType>
+    <Company />
+    <Description>Library to extend the functionality of the TimeSpan structure to be comparable, serializable, and convertible. It also supports localized string formatting and parsing so a TimeSpan can be represented by something like "3 days, 2 hours, 19 minutes" instead of "3:02:19:00".</Description>
+    <Copyright>Copyright © 2017-2021</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFrameworkVersion)\TimeSpan2.Core.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net2')) Or $(TargetFramework.StartsWith('net3')) Or $(TargetFramework.StartsWith('net4')) ">
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\docs\stopwatch.png">
+      <Pack>True</Pack>
+      <PackagePath>
+      </PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
 </Project>
