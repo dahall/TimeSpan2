@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net20;net35;net40;net45;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net20;net35;net462;net48;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
     <RootNamespace>System</RootNamespace>
-    <Version>2.4.2</Version>
+    <Version>2.4.3</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dahall/TimeSpan2</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dahall/TimeSpan2</RepositoryUrl>
