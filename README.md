@@ -18,7 +18,7 @@ It is available for inclusion into .NET projects via NuGet:
 
 ## Documentation
 
-For sample code, see the [Documentation](docs\Documentation.md).
+For sample code, see the [Documentation](docs/Documentation.md).
 
 ## Release History
 * 2.4.1 - Split into two packages (`TimeSpan2.Core` and `TimeSpan2`) to remove WinForms dependency from core package.
